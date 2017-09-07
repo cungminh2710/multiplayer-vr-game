@@ -1,0 +1,18 @@
+{
+    "name": "vr-server",
+    "version": "1.0.0",
+    "description": "VR Game Server",
+    "main": "index.js",
+    "scripts": {
+        "start": "tsc && node index.js"
+    },
+    "dependencies": {
+        "colyseus": "^0.5.2",
+        "express": "^4.14.0",
+        "nodemon": "^1.11.0",
+        "serve-index": "^1.8.0"
+    },
+    "devDependencies": {
+        "typescript": "^2.4.2"
+    }
+}
