@@ -7,7 +7,7 @@ services:
     ports:
       - 2657:2657
     environment:
-      - PORT: 2657
+      PORT: 2657
     volumes: 
       - .:/usr/src/app
     depends_on:
