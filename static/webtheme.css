@@ -1,3 +1,8 @@
+body {
+  background-color: #000;
+  color: #fff;
+}
+
 .login-hdr {
   float: right;
   margin-top: 15px;
@@ -51,4 +56,9 @@
 .btn-play:hover , .btn-play:focus, .btn-play:active {
   color: #fff;
   border-color: #21e9fc;
+}
+
+.registration {
+  width: 45%;
+  height: 45%;
 }
