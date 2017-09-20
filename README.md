@@ -1,5 +1,5 @@
 # LoVR 
-A VR Game
+A Cross platform Browser-based VR Game
 
 ## Installation
 
@@ -19,6 +19,8 @@ A VR Game
 	npm install -g --silent pm2 && npm install --production --silent
 	# Install typescript tranpiller
 	pm2 install typescript
+	# Start our game and watch code changes
+	pm2 start index.ts --watch
 	```
 	* Windows Instruction will be updated if anybody needs windows ...
 
