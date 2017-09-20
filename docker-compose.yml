@@ -8,6 +8,7 @@ services:
       - 2657:2657
     environment:
       PORT: 2657
+      NODE_ENV: development
     volumes: 
       - .:/usr/src/app
     depends_on:

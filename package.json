@@ -1,20 +1,22 @@
 {
-    "name": "vr-server",
-    "version": "1.0.0",
-    "description": "VR Game Server",
-    "main": "index.js",
-    "scripts": {
-        "start": "tsc && node index.js"
-    },
-    "dependencies": {
+	"name": "vr-server",
+	"version": "1.0.0",
+	"description": "VR Game Server",
+	"main": "index.js",
+	"scripts": {
+		"start": "tsc && node index.js"
+	},
+	"dependencies": {
         "bcrypt": "^1.0.3",
-        "colyseus": "^0.5.2",
+		"colyseus": "^0.5.2",
         "express": "^4.14.0",
         "mongoose": "^4.11.12",
-        "nodemon": "^1.11.0",
-        "serve-index": "^1.8.0"
-    },
-    "devDependencies": {
-        "typescript": "^2.4.2"
-    }
+		"serve-index": "^1.8.0"
+	},
+	"devDependencies": {
+		"typescript": "^2.4.2",
+		"pm2": "^2.7.0",
+		"ts-node": "^3.3.0",
+		"nodemon": "^1.11.0"
+	}
 }
