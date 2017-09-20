@@ -8,6 +8,7 @@ import { Server } from 'colyseus';
 
 // Require ChatRoom handler
 import { ChatRoom } from "./rooms/01-basic";
+import { GameRoom } from "./rooms/game-room";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
@@ -31,6 +32,7 @@ const gameServer = new Server({ server: httpServer });
 
 // Register ChatRoom as "chat"
 gameServer.register("chat", ChatRoom);
+gameServer.register("game-room", GameRoom);
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}));
