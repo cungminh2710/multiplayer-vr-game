@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as express from 'express';
 import * as serveIndex from 'serve-index';
+import * as mongoose from "mongoose";
+
 import { createServer } from 'http';
 import { Server } from 'colyseus';
 
@@ -9,6 +11,17 @@ import { ChatRoom } from "./rooms/01-basic";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
+
+/**
+ * Connect to MongoDB.
+ */
+// mongoose.Promise = global.Promise;
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/");
+
+// mongoose.connection.on("error", () => {
+  // console.log("MongoDB connection error. Please make sure MongoDB is running.");
+  // process.exit();
+// });
 
 // Create HTTP Server
 const httpServer = createServer(app);
@@ -20,7 +33,7 @@ const gameServer = new Server({ server: httpServer });
 gameServer.register("chat", ChatRoom);
 
 app.use(express.static(path.join(__dirname, "static")));
-app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}))
+app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}));
 
 gameServer.listen(port);
 
