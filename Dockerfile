@@ -1,10 +1,11 @@
-#FROM node:alpine
-FROM node:8.1.2-slim
-ENV NODE_ENV production
+FROM node:latest
 WORKDIR /usr/src/app
-COPY ["package.json", "npm-shrinkwrap.json*", "./"]
-RUN npm install -g typescript
-RUN npm install --production --silent && mv node_modules ../ && npm install -g ts-node pm2
+# Update Ubuntu Image 
+RUN apt-get update -y -q && apt-get upgrade -y
+# Install app dependencies
 COPY . .
+RUN npm install -g --silent pm2 && npm install --production --silent
+# Install typescript tranpiller
+RUN pm2 install typescript
 EXPOSE 2657
-CMD npm start
+# CMD npm start
