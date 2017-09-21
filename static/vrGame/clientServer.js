@@ -23,11 +23,11 @@ gameRoom.listen("messages/:number", function(change) {
 });
 gameRoom.listen(function(change) {
     if(count == 0){
-        Players.createOtherPlayer("-2.5 2.5 5");
+        Players.createOtherPlayer("2.5 2.5 5");
         console.log("created");
     }
     count++;
-    console.log("patch:", change.path, change.operation, change.value);
+    console.log(change);
 
   
 });

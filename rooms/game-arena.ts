@@ -67,7 +67,7 @@ export class GameArena extends Room {
         for (var index = 0; index < this.state.players.length; index++) {
           var element = this.state.players[index];
           if(element.id == client.id){
-            this.state.players[index].position = data.data;
+            this.state.players[index].position = {x: data.data.x,y: data.data.y,z: data.data.z};
           }
         }
       }
