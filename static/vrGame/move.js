@@ -46,15 +46,26 @@ window.addEventListener( 'keydown', function( e ) {
         // the variable need to send is pos and el.getAttribute("id")
         
         gameRoom.send({
-            
-        })
+            action: "MOVE",
+            data: {
+                x: pos.x,
+                y: pos.y,
+                z: pos.z
+            }
+        });
     }
     else if(map[38]){// up arrow
         pos.z-=0.4;
          el.setAttribute("position",pos);
 
-
-        map = {};   
+        gameRoom.send({
+            action: "MOVE",
+            data: {
+                x: pos.x,
+                y: pos.y,
+                z: pos.z
+            }
+        });
     }
     else if(map[39]){// right 
         pos.x+=0.4;
@@ -63,6 +74,14 @@ window.addEventListener( 'keydown', function( e ) {
 
      
         map = {};
+        gameRoom.send({
+            action: "MOVE",
+            data: {
+                x: pos.x,
+                y: pos.y,
+                z: pos.z
+            }
+        });
     }
     else if(map[40]){//down arrow
          pos.z+=0.4; 
@@ -70,7 +89,15 @@ window.addEventListener( 'keydown', function( e ) {
 
          
    
-        map = {};   
+        map = {};
+        gameRoom.send({
+            action: "MOVE",
+            data: {
+                x: pos.x,
+                y: pos.y,
+                z: pos.z
+            }
+        });
     }
     
 } );

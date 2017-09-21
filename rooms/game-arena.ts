@@ -1,71 +1,79 @@
 import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 
-enum Action {
-  Move,
-  Shoot
-}
-
 interface PlayerInfo {
-  id: string,
+  id?: string,
   character: string,
   health: number,
   team: string,
   position: {
     x: number,
-    y: number
+    y: number,
+    z: number
   }
 }
-
 export class GameArena extends Room {
-  private roomNameExists(name: string) {
-    let arr = this.state.rooms;
-    return arr.filter(room => room.name == name) > 0;
-  }
-
+  private numJoined: number = 0;
   onInit (options) {
-      this.setState({
-        players: <Array<PlayerInfo>> [],
-      });
-      console.log("GameRoom created!", options);
-  }
-
-  onJoin (client: Client) {
-    let newPlayer: PlayerInfo = {
-      id: client.id,
+    let newPlayer1: PlayerInfo = {
       team: "blue",
       character: "tank1",
       health: 100,
       position: {
         x: 10,
-        y: 10
+        y: 10,
+        z: 1
       }
     };
-    this.state.players.push(newPlayer);
+
+    let newPlayer2: PlayerInfo = {
+      team: "red",
+      character: "tank2",
+      health: 100,
+      position: {
+        x: 15,
+        y: 15,
+        z: 1
+      }
+    };
+    this.setState({
+      players: <Array<PlayerInfo>> [newPlayer1, newPlayer2],
+    });
+    console.log("Arena created!", options);
+  }
+
+  onJoin (client: Client) {
+    console.log("NEW CLIENT JOINED");
+    console.log(client);
+    if(this.numJoined == 0){
+      this.state.players[0].id = client.id;
+      this.numJoined++;
+    }else if(this.numJoined == 1){
+      this.state.players[1].id = client.id;
+    }
   }
 
   onLeave (client: Client) {
-      this.state.messages.push(`${ client.id } left.`);
-      
-      let index: number = this.state.messages.indexOf(client.id);
-      this.state.players.splice(index, 1);
+      //let index: number = this.state.messages.indexOf(client.id);
+      //this.state.players.splice(index, 1);
+      console.log("CLIENT GONE");
+      console.log(client);
   }
 
   onMessage (client: Client, data) {
-      console.log("ChatRoom:", client.id, data);
+      console.log("Game Arena:", client.id, data);
 
-      let action: Action = data.action;
-      switch (action) {
-        case Action.Move:
-        console.log("moving");
-        break;
-        default:
-          console.log("Leaving current room");
-          break;
+      if(data.action == "MOVE"){
+        for (var index = 0; index < this.state.players.length; index++) {
+          var element = this.state.players[index];
+          if(element.id == client.id){
+            this.state.players[index].position = data.data;
+          }
+        }
       }
   }
 
   onDispose () {
-      console.log("Dispose ChatRoom");
+      console.log("Dispose Arena");
   }
 }
