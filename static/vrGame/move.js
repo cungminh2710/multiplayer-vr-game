@@ -18,16 +18,7 @@ window.addEventListener( 'keyup', function( e ) {
 
 window.addEventListener( 'keydown', function( e ) {
     e.preventDefault( );
-//       var greyMaterial = new THREE.MeshStandardMaterial( { color:0x696969,roughness: 1, metalness: 0.5 } )
 
-
-    
-    
-//     var box = new THREE.Mesh( new THREE.BoxBufferGeometry(0.6, 0.5, 0.5), greyMaterial); 
-    
-//     // console.log( document.querySelector("#man").object3D);
-// var hand = document.querySelector("#man").object3D.children[0].children[0].children[2].children[0].children[0].children[2].children[0].children[0].children[0].children[0];
-//hand.add(box);
     if( this.repeating == true )
     {
        if( this.repeatRateTimer == null ){
@@ -47,16 +38,22 @@ window.addEventListener( 'keydown', function( e ) {
     map[e.keyCode] = e.type == 'keydown';
     if(map[37]){ //left arrow
         pos.x-=0.4;
+        console.log(el.getAttribute("position"));
         el.setAttribute("position",pos);
         console.log(count);
-       count++;
+        
         map = {};
+        // the variable need to send is pos and el.getAttribute("id")
+        
+        gameRoom.send({
+            
+        })
     }
     else if(map[38]){// up arrow
         pos.z-=0.4;
          el.setAttribute("position",pos);
 
-        count++;
+
         map = {};   
     }
     else if(map[39]){// right 
@@ -64,7 +61,7 @@ window.addEventListener( 'keydown', function( e ) {
         el.setAttribute("position",pos);
         console.log(el.getAttribute("position"));
 
-        count++;
+     
         map = {};
     }
     else if(map[40]){//down arrow
@@ -72,7 +69,7 @@ window.addEventListener( 'keydown', function( e ) {
           el.setAttribute("position",pos);
 
          
-        count++;
+   
         map = {};   
     }
     
