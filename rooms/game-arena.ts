@@ -10,6 +10,7 @@ interface PlayerInfo {
   id: string,
   character: string,
   health: number,
+  team: string,
   position: {
     x: number,
     y: number
@@ -32,6 +33,7 @@ export class GameArena extends Room {
   onJoin (client: Client) {
     let newPlayer: PlayerInfo = {
       id: client.id,
+      team: "blue",
       character: "tank1",
       health: 100,
       position: {
