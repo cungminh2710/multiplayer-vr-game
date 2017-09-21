@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+  </head>
+  <body>
+      <script type="text/javascript" src="tank.js"></script>
+      <script type="text/javascript" src="move.js"></script>
+      <script type="text/javascript" src="healer.js"></script>
+    <a-scene>
+  <a-assets>
+    <img id="tankBody" src="tankBody.jpg">
+  </a-assets>
+</a-entity>
+<a-light type="point" position="0 5 0"></a-light>
+<a-light type="ambient"></a-light>
+<a-entity tank position="-2.5 0 0"></a-entity>
+<a-entity healer position="2.5 0 0"></a-entity>
+      <a-sky color="#ECECEC"></a-sky>
+      <a-entity position="0 0 10">
+      <a-camera  wasd-controls-enabled="true" ></a-camera>
+      </a-entity>
+    </a-scene>
+
+
+<script type="text/javascript">
+
+</script>
+    
+</body>
+</html>

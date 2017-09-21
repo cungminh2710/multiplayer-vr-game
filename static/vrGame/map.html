@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script type="text/javascript" src="tower.js"></script>
+      <!-- colyseus.js 0.7.0 client -->
+      <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
+      
+  </head>
+  <body>
+    
+    <a-scene inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js">
+      
+      <a-assets>
+    <img id="container" src="container2.png">
+    <img id="box" src="box.png">
+    <img id="stair" src="stair.png">
+    <img id="platform" src="platform.png">
+    <img id="ground" src="ground.png">
+    <img id="wall" src="wall.png">
+    </a-assets>
+      
+      <!----ground>-->
+    <a-plane id="ground" src="#ground" rotation="-90 0 0" width="60" height="120"repeat="30 30"position="0 0 -60"></a-plane>
+    <!----Blue terrace>-->
+      <a-entity id="mainterrace" geometry="primitive: box; depth:14; height:3 ;width:60"material="src:#platform" position="0 1.5 -7">
+          <a-entity id="tower" tower position="0 2 0"></a-entity>
+          <a-entity id="terrace1"  geometry="primitive: box; depth:2; height:2.5 ;width:60" material="src:#stair"position="0 -0.25 -8"></a-entity>
+            <a-entity id="terrace2"  geometry="primitive: box; depth:2; height:2 ;width:60" material="src:#stair"position="0 -0.5 -10"></a-entity>
+           <a-entity id="terrace3"  geometry="primitive: box; depth:2; height:1.5 ;width:60" material="src:#stair"position="0 -0.75 -12"></a-entity>
+            <a-entity id="terrace4"  geometry="primitive: box; depth:2; height:1.0 ;width:60" material="src:#stair"position="0 -1 -14"></a-entity>  
+              <a-entity id="terrace5"  geometry="primitive: box; depth:2; height:0.5 ;width:60" material="src:#stair"position="0 -1.25 -16"></a-entity>
+      </a-entity>
+      
+      
+      <!----Blue region2>-->
+      <!----Bluewall1>-->
+      <a-entity id="bluewall1" geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -46">
+        <!----box1>-->
+        <a-entity id="bluewallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="0 -0.5 2.5"></a-entity>
+        <!----BlueWall2>-->
+        <a-entity id="bluewall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="-40 0 0"></a-entity>
+        </a-entity>
+      
+      <!----Room>-->
+      <!----frontwall>-->
+      <a-entity id="frontwall">
+      <a-entity id="frontwall1" geometry="primitive:box;depth:0.5;height:6;width:11"material="src:#wall"position="7.5 3 -54"></a-entity>
+      <a-entity id="frontwall2" geometry="primitive:box;depth:0.5;height:6;width:11" material="src:#wall"position="-7.5 3 -54"></a-entity>
+      <a-entity id="frontdoor" geometry="primative:box;depth:0.5;height:3.5;width:4" material="src:#wall"position="0 4.25 -54"></a-entity>
+      </a-entity>
+      
+      <!---backwall-->
+       <a-entity id="backwall">
+      <a-entity id="backwall1" geometry="primitive:box;depth:0.5;height:6;width:11" material="src:#wall"position="7.5 3 -68"></a-entity>
+      <a-entity id="backwall2" geometry="primitive:box;depth:0.5;height:6;width:11" material="src:#wall"position="-7.5 3 -68"></a-entity>
+      <a-entity id="backdoor" geometry="primative:box;depth:0.5;height:3.5;width:4" material="src:#wall" position="0 4.25 -68"></a-entity>
+      </a-entity>
+      
+        <!--rightwall>-->
+      <a-entity id="rightwall">
+      <a-entity id="rightwall1" geometry="primitive:box;depth:5.5;height:6;width:0.5" material="src:#wall"position="13 3 -56.5"></a-entity>
+      <a-entity id="rightwall2" geometry="primitive:box;depth:5.5;height:6;width:0.5" material="src:#wall"position="13 3 -65.5"></a-entity>
+      <a-entity id="rightdoor" geometry="primative:box;depth:4;height:3.5;width:0.5" material="src:#wall" position="13 4.25 -61 -"></a-entity>
+      </a-entity>
+      
+     <!----leftwall>-->
+      <a-entity id="leftwall">
+      <a-entity id="leftwall1" geometry="primitive:box;depth:5.5;height:6;width:0.5" material="src:#wall"position="-13 3 -56.5"></a-entity>
+      <a-entity id="leftwall2" geometry="primitive:box;depth:5.5;height:6;width:0.5" material="src:#wall"position="-13 3 -65.5"></a-entity>
+      <a-entity id="leftdoor" geometry="primative:box;depth:4;height:3.5;width:0.5" material="src:#wall" position="-13 4.25 -61 -"></a-entity>
+      </a-entity>
+      
+      
+    <!----Red region2>-->
+      <!----Redwall1>-->
+      <a-entity id="redwall1" geometry="primitive: box; depth:4; height:2 ;width:20"   material="src: #container" position="-20 1 -74">
+        <!---BlueWall2>-->            
+        <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="40 0 0"></a-entity>
+             <!----box1>-->
+        <a-entity id="redwallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box" position="0 -0.5 -2.5"></a-entity>
+        </a-entity>
+        
+    
+        
+        
+        
+        
+      <!----Red terrace>-->
+      <a-entity id="mainterrace2" geometry="primitive: box; depth:14; height:3 ;width:60" material="src:#platform"position="0 1.5 -113">
+      <a-entity id="tower2" tower position="0 2 0" rotation="0 180 0"></a-entity>
+      <a-entity id="terrace6"  geometry="primitive: box; depth:2; height:2.5 ;width:60"material="src:#stair"position="0 -0.25 8"></a-entity>
+            <a-entity id="terrace7"  geometry="primitive: box; depth:2; height:2 ;width:60" material="src:#stair" position="0 -0.5 10"></a-entity>
+           <a-entity id="terrace8"  geometry="primitive: box; depth:2; height:1.5 ;width:60"  material="src:#stair"position="0 -0.75 12"></a-entity>
+            <a-entity id="terrace9"  geometry="primitive: box; depth:2; height:1.0 ;width:60" material="src:#stair"position="0 -1 14"></a-entity>  
+              <a-entity id="terrace10"  geometry="primitive: box; depth:2; height:0.5 ;width:60" material="src:#stair"position="0 -1.25 16"></a-entity>
+      </a-entity>
+      <!---->-->
+     
+      
+     
+      
+    <a-entity position="0 0 5">
+    <a-camera userHeight ="0" far="200000">
+    </a-entity>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+
+<script type="text/javascript" src="player.js"></script>
+  </body>
+  
+</html>
