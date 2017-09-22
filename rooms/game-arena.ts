@@ -44,7 +44,6 @@ export class GameArena extends Room {
 
   onJoin (client: Client) {
     console.log("NEW CLIENT JOINED");
-    console.log(client);
     if(this.numJoined == 0){
       this.state.players[0].id = client.id;
       this.numJoined++;

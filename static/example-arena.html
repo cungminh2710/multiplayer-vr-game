@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Tahoma, Geneva, sans-serif;
+            text-align: center;
+        }
+    </style>
+
+    <!-- dummy Symbol polyfill -->
+    <script>
+        if (typeof(Symbol) === "undefined") {
+            window.Symbol = function(arg) {
+                return arg;
+            }
+        }
+    </script>
+
+    <!-- colyseus.js 0.7.0 client -->
+    <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <h1><img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus"></h1>
+    <strong>States</strong><br>
+
+    <div id="states"></div>
+
+    <script>
+        var host = window.document.location.host.replace(/:.*/, '');
+        var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
+        var gameRoom = client.join("test-arena");
+        var playerNumber = 0;
+        var myPlayerName = client.id;
+        var globalState = {}
+        gameRoom.onJoin.add(function(state) {
+            console.log("initial room data:", state);
+            globalState = state
+            for (var i = 0; i < state.players.length; i++) {
+                if (myPlayerName == state.players[i].id) {
+                    playerNumber = i;
+                    break;
+                }
+            }
+        });
+        // new room state
+        gameRoom.onUpdate.add(function(state) {
+            // this signal is triggered on each patch
+            console.log("NEW STATE");
+            console.log(state);
+            globalState = state;
+            var p = document.createElement("p");
+            p.innerHTML = JSON.stringify(state);
+            document.querySelector("#states").appendChild(p);
+        });
+        // send data to room on submit
+        $('body').bind('keyup', function(e) {
+            console.log("new move");
+            if (e.keyCode == 38) {
+                // send data to room
+                gameRoom.send({
+                    data: {
+                        x: globalState.players[playerNumber].position.x,
+                        y: globalState.players[playerNumber].position.y + 1,
+                        z: globalState.players[playerNumber].position.z
+                    },
+                    action: "MOVE"
+                });
+            } else if (e.keyCode == 40) {
+                // send data to room
+                gameRoom.send({
+                    data: {
+                        x: globalState.players[playerNumber].position.x,
+                        y: globalState.players[playerNumber].position.y - 1,
+                        z: globalState.players[playerNumber].position.z
+                    },
+                    action: "MOVE"
+                });
+            } else if (e.keyCode == 39) {
+                // send data to room
+                gameRoom.send({
+                    data: {
+                        x: globalState.players[playerNumber].position.x + 1,
+                        y: globalState.players[playerNumber].position.y,
+                        z: globalState.players[playerNumber].position.z
+                    },
+                    action: "MOVE"
+                });
+            } else if (e.keyCode == 37) {
+                // send data to room
+                gameRoom.send({
+                    data: {
+                        x: globalState.players[playerNumber].position.x - 1,
+                        y: globalState.players[playerNumber].position.y,
+                        z: globalState.players[playerNumber].position.z
+                    },
+                    action: "MOVE"
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
