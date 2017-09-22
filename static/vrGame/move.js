@@ -43,7 +43,7 @@ AFRAME.registerComponent('move', {
    
             var camera = document.querySelector("#camera").object3D;
             var direction = camera.getWorldDirection();
-            var player = document.querySelector('#'+client.id);
+            var player = document.querySelector("#playerWrapper");
             var pos = player.getAttribute("position");
             this.repeating = true;
             console.log("press");

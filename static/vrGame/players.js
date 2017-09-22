@@ -9,16 +9,20 @@ class Players {
   static createMyself(playerInfo){
     //   var player = Players.createOtherPlayer(playerInfo);
     //   player.appendChild(Players.createCamera());
-
+      var playerWrapper =  document.createElement("a-entity");
+      playerWrapper.setAttribute("id","playerWrapper");
       var player = document.createElement("a-entity");
       player.setAttribute("id",client.id);
-      player.setAttribute("position",playerInfo );
+      playerWrapper.setAttribute("position",playerInfo );
  
       player.setAttribute("animation-mixer","clip: idle");
-      player.setAttribute("move","");
+      playerWrapper.setAttribute("move","");
       player.setAttribute("json_model","src: url(models/adc.json);");
-      player.appendChild(Players.createCamera());
-      document.querySelector("a-scene").appendChild(player);
+
+      playerWrapper.appendChild(player);
+      playerWrapper.appendChild(Players.createCamera());
+     
+      document.querySelector("a-scene").appendChild(playerWrapper);
 
   }
   
@@ -64,9 +68,16 @@ class Players {
       camera.addEventListener('componentchanged', function (evt) {
         if (evt.detail.name !== 'rotation') return;
           var rotation = evt.detail.newData;
-          var a = document.querySelector('#cameraWrapper').getAttribute("position");
-          document.querySelector("#"+client.id).setAttribute("rotation",rotation);
-        
+          console.log(evt.detail);
+          //console.log(camera.getAttribute("rotation"))
+     
+          //var a = document.querySelector('#cameraWrapper').getAttribute("position");
+          var player = document.querySelector("#"+client.id)
+          player.setAttribute("rotation",0+" "+rotation.y+" "+0);
+          var head = player.object3D.children[0].children[0].children[0].children[0];
+          head.rotation.x = -Math.PI*rotation.x/180;
+          //console.log(head)
+
       });
 
       cameraWrapper.appendChild(camera);
