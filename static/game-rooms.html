@@ -20,51 +20,167 @@
 
     <!-- colyseus.js 0.7.0 client -->
     <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
-
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <h1><img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus"></h1>
-    <strong>Messages</strong><br>
+    <strong>Game Room</strong><br>
 
     <form id="form">
-        <input type="text" id="input" value="" />
-        <input type="submit" value="send" />
+        <input type="text" id="game-name" value="" />
+        <input type="number" id="game-max-players" step="2" min="2" max="6" value="" />
+        <input id="submit-create-room" type="submit" value="create" />
     </form>
 
-    <div id="messages"></div>
+    <div id="current-rooms">
+        <h3>Available Rooms</h3>
+    </div>
+
+
+    <div id="my-room" style="max-width: 400px; margin: auto;">
+        <h3>My Room</h3>
+        <h4>Members</h4>
+        <ul id="player-list"></ul>
+        <h4>Buttons</h4>
+        <button id="leave-room" disabled>Leave</button>
+        <button id="player-ready" disabled>I'm Ready</button>
+    </div>
 
     <script>
         var host = window.document.location.host.replace(/:.*/, '');
         var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
+        var myPlayerName = client.id;
         var gameRoom = client.join("game-room");
-        gameRoom.onUpdate.addOnce(function(state) {
-            console.log("initial room data:", state);
+
+        var globalState = {};
+        gameRoom.onJoin.add(function() {
+            console.log("joined-room");
         });
         // new room state
         gameRoom.onUpdate.add(function(state) {
             // this signal is triggered on each patch
+            globalState = state;
+            updateDOM();
         });
-        // listen to patches coming from the server
-        gameRoom.listen("messages/:number", function(change) {
-            var p = document.createElement("p");
-            p.innerHTML = change.value;
-            document.querySelector("#messages").appendChild(p);
-        });
-        gameRoom.listen(function(change) {
-            console.log("patch:", change.path, change.operation, change.value)
-        });
+
+        function updateDOM() {
+            console.log(globalState);
+            var joinedRoom = -1;
+            //clear old data
+            var gameRoomList = document.getElementById("current-rooms");
+            gameRoomList.innerHTML = "";
+
+            for (var i = 0; i < globalState.rooms.length; i++) {
+                if (globalState.rooms[i].players.indexOf(myPlayerName) > -1) {
+                    joinedRoom = i;
+                }
+
+                var newDiv = document.createElement("div");
+                var roomName = document.createElement("span");
+                roomName.className = "room-name";
+                roomName.innerHTML = globalState.rooms[i].name;
+
+                var currentNumPlayers = document.createElement("span");
+                currentNumPlayers.innerHTML = globalState.rooms[i].players.length;
+                var maxPlayers = document.createElement("span");
+                maxPlayers.innerHTML = globalState.rooms[i].maxPlayers;
+                var joinBtn = document.createElement("button");
+                joinBtn.className = "join-room";
+                joinBtn.innerHTML = "Join";
+                joinBtn.disabled = globalState.rooms[i].players.length == globalState.rooms[i].maxPlayers;
+
+                newDiv.appendChild(roomName).appendChild(currentNumPlayers).appendChild(maxPlayers).appendChild(joinBtn);
+                gameRoomList.appendChild(newDiv);
+            }
+
+            // populate bottom section
+            if (joinedRoom > -1) {
+                //disabled join room buttons
+                var el = document.getElementsByClassName("join-room");
+                for (var i = 0; i < el.length; i++) {
+                    el[i].disabled = true;
+                }
+
+                // enable leave button 
+                document.getElementById("leave-room").disabled = false;
+
+                // Remove all elements in list
+                var myNode = document.getElementById("player-list");
+                myNode.innerHTML = '';
+
+                if (globalState.rooms[joinedRoom].players.length === globalState.rooms[joinedRoom].readyPlayers.length) {
+                    //go to game arena
+                }
+
+                for (var j = 0; j < globalState.rooms[joinedRoom].players.length; j++) {
+                    var newElement = document.createElement("li");
+                    newElement.innerHTML = globalState.rooms[joinedRoom].players[j];
+
+                    if (globalState.rooms[joinedRoom].players.length == globalState.rooms[joinedRoom].maxPlayers) {
+                        //prompt players to press ready button
+                        if (globalState.rooms[joinedRoom].readyPlayers.indexOf(myPlayerName) === -1) {
+                            var readyBtn = document.getElementById("player-ready");
+                            readyBtn.disabled = false;
+                        }
+
+                        // mark ready players as "IS READY"
+                        if (globalState.rooms[joinedRoom].readyPlayers.indexOf(globalState.rooms[joinedRoom].players[j]) > -1) {
+                            newElement.innerHTML += " IS READY";
+                        }
+                    }
+
+                    myNode.appendChild(newElement);
+                }
+            }
+        }
+
         // send data to room on submit
         document.querySelector("#form").onsubmit = function(e) {
             e.preventDefault();
-            var input = document.querySelector("#input");
+            var roomName = document.querySelector("#game-name");
+            var maxPlayers = document.querySelector("#game-max-players");
             // send data to room
             gameRoom.send({
-                message: input.value
+                action: "CREATE",
+                payload: {
+                    roomName: roomName.value,
+                    maxPlayers: maxPlayers.value
+                }
             });
             // clear input
-            input.value = "";
+            roomName.value = "";
+            maxPlayers.value = "";
+            document.getElementById("submit-create-room").disabled = true;
         }
+
+        // join room
+        $(document).on('click', '.join-room', function(e) {
+            var roomName = $(this).siblings('.room-name').innerHTML;
+            gameRoom.send({
+                action: "JOIN",
+                payload: {
+                    roomName: roomName
+                }
+            });
+            document.getElementById("submit-create-room").disabled = true;
+        });
+
+        // mark ready
+        $(document).on('click', '#player-ready', function() {
+            gameRoom.send({
+                action: "READY"
+            });
+        });
+
+        $(document).on('click', '#leave-room', function() {
+            gameRoom.send({
+                action: "LEAVE"
+            });
+            document.getElementById("player-list").innerHTML = '';
+            document.getElementById("submit-create-room").disabled = false;
+        });
     </script>
 </body>
 
