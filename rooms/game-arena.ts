@@ -60,13 +60,13 @@ export class GameArena extends Room {
   }
 
   onMessage (client: Client, data) {
-      console.log("Game Arena:", client.id, data);
+     // console.log("Game Arena:", client.id, data);
 
       if(data.action == "MOVE"){
         for (var index = 0; index < this.state.players.length; index++) {
           var element = this.state.players[index];
           if(element.id == client.id){
-            this.state.players[index].position = {x: data.data.x,y: data.data.y,z: data.data.z};
+            this.state.players[index].position = data.data;
           }
         }
       }

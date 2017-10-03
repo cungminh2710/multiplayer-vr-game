@@ -19,8 +19,9 @@ AFRAME.registerComponent('move', {
                 this.repeatRateTimer = null;
             }
             console.log("keyUp");
+            gameRoom.send({action: "keyup" });
             moveFlag = "idle";
-            Animation.setAnimation(client.id,"idle");
+            Animation.setAnimation(el.querySelector("#"+client.id),"idle");
             this.repeating = false;
         } );
 
@@ -40,7 +41,7 @@ AFRAME.registerComponent('move', {
                 return;
             }
 
-   
+    
             var camera = document.querySelector("#camera").object3D;
             var direction = camera.getWorldDirection();
             var player = document.querySelector("#playerWrapper");
@@ -57,8 +58,11 @@ AFRAME.registerComponent('move', {
                 var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
                 player.setAttribute('position', newPos);
                 map = {};
+                console.log("adfafasfadsf");
+                console.log(el);
                 if(moveFlag != "run") {
-                    Animation.setAnimation(client.id,"run");
+                 
+                    Animation.setAnimation(el.children[0],"run");
                     moveFlag = "run";
                 }
                 gameRoom.send({action: "MOVE",data: {x: pos.x,y: pos.y, z: pos.z} });
@@ -68,7 +72,7 @@ AFRAME.registerComponent('move', {
                 var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
                 player.setAttribute('position', newPos);
                 if(moveFlag != "run") {
-                    Animation.setAnimation(client.id,"run");
+                    Animation.setAnimation(el.children[0],"run");
                     moveFlag = "run";
                 }
                 map = {};
