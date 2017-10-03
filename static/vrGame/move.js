@@ -18,10 +18,10 @@ AFRAME.registerComponent('move', {
                 clearTimeout( this.repeatRateTimer );
                 this.repeatRateTimer = null;
             }
-            console.log("keyUp");
-            gameRoom.send({action: "keyup" });
+         
+            gameRoom.send({action: "idle",data: {} });
             moveFlag = "idle";
-            Animation.setAnimation(el.querySelector("#"+client.id),"idle");
+            Animation.setAnimation(el.children[0],"idle");
             this.repeating = false;
         } );
 
@@ -58,8 +58,8 @@ AFRAME.registerComponent('move', {
                 var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
                 player.setAttribute('position', newPos);
                 map = {};
-                console.log("adfafasfadsf");
-                console.log(el);
+                //console.log("adfafasfadsf");
+               // console.log(el);
                 if(moveFlag != "run") {
                  
                     Animation.setAnimation(el.children[0],"run");

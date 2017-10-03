@@ -9,7 +9,7 @@ var gameRoom = client.join("test-arena");
 var playerNumber = 0; // index in state.players[] array that will correspond to this player
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = {} // it is a good idea to store state changes from server on client
-
+var create = 0;
 // THIS IS THE FIRST STAETE THIS CLIENT WILL SEE WHEN THEY JOIN THE GAME
 gameRoom.onJoin.addOnce(function(state) {
     console.log("initial room data:", state);
@@ -33,22 +33,24 @@ gameRoom.onJoin.addOnce(function(state) {
 gameRoom.onUpdate.add(function(state) {
     // UPDATE CLIENT STATE
     globalState = state;
-    if(document.querySelector("#"+client.id) == undefined){
+    console.log("update");
+    if(create == 0){
         Players.createMyself("2.5 2.5 5")
+        create = 1
         console.log("1");
     } 
     // this signal is triggered on each patch
-    for (var i = 0; i < state.players.length; i++) {
+    // for (var i = 0; i < state.players.length; i++) {
 
-        // TODO: change to player's coordinates
-        if(document.querySelector("#"+state.players[i].id) == undefined){
-            Players.createOtherPlayer("2.5 2.5 5")
-            console.log("ohter");
-        }
-        // } else {
-        //     Players.createOtherPlayer("2.5 2.5 5");
-        //     console.log("2");
-        // }
-    }
+    //     // TODO: change to player's coordinates
+    //     if(document.querySelector("#"+state.players[i].id) == undefined){
+    //         Players.createOtherPlayer("2.5 2.5 5")
+    //         console.log("ohter");
+    //     }
+    //     // } else {
+    //     //     Players.createOtherPlayer("2.5 2.5 5");
+    //     //     console.log("2");
+    //     // }
+    // }
   //  console.log(state);
 });

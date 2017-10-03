@@ -12,7 +12,9 @@ class Players {
       var playerWrapper =  document.createElement("a-entity");
       playerWrapper.setAttribute("id","playerWrapper");
       var player = document.createElement("a-entity");
+
       player.setAttribute("id",client.id);
+     // player.setAttribute("id","testID");
       playerWrapper.setAttribute("position",playerInfo );
  
       player.setAttribute("animation-mixer","clip: idle");
@@ -20,7 +22,7 @@ class Players {
       player.setAttribute("json_model","src: url(models/adc.json);");
 
       playerWrapper.appendChild(player);
-      playerWrapper.appendChild(Players.createCamera());
+      playerWrapper.appendChild(Players.createCamera(player));
      
       document.querySelector("a-scene").appendChild(playerWrapper);
 
@@ -40,7 +42,7 @@ class Players {
 
 
   }
-  static createCamera(){
+  static createCamera(player){
       var cameraWrapper = document.createElement("a-entity");
       cameraWrapper.setAttribute("id","cameraWrapper");
 
@@ -67,15 +69,19 @@ class Players {
                   
       camera.addEventListener('componentchanged', function (evt) {
         if (evt.detail.name !== 'rotation') return;
-          var rotation = evt.detail.newData;
-          console.log(evt.detail);
-          //console.log(camera.getAttribute("rotation"))
-     
+          
+          console.log("adsfda",evt);
+          var rotation = camera.components.rotation.data;
+         // var player = evt.srcElement
+          
           //var a = document.querySelector('#cameraWrapper').getAttribute("position");
-          var player = document.querySelector("#"+client.id)
+          //var player = document.querySelector("#"+client.id)
+         // var player = document.querySelector("#testID")
+
           player.setAttribute("rotation",0+" "+rotation.y+" "+0);
+          console.log(player.getAttribute("rotation"))
           var head = player.object3D.children[0].children[0].children[0].children[0];
-          head.rotation.x = -Math.PI*rotation.x/180;
+         head.rotation.x = -Math.PI*rotation.x/180;
           //console.log(head)
 
       });
