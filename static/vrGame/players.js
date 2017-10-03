@@ -82,7 +82,7 @@ class Players {
           console.log(player.getAttribute("rotation"))
           var head = player.object3D.children[0].children[0].children[0].children[0];
          head.rotation.x = -Math.PI*rotation.x/180;
-          //console.log(head)
+    
 
       });
 
