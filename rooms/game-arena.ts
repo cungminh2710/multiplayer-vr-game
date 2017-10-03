@@ -10,8 +10,10 @@ interface PlayerInfo {
     x: number,
     y: number,
     z: number
-  }
+  },
+  animations: string[]
 }
+
 export class GameArena extends Room {
   private numJoined: number = 0;
   onInit (options) {
@@ -23,7 +25,8 @@ export class GameArena extends Room {
         x: 10,
         y: 10,
         z: 1
-      }
+      },
+      animations: ["standing"]
     };
 
     let newPlayer2: PlayerInfo = {
@@ -34,7 +37,8 @@ export class GameArena extends Room {
         x: 15,
         y: 15,
         z: 1
-      }
+      },
+      animations: ["standing"]
     };
     this.setState({
       players: <Array<PlayerInfo>> [newPlayer1, newPlayer2],
@@ -67,6 +71,7 @@ export class GameArena extends Room {
           var element = this.state.players[index];
           if(element.id == client.id){
             this.state.players[index].position = {x: data.data.x,y: data.data.y,z: data.data.z};
+            this.state.players[index].animations = data.data.animations;
           }
         }
       }
