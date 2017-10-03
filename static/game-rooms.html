@@ -36,6 +36,19 @@
 
     <div id="current-rooms">
         <h3>Available Rooms</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Num Players</th>
+                    <th>Max Num Players</th>
+                    <th>Join</th>
+                </tr>
+            </thead>
+            <tbody id="current-rooms-tbody">
+
+            </tbody>
+        </table>
     </div>
 
 
@@ -69,7 +82,7 @@
             console.log(globalState);
             var joinedRoom = -1;
             //clear old data
-            var gameRoomList = document.getElementById("current-rooms");
+            var gameRoomList = document.getElementById("current-rooms-tbody");
             gameRoomList.innerHTML = "";
 
             for (var i = 0; i < globalState.rooms.length; i++) {
@@ -77,16 +90,16 @@
                     joinedRoom = i;
                 }
 
-                var newDiv = document.createElement("div");
-                var roomName = document.createElement("span");
+                var newRow = document.createElement("tr");
+                var roomName = document.createElement("td");
                 roomName.className = "room-name";
                 roomName.innerHTML = globalState.rooms[i].name;
 
-                var currentNumPlayers = document.createElement("span");
+                var currentNumPlayers = document.createElement("td");
                 currentNumPlayers.innerHTML = globalState.rooms[i].players.length;
-                var maxPlayers = document.createElement("span");
+                var maxPlayers = document.createElement("td");
                 maxPlayers.innerHTML = globalState.rooms[i].maxPlayers;
-                var joinBtn = document.createElement("button");
+                var joinBtn = document.createElement("td");
                 joinBtn.className = "join-room";
                 joinBtn.innerHTML = "Join";
                 joinBtn.disabled = globalState.rooms[i].players.length == globalState.rooms[i].maxPlayers;
