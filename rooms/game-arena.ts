@@ -54,6 +54,12 @@ export class GameArena extends Room {
     }else if(this.numJoined == 1){
       this.state.players[1].id = client.id;
     }
+
+    console.log("SENDING INITIAL DATA")
+    this.send(client, {
+      type: "initial",
+      state: this.state
+    });
   }
 
   onLeave (client: Client) {
@@ -65,7 +71,9 @@ export class GameArena extends Room {
 
   onMessage (client: Client, data) {
      // console.log("Game Arena:", client.id, data);
-
+      if(data.action == "idle"){
+        return;
+      }
       if(data.action == "MOVE"){
         for (var index = 0; index < this.state.players.length; index++) {
           var element = this.state.players[index];
@@ -75,6 +83,21 @@ export class GameArena extends Room {
           }
         }
       }
+
+      // this.messageClient(client);
+  }
+
+  messageClient (client: Client) {
+    let container = [];
+    this.state.players.forEach(player => {
+      if(player.id != client.id){
+        container.push(player);
+      }
+    });
+
+    this.send(client, {
+      players: container
+    });
   }
 
   onDispose () {
