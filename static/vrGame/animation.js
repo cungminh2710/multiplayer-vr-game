@@ -1,7 +1,7 @@
 class Animation{
 
-    static setAnimation(id, movement){
-        var player = document.querySelector("#"+id);
+    static setAnimation(player, movement){
+       
         player.setAttribute("animation-mixer","clip:"+movement)
         
     }

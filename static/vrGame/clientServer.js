@@ -16,7 +16,7 @@ gameRoom.onJoin.addOnce(function(state) {
 
     // STORE STATE
     globalState = state
-
+    console.log(state);
     // THIS WILL UPDATE playerNumber 
     // TO UPDATE YOUR POSITION LATER
     for (var i = 0; i < state.players.length; i++) {
@@ -26,23 +26,29 @@ gameRoom.onJoin.addOnce(function(state) {
         }
     }
 
-    Players.createMyself("2.5 2.5 5");
+   // Players.createMyself("2.5 2.5 5");
 });
 
 // THIS WILL LISTEN FOR STATE UPDATES (movements, HP changes, deaths, etc)
 gameRoom.onUpdate.add(function(state) {
     // UPDATE CLIENT STATE
     globalState = state;
-
+    if(document.querySelector("#"+client.id) == undefined){
+        Players.createMyself("2.5 2.5 5")
+        console.log("1");
+    } 
     // this signal is triggered on each patch
     for (var i = 0; i < state.players.length; i++) {
 
         // TODO: change to player's coordinates
-        if (i == playerNumber) {
-            Players.createMyself("2.5 2.5 5")
-        } else {
-            Players.createOtherPlayer("2.5 2.5 5");
+        if(document.querySelector("#"+state.players[i].id) == undefined){
+            Players.createOtherPlayer("2.5 2.5 5")
+            console.log("ohter");
         }
+        // } else {
+        //     Players.createOtherPlayer("2.5 2.5 5");
+        //     console.log("2");
+        // }
     }
-    console.log(state);
+  //  console.log(state);
 });
