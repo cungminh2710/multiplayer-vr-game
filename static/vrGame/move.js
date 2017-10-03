@@ -2,46 +2,44 @@ AFRAME.registerComponent('move', {
     schema: {
         DELTA_MOVE: {
 
-          default:'0.4'
+            default: '0.4'
         }
-      },
-    init: function () {
+    },
+    init: function() {
         this.repeating = false;
         this.repeatRateTimer = null;
         var count = this.count = 0;
         var el = this.el;
         var DELTA_MOVE = this.data.DELTA_MOVE;
-        var moveFlag = "idle"; 
-        window.addEventListener( 'keyup', function( e ) {
-            if( this.repeatRateTimer != null )
-            {
-                clearTimeout( this.repeatRateTimer );
+        var moveFlag = "idle";
+        window.addEventListener('keyup', function(e) {
+            if (this.repeatRateTimer != null) {
+                clearTimeout(this.repeatRateTimer);
                 this.repeatRateTimer = null;
             }
-         
-            gameRoom.send({action: "idle",data: {} });
+
+            gameRoom.send({ action: "idle", data: {} });
             moveFlag = "idle";
-            Animation.setAnimation(el.children[0],"idle");
+            Animation.setAnimation(el.children[0], "idle");
             this.repeating = false;
-        } );
+        });
 
 
-        window.addEventListener( 'keydown', function( e ) {
-            e.preventDefault( );
+        window.addEventListener('keydown', function(e) {
+            e.preventDefault();
 
-            if( this.repeating == true )
-            {
-            if( this.repeatRateTimer == null ){
-                    this.repeatRateTimer = setTimeout( function( ) {
-                    this.repeating = false;
-                    clearTimeout( this.repeatRateTimer );
-                    this.repeatRateTimer = null;
-                    }, 1 );
+            if (this.repeating == true) {
+                if (this.repeatRateTimer == null) {
+                    this.repeatRateTimer = setTimeout(function() {
+                        this.repeating = false;
+                        clearTimeout(this.repeatRateTimer);
+                        this.repeatRateTimer = null;
+                    }, 1);
                 }
                 return;
             }
 
-    
+
             var camera = document.querySelector("#camera").object3D;
             var direction = camera.getWorldDirection();
             var player = document.querySelector("#playerWrapper");
@@ -49,36 +47,35 @@ AFRAME.registerComponent('move', {
             this.repeating = true;
             console.log("press");
             var pos = el.getAttribute("position");
-            e = e ||window.event; // to deal with IE
+            e = e || window.event; // to deal with IE
             var map = {};
             map[e.keyCode] = e.type == 'keydown';
 
-            if(map[40]){// up arrow
-                el.setAttribute("position",pos);
-                var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
+            if (map[40]) { // up arrow
+                el.setAttribute("position", pos);
+                var newPos = { x: pos.x + direction.x * DELTA_MOVE, y: pos.y, z: pos.z + direction.z * DELTA_MOVE };
                 player.setAttribute('position', newPos);
                 map = {};
                 //console.log("adfafasfadsf");
-               // console.log(el);
-                if(moveFlag != "run") {
-                 
-                    Animation.setAnimation(el.children[0],"run");
+                // console.log(el);
+                if (moveFlag != "run") {
+
+                    Animation.setAnimation(el.children[0], "run");
                     moveFlag = "run";
                 }
-                gameRoom.send({action: "MOVE",data: {x: pos.x,y: pos.y, z: pos.z} });
-            }
-            else if(map[38]){//down arrow
-                el.setAttribute("position",pos);
-                var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
+                gameRoom.send({ action: "MOVE", data: { x: pos.x, y: pos.y, z: pos.z } });
+            } else if (map[38]) { //down arrow
+                el.setAttribute("position", pos);
+                var newPos = { x: pos.x - direction.x * DELTA_MOVE, y: pos.y, z: pos.z - direction.z * DELTA_MOVE };
                 player.setAttribute('position', newPos);
-                if(moveFlag != "run") {
-                    Animation.setAnimation(el.children[0],"run");
+                if (moveFlag != "run") {
+                    Animation.setAnimation(el.children[0], "run");
                     moveFlag = "run";
                 }
                 map = {};
-                gameRoom.send({action: "MOVE",data: {x: pos.x,y: pos.y,z: pos.z}});
+                gameRoom.send({ action: "MOVE", data: { x: pos.x, y: pos.y, z: pos.z } });
             }
-            
+
 
             // if(map[37]){ //left arrow
             //     console.log(el.getAttribute("position"));
@@ -93,7 +90,7 @@ AFRAME.registerComponent('move', {
             //     gameRoom.send({action: "MOVE",data: {x: pos.x,y: pos.y,z: pos.z}});
             // }
 
-        } );
+        });
 
     },
 
