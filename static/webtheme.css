@@ -50,10 +50,12 @@ a.header-logo {
 }
 
 .btn-leave {
+  width: 7em;
   background-color: #fff;
 }
 
 .btn-ready {
+  width: 7em;
   background-color: #f0004f;
 }
 
