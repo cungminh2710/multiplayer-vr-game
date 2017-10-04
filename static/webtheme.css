@@ -3,6 +3,60 @@ body {
   color: #fff;
 }
 
+.gameroom {
+  font-family: Tahoma, Geneva, sans-serif;
+  text-align: center;
+}
+
+.gameroom table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gameroom tr, th, td {
+  border: 1px solid #fff;
+  padding: 5px;
+}
+
+.gameroom input {
+  color: #000;
+}
+
+.header-bar {
+  background-color: #fff;
+  background-image: url("bg_banner.jpg");
+  background-size: cover;
+}
+
+.header-strip {
+  padding: 5px;
+  margin-bottom: 20px;
+  background-color: #AF9153;
+}
+
+a.header-logo {
+  text-decoration: none;
+  color: #fff;
+  font-family: Garamond;
+  font-size: 3em;
+}
+
+.rm-btn {
+  padding: 5px;
+  color: #000;
+  border-radius: 5px;
+  border-color: blue;
+  background-color: #45d2f6;
+}
+
+.btn-leave {
+  background-color: #fff;
+}
+
+.btn-ready {
+  background-color: #f0004f;
+}
+
 .login-hdr {
   float: right;
   margin-top: 15px;
