@@ -66,22 +66,14 @@ class Players {
       camera.appendChild(raycaster);
 
 
-                  
+      // add head movement and body rotation           
       camera.addEventListener('componentchanged', function (evt) {
         if (evt.detail.name !== 'rotation') return;
           
-          console.log("adsfda",evt);
           var rotation = camera.components.rotation.data;
-         // var player = evt.srcElement
-          
-          //var a = document.querySelector('#cameraWrapper').getAttribute("position");
-          //var player = document.querySelector("#"+client.id)
-         // var player = document.querySelector("#testID")
-
           player.setAttribute("rotation",0+" "+rotation.y+" "+0);
-          console.log(player.getAttribute("rotation"))
           var head = player.object3D.children[0].children[0].children[0].children[0];
-         head.rotation.x = -Math.PI*rotation.x/180;
+          head.rotation.x = -Math.PI*rotation.x/180;
     
 
       });
