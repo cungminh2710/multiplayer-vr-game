@@ -50,6 +50,7 @@ gameRoom.onUpdate.add(function(state) {
         } else if (!isEquivalent(globalState.players[i], state.players[i])) {
             // TODO: change to player's coordinates
             console.log("CHANGE PLAYER COORD");
+            console.log(state)
         }
     }
     // UPDATE CLIENT STATE
@@ -82,3 +83,5 @@ function isEquivalent(a, b) {
     // are considered equivalent
     return true;
 }
+
+
