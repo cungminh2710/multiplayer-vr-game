@@ -2,215 +2,218 @@
 <html>
 
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="webtheme.css">
 
-  <!-- dummy Symbol polyfill -->
-  <script>
-    if (typeof(Symbol) === "undefined") {
-        window.Symbol = function(arg) {
-            return arg;
+    <!-- dummy Symbol polyfill -->
+    <script>
+        if (typeof(Symbol) === "undefined") {
+            window.Symbol = function(arg) {
+                return arg;
+            }
         }
-    }
-  </script>
+    </script>
 
-  <!-- colyseus.js 0.7.0 client -->
-  <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
-  <!-- jquery -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+    <!-- colyseus.js 0.7.0 client -->
+    <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 </head>
 
 <body class="gameroom">
-  <nav>
-    <div class="header-bar">
-      <div class="container">
-        <a href="#" class="header-logo">LoVR</a>
-      </div>
+    <nav>
+        <div class="header-bar">
+            <div class="container">
+                <a href="#" class="header-logo">LoVR</a>
+            </div>
 
+        </div>
+        <div class="header-strip">
+        </div>
+    </nav>
+
+    <h1><img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus"></h1>
+    <strong>Game Room</strong><br>
+
+    <form id="form">
+        <input type="text" id="game-name" value="" placeholder="Game Room Name" />
+        <input type="number" id="game-max-players" step="2" min="2" max="6" value="" placeholder="Max Players" />
+        <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
+    </form>
+
+    <div id="current-rooms">
+        <h3>Available Rooms</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Num Players</th>
+                    <th>Max Num Players</th>
+                    <th>Join</th>
+                </tr>
+            </thead>
+            <tbody id="current-rooms-tbody">
+                <tr>
+                    <td>Something here</td>
+                    <td>Something here</td>
+                    <td>Something here</td>
+                    <td>Something here</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="header-strip">
+
+
+    <div id="my-room" style="max-width: 400px; margin: auto;">
+        <h3>My Room</h3>
+        <h4>Members</h4>
+        <ul id="player-list">
+
+        </ul>
+        <h4>Buttons</h4>
+        <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
+        <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
     </div>
-  </nav>
 
-  <h1><img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus"></h1>
-  <strong>Game Room</strong><br>
+    <script>
+        var host = window.document.location.host.replace(/:.*/, '');
+        var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
+        var myPlayerName = client.id;
+        var gameRoom = client.join("game-room");
 
-  <form id="form">
-    <input type="text" id="game-name" value="" />
-    <input type="number" id="game-max-players" step="2" min="2" max="6" value="" />
-    <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
-  </form>
+        var globalState = {};
+        gameRoom.onJoin.add(function() {
+            console.log("joined-room");
+        });
+        // new room state
+        gameRoom.onUpdate.add(function(state) {
+            // this signal is triggered on each patch
+            globalState = state;
+            updateDOM();
+        });
 
-  <div id="current-rooms">
-    <h3>Available Rooms</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Num Players</th>
-          <th>Max Num Players</th>
-          <th>Join</th>
-        </tr>
-      </thead>
-      <tbody id="current-rooms-tbody">
-        <tr>
-          <td>Something here</td>
-          <td>Something here</td>
-          <td>Something here</td>
-          <td>Something here</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        function updateDOM() {
+            console.log(globalState);
+            var joinedRoom = -1;
+            //clear old data
+            var gameRoomList = document.getElementById("current-rooms-tbody");
+            gameRoomList.innerHTML = "";
 
+            for (var i = 0; i < globalState.rooms.length; i++) {
+                if (globalState.rooms[i].players.indexOf(myPlayerName) > -1) {
+                    joinedRoom = i;
+                }
 
-  <div id="my-room" style="max-width: 400px; margin: auto;">
-    <h3>My Room</h3>
-    <h4>Members</h4>
-    <ul id="player-list">
+                var newRow = document.createElement("tr");
+                var roomName = document.createElement("td");
+                roomName.className = "room-name";
+                roomName.innerHTML = globalState.rooms[i].name;
 
-    </ul>
-    <h4>Buttons</h4>
-    <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
-    <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
-  </div>
+                var currentNumPlayers = document.createElement("td");
+                currentNumPlayers.innerHTML = globalState.rooms[i].players.length;
+                var maxPlayers = document.createElement("td");
+                maxPlayers.innerHTML = globalState.rooms[i].maxPlayers;
+                var joinBtn = document.createElement("td");
+                joinBtn.className = "join-room";
+                joinBtn.innerHTML = "Join";
+                joinBtn.disabled = globalState.rooms[i].players.length == globalState.rooms[i].maxPlayers;
 
-  <script>
-      var host = window.document.location.host.replace(/:.*/, '');
-      var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
-      var myPlayerName = client.id;
-      var gameRoom = client.join("game-room");
+                newRow.appendChild(roomName);
+                newRow.appendChild(currentNumPlayers)
+                newRow.appendChild(maxPlayers)
+                newRow.appendChild(joinBtn);
+                gameRoomList.appendChild(newRow);
+            }
 
-      var globalState = {};
-      gameRoom.onJoin.add(function() {
-          console.log("joined-room");
-      });
-      // new room state
-      gameRoom.onUpdate.add(function(state) {
-      // this signal is triggered on each patch
-          globalState = state;
-          updateDOM();
-      });
+            // populate bottom section
+            if (joinedRoom > -1) {
+                //disabled join room buttons
+                var el = document.getElementsByClassName("join-room");
+                for (var i = 0; i < el.length; i++) {
+                    el[i].disabled = true;
+                }
 
-      function updateDOM() {
-          console.log(globalState);
-          var joinedRoom = -1;
-          //clear old data
-          var gameRoomList = document.getElementById("current-rooms-tbody");
-          gameRoomList.innerHTML = "";
+                // enable leave button
+                document.getElementById("leave-room").disabled = false;
 
-          for (var i = 0; i < globalState.rooms.length; i++) {
-              if (globalState.rooms[i].players.indexOf(myPlayerName) > -1) {
-                  joinedRoom = i;
-              }
+                // Remove all elements in list
+                var myNode = document.getElementById("player-list");
+                myNode.innerHTML = '';
 
-              var newRow = document.createElement("tr");
-              var roomName = document.createElement("td");
-              roomName.className = "room-name";
-              roomName.innerHTML = globalState.rooms[i].name;
+                if (globalState.rooms[joinedRoom].players.length === globalState.rooms[joinedRoom].readyPlayers.length) {
+                    //go to game arena
+                }
 
-              var currentNumPlayers = document.createElement("td");
-              currentNumPlayers.innerHTML = globalState.rooms[i].players.length;
-              var maxPlayers = document.createElement("td");
-              maxPlayers.innerHTML = globalState.rooms[i].maxPlayers;
-              var joinBtn = document.createElement("td");
-              joinBtn.className = "join-room";
-              joinBtn.innerHTML = "Join";
-              joinBtn.disabled = globalState.rooms[i].players.length == globalState.rooms[i].maxPlayers;
+                for (var j = 0; j < globalState.rooms[joinedRoom].players.length; j++) {
+                    var newElement = document.createElement("li");
+                    newElement.innerHTML = globalState.rooms[joinedRoom].players[j];
 
-              newDiv.appendChild(roomName).appendChild(currentNumPlayers).appendChild(maxPlayers).appendChild(joinBtn);
-              gameRoomList.appendChild(newDiv);
-          }
+                    if (globalState.rooms[joinedRoom].players.length == globalState.rooms[joinedRoom].maxPlayers) {
+                        //prompt players to press ready button
+                        if (globalState.rooms[joinedRoom].readyPlayers.indexOf(myPlayerName) === -1) {
+                            var readyBtn = document.getElementById("player-ready");
+                            readyBtn.disabled = false;
+                        }
 
-          // populate bottom section
-          if (joinedRoom > -1) {
-              //disabled join room buttons
-              var el = document.getElementsByClassName("join-room");
-              for (var i = 0; i < el.length; i++) {
-                  el[i].disabled = true;
-              }
+                        // mark ready players as "IS READY"
+                        if (globalState.rooms[joinedRoom].readyPlayers.indexOf(globalState.rooms[joinedRoom].players[j]) > -1) {
+                            newElement.innerHTML += " IS READY";
+                        }
+                    }
 
-              // enable leave button
-              document.getElementById("leave-room").disabled = false;
+                    myNode.appendChild(newElement);
+                }
+            }
+        }
 
-              // Remove all elements in list
-              var myNode = document.getElementById("player-list");
-              myNode.innerHTML = '';
+        // send data to room on submit
+        document.querySelector("#form").onsubmit = function(e) {
+            e.preventDefault();
+            var roomName = document.querySelector("#game-name");
+            var maxPlayers = document.querySelector("#game-max-players");
+            // send data to room
+            gameRoom.send({
+                action: "CREATE",
+                payload: {
+                    roomName: roomName.value,
+                    maxPlayers: maxPlayers.value
+                }
+            });
+            // clear input
+            roomName.value = "";
+            maxPlayers.value = "";
+            document.getElementById("submit-create-room").disabled = true;
+        }
 
-              if (globalState.rooms[joinedRoom].players.length === globalState.rooms[joinedRoom].readyPlayers.length) {
-                  //go to game arena
-              }
+        // join room
+        $(document).on('click', '.join-room', function(e) {
+            var roomName = $(this).siblings('.room-name').innerHTML;
+            gameRoom.send({
+                action: "JOIN",
+                payload: {
+                    roomName: roomName
+                }
+            });
+            document.getElementById("submit-create-room").disabled = true;
+        });
 
-              for (var j = 0; j < globalState.rooms[joinedRoom].players.length; j++) {
-                  var newElement = document.createElement("li");
-                  newElement.innerHTML = globalState.rooms[joinedRoom].players[j];
+        // mark ready
+        $(document).on('click', '#player-ready', function() {
+            gameRoom.send({
+                action: "READY"
+            });
+        });
 
-                  if (globalState.rooms[joinedRoom].players.length == globalState.rooms[joinedRoom].maxPlayers) {
-                      //prompt players to press ready button
-                      if (globalState.rooms[joinedRoom].readyPlayers.indexOf(myPlayerName) === -1) {
-                          var readyBtn = document.getElementById("player-ready");
-                          readyBtn.disabled = false;
-                      }
-
-                      // mark ready players as "IS READY"
-                      if (globalState.rooms[joinedRoom].readyPlayers.indexOf(globalState.rooms[joinedRoom].players[j]) > -1) {
-                          newElement.innerHTML += " IS READY";
-                      }
-                  }
-
-                  myNode.appendChild(newElement);
-              }
-          }
-      }
-
-      // send data to room on submit
-      document.querySelector("#form").onsubmit = function(e) {
-          e.preventDefault();
-          var roomName = document.querySelector("#game-name");
-          var maxPlayers = document.querySelector("#game-max-players");
-          // send data to room
-          gameRoom.send({
-              action: "CREATE",
-              payload: {
-                  roomName: roomName.value,
-                  maxPlayers: maxPlayers.value
-              }
-          });
-          // clear input
-          roomName.value = "";
-          maxPlayers.value = "";
-          document.getElementById("submit-create-room").disabled = true;
-      }
-
-      // join room
-      $(document).on('click', '.join-room', function(e) {
-          var roomName = $(this).siblings('.room-name').innerHTML;
-          gameRoom.send({
-              action: "JOIN",
-              payload: {
-                  roomName: roomName
-              }
-          });
-          document.getElementById("submit-create-room").disabled = true;
-      });
-
-      // mark ready
-      $(document).on('click', '#player-ready', function() {
-          gameRoom.send({
-              action: "READY"
-          });
-      });
-
-      $(document).on('click', '#leave-room', function() {
-          gameRoom.send({
-              action: "LEAVE"
-          });
-          document.getElementById("player-list").innerHTML = '';
-          document.getElementById("submit-create-room").disabled = false;
-      });
-  </script>
+        $(document).on('click', '#leave-room', function() {
+            gameRoom.send({
+                action: "LEAVE"
+            });
+            document.getElementById("player-list").innerHTML = '';
+            document.getElementById("submit-create-room").disabled = false;
+        });
+    </script>
 </body>
 
 </html>
