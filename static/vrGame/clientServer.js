@@ -23,23 +23,12 @@ gameRoom.onData.add(function(data) {
         for (var i = 0; i < globalState.players.length; i++) {
             if (myPlayerName == globalState.players[i].id) {
                 playerNumber = i;
-<<<<<<< HEAD
 
                 player = Players.createMyself("0 0 5");
                 console.log("MYSELF CREATED");
             } else {
                 player = Players.createOtherPlayer("0 0 5");
                 console.log("OTHER"+i+" "+"CREATED");
-=======
-                // Players.createMyself("2.5 2.5 5");
-                Players.createMyself(globalState.players[i].position.x + " " + globalState.players[i].position.y + " " + globalState.players[i].position.z);
-                console.log("1");
-            } else {
-                // Players.createOtherPlayer("2.5 2.5 5");
-                Players.createOtherPlayer(globalState.players[i].position.x + " " + globalState.players[i].position.y + " " +
-                    globalState.players[i].position.z);
-                console.log("ohter");
->>>>>>> master
             }
             playersDict[globalState.players[i].id] = player;
             console.log(globalState.players[i].id);
