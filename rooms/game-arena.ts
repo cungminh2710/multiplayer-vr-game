@@ -1,12 +1,6 @@
 import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 
-interface Coords {
-    x: number,
-    y: number,
-    z: number
-}
-
 interface PlayerInfo {
   id?: string,
   character: string,
@@ -25,24 +19,11 @@ interface PlayerInfo {
 
 export class GameArena extends Room {
   private numJoined: number = 0;
-
-  euclideanDistance(a: Coords, b: Coords){
-    let sums = [
-      Math.pow(a.x - b.x, 2),
-      Math.pow(a.y - b.y, 2),
-      Math.pow(a.z - b.z, 2)
-    ];
-    return Math.sqrt(sums.reduce(function(accumulator, currentValue) {
-        return accumulator + currentValue;
-    }));
-  }
-
   onInit (options) {
     let newPlayer1: PlayerInfo = {
       team: "blue",
       character: "tank1",
       health: 100,
-<<<<<<< HEAD
       data:{
         position: {
           x: 10,
@@ -53,21 +34,11 @@ export class GameArena extends Room {
     },
     skillAnimation: "skill1"
   };
-=======
-      position: {
-        x: 2.5,
-        y: 2.5,
-        z: 5
-      },
-      animations: ["standing"]
-    };
->>>>>>> master
 
     let newPlayer2: PlayerInfo = {
       team: "red",
       character: "tank2",
       health: 100,
-<<<<<<< HEAD
       data:{
         position: {
           x: 15,
@@ -75,12 +46,6 @@ export class GameArena extends Room {
           z: 1
         },
         moveAnimation: "idle"
-=======
-      position: {
-        x: 3.5,
-        y: 3.5,
-        z: 4
->>>>>>> master
       },
       skillAnimation: "skill1"
     };
@@ -129,25 +94,6 @@ export class GameArena extends Room {
           }
         }
       }
-      // else if (data.action == "SHOOT"){
-      //   //get player
-      //   var opponent;
-      //   var i;
-      //   for (var index = 0; index < array.length; index++) {
-      //     var element = array[index];
-      //     if(element.id === data.data.opponent.id){
-      //       opponent = element;
-      //       i = 
-      //     }
-      //   }
-
-      //   //check 
-      //   let target = data.data.opponent.position;
-      //   let actualPos = opponent.position;
-      //   if(this.euclideanDistance(target, actualPos)){
-
-      //   }
-      // }
 
       // this.messageClient(client);
   }
