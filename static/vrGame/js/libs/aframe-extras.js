@@ -21808,22 +21808,21 @@ module.exports = {
         clips = model.animations || (model.geometry || {}).animations || [];
 
     if (!clips.length) return;
-    console.log(data.clip);
+
     var actions = data.clip.split(",");
-    for (var re, j = 0;(re=actions[j]);j++ ){
-        console.log(re);
-    for (var clip, i = 0; (clip = clips[i]); i++) {
-      if (clip.name.match(re)) {
-        var action = this.mixer.clipAction(clip, model);
-        action.enabled = true;
-        if (data.duration) action.setDuration(data.duration);
-        action
-          .setLoop(LoopMode[data.loop], data.repetitions)
-          .fadeIn(data.crossFadeDuration)
-          .play()
-        this.activeActions.push(action);
+    for (var re, j = 0;(re=actions[j]);j++){
+      for (var clip, i = 0; (clip = clips[i]); i++) {
+        if (clip.name.match(re)) {
+          var action = this.mixer.clipAction(clip, model);
+          action.enabled = true;
+          if (data.duration) action.setDuration(data.duration);
+          action
+            .setLoop(LoopMode[data.loop], data.repetitions)
+            .fadeIn(data.crossFadeDuration)
+            .play()
+          this.activeActions.push(action);
+        }
       }
-    }
     }
   },
 

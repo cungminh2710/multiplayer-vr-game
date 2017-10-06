@@ -3,7 +3,7 @@ var count = 0;
 var host = window.document.location.host.replace(/:.*/, '');
 var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
 var gameRoom = client.join("test-arena");
-
+var playersDict = {};
 
 // PLAYER AND GAME INFO
 var playerNumber = 0; // index in state.players[] array that will correspond to this player
@@ -12,7 +12,7 @@ var globalState = null // it is a good idea to store state changes from server o
 
 // THIS IS THE FIRST STAETE THIS CLIENT WILL SEE WHEN THEY JOIN THE GAME
 gameRoom.onData.add(function(data) {
-    if (data.type === "initial") {
+    if (data.type == "initial") {
         console.log("initial room data:", data.state);
 
         // STORE STATE
@@ -23,13 +23,19 @@ gameRoom.onData.add(function(data) {
         for (var i = 0; i < globalState.players.length; i++) {
             if (myPlayerName == globalState.players[i].id) {
                 playerNumber = i;
-                Players.createMyself("2.5 2.5 5");
-                console.log("1");
+
+                player = Players.createMyself("0 0 5");
+                console.log("MYSELF CREATED");
             } else {
-                Players.createOtherPlayer("2.5 2.5 5");
-                console.log("ohter");
+                player = Players.createOtherPlayer("0 0 5");
+                console.log("OTHER"+i+" "+"CREATED");
             }
+            playersDict[globalState.players[i].id] = player;
+            console.log(globalState.players[i].id);
+
         }
+        //console.log(playersDict);
+        //console.log(playersDict["BJ26x2ljW"]);
     } else if (data.type === "damage") {
         console.log("YOU GOT HIT");
     }
@@ -43,14 +49,14 @@ gameRoom.onUpdate.add(function(state) {
         return;
     }
     // this signal is triggered on each patch
+   
     for (var i = 0; i < globalState.players.length; i++) {
-
         if (i === playerNumber) {
             continue;
-        } else if (!isEquivalent(globalState.players[i], state.players[i])) {
+        } else if (!isEquivalent(globalState.players[i], state.players[i], state.players[i].id)) {
             // TODO: change to player's coordinates
             console.log("CHANGE PLAYER COORD");
-            console.log(state)
+    
         }
     }
     // UPDATE CLIENT STATE
@@ -58,30 +64,48 @@ gameRoom.onUpdate.add(function(state) {
     //  console.log(state);
 });
 
-function isEquivalent(a, b) {
+function isEquivalent(a, b, id) {
     // Create arrays of property names
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
 
     // If number of properties is different,
     // objects are not equivalent
-    if (aProps.length != bProps.length) {
+    if (aProps.length !== bProps.length) {
         return false;
     }
 
     for (var i = 0; i < aProps.length; i++) {
         var propName = aProps[i];
-
+       
         // If values of same property are not equal,
         // objects are not equivalent
-        if (a[propName] !== b[propName]) {
+        if (JSON.stringify(a[propName]) != JSON.stringify(b[propName])) {
+            console.log(JSON.stringify( a[propName]));
+            console.log(a[propName]);
+            var newPos = b[propName].position;
+            console.log(id)
+            console.log(newPos);
+
+            var player = playersDict[id];
+            var animation = b[propName].moveAnimation;
+            player.setAttribute("position",newPos);
+            console.log(player);
+            var preAnimation = player.getAttribute("animation-mixer").clip;
+            console.log(preAnimation); 
+            if(preAnimation.includes(animation) == false){
+                console.log("animation= "+animation)
+                Animation.setAnimation(player,animation);
+            }
+            
+            console.log("updated", playersDict[id].getAttribute("position"));
             return false;
         }
     }
 
     // If we made it this far, objects
     // are considered equivalent
-    return true;
+    return true;        
 }
 
 

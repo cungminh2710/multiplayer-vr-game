@@ -2,7 +2,7 @@ AFRAME.registerComponent('move', {
     schema: {
         DELTA_MOVE: {
 
-          default:'0.12'
+          default:'0.05'
         }
       },
     init: function () {
@@ -32,7 +32,8 @@ AFRAME.registerComponent('move', {
             console.log("kedown");
             if (map[67] || map[69]||map[81]||map[90]){
                 tween.stop();
-                Animation.setAnimation(el.children[0],"idle");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                gameRoom.send({action: "MOVE", data:{position: pos, moveAnimation:"idle"}}); 
                 preKey = 0;              
             }
             else if(map[87]&& preKey != 87){// w
@@ -53,12 +54,12 @@ AFRAME.registerComponent('move', {
                     direction = camera.getWorldDirection();
                     var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
                     player.setAttribute('position', newPos);
-                    gameRoom.send({action: "MOVE",data: newPos});
-                    //console.log(direction);
+                    gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
+                
                  })
                 .onStart(function(){
                     preTime = new Date().getTime();
-                    Animation.setAnimation(el.children[0],"run");
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"run");
                 })
                 .start();   
             }
@@ -78,11 +79,11 @@ AFRAME.registerComponent('move', {
                     direction = camera.getWorldDirection();
                     var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
                     player.setAttribute('position', newPos);
-                    gameRoom.send({action: "MOVE",data: newPos}); 
+                    gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 })
                 .onStart(function(){
                     preTime = new Date().getTime();
-                    Animation.setAnimation(el.children[0],"run");
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"run");
                 })
                 .start();
                 
@@ -106,11 +107,12 @@ AFRAME.registerComponent('move', {
                     direction.applyAxisAngle( axis, angle );
                     var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
                     player.setAttribute('position', newPos);
-                    gameRoom.send({action: "MOVE",data: newPos}); 
+                    gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 
                 })
                 .onStart(function(){
                     preTime = new Date().getTime();
-                    Animation.setAnimation(el.children[0],"move");
+
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"move");
                 })
                 .start();
             }
@@ -121,14 +123,10 @@ AFRAME.registerComponent('move', {
                 .repeat(Infinity)
                 .onUpdate(function(){
                     var now = new Date().getTime();
-                    //console.log(preTime);
-
                     if(now-preTime <10) return;
                     preTime = now;
                     console.log("send")
                     pos = player.getAttribute("position");
-                    
-                    //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
                     var axis = new THREE.Vector3( 0, 1, 0 );
                     var angle = Math.PI / 2;
@@ -136,11 +134,11 @@ AFRAME.registerComponent('move', {
                     direction.applyAxisAngle( axis, angle );
                     var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
                     player.setAttribute('position', newPos);
-                    gameRoom.send({action: "MOVE",data: newPos}); 
+                    gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 
                 })
                 .onStart(function(){
                     preTime = new Date().getTime();
-                    Animation.setAnimation(el.children[0],"move");
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"move");
                 })
                 .start();
             }

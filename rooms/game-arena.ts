@@ -4,14 +4,17 @@ import { Room } from "colyseus";
 interface PlayerInfo {
   id?: string,
   character: string,
-  health: number,
   team: string,
-  position: {
-    x: number,
-    y: number,
-    z: number
-  },
-  animations: string[]
+  health:number,
+  data: {
+    position:{
+      x: number,
+      y: number,
+      z: number
+    },
+    moveAnimation:string
+  }
+  skillAnimation:string
 }
 
 export class GameArena extends Room {
@@ -21,24 +24,30 @@ export class GameArena extends Room {
       team: "blue",
       character: "tank1",
       health: 100,
-      position: {
-        x: 10,
-        y: 10,
-        z: 1
-      },
-      animations: ["standing"]
-    };
+      data:{
+        position: {
+          x: 10,
+          y: 10,
+          z: 1
+        },
+        moveAnimation: "idle"
+    },
+    skillAnimation: "skill1"
+  };
 
     let newPlayer2: PlayerInfo = {
       team: "red",
       character: "tank2",
       health: 100,
-      position: {
-        x: 15,
-        y: 15,
-        z: 1
+      data:{
+        position: {
+          x: 15,
+          y: 15,
+          z: 1
+        },
+        moveAnimation: "idle"
       },
-      animations: ["standing"]
+      skillAnimation: "skill1"
     };
     this.setState({
       players: <Array<PlayerInfo>> [newPlayer1, newPlayer2],
@@ -75,13 +84,13 @@ export class GameArena extends Room {
       if(data.action == "idle"){
         return;
       }
-
-      if(data.action == "MOVE"){
+      console.log(data);
+      if(data.action== "MOVE"){
         for (var index = 0; index < this.state.players.length; index++) {
           var element = this.state.players[index];
           if(element.id == client.id){
-            this.state.players[index].position = {x: data.data.x,y: data.data.y,z: data.data.z};
-            this.state.players[index].animations = data.data.animations;
+            console.log(data.data)
+            this.state.players[index].data = data.data;
           }
         }
       }
