@@ -1,11 +1,12 @@
 body {
   background-color: #000;
-  color: #fff;
+  font-family: Tahoma, Geneva, sans-serif;
 }
 
 .gameroom {
   font-family: Tahoma, Geneva, sans-serif;
   text-align: center;
+  color: #fff;
 }
 
 .gameroom table {
@@ -35,6 +36,8 @@ body {
 }
 
 a.header-logo {
+  display: block;
+  text-align: center;
   text-decoration: none;
   color: #fff;
   font-family: Garamond;
