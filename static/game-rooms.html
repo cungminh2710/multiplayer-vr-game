@@ -20,7 +20,7 @@
     <link rel="stylesheet" type="text/css" href="webtheme.css">
 </head>
 
-<body class="gameroom">
+<body>
     <nav>
         <div class="header-bar">
             <div class="container">
@@ -32,6 +32,8 @@
         </div>
     </nav>
 
+    <div class="gameroom">
+
     <h1>LoVR Game Rooms</h1>
 
     <strong>Game Room</strong><br>
@@ -41,6 +43,10 @@
         <input type="number" id="game-max-players" step="2" min="2" max="6" value="" placeholder="Max Players" />
         <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
     </form>
+
+    </div>
+
+    <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ready-modal">Open Modal</button> -->
 
     <div id="ready-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -63,6 +69,8 @@
 
         </div>
     </div>
+
+    <div class="gameroom">
 
     <div id="current-rooms">
         <h3>Available Rooms</h3>
@@ -97,7 +105,7 @@
         <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
         <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
     </div>
-
+    </div>
     <script>
         var host = window.document.location.host.replace(/:.*/, '');
         var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
