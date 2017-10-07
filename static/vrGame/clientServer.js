@@ -2,7 +2,8 @@ var count = 0;
 
 var host = window.document.location.host.replace(/:.*/, '');
 var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
-var gameRoom = client.join("test-arena");
+var roomName = findGetParameter("roomName");
+var gameRoom = client.join(roomName != null ? roomName : "test-arena", {id: client.id});
 var playersDict = {};
 
 // PLAYER AND GAME INFO
@@ -28,7 +29,7 @@ gameRoom.onData.add(function(data) {
                 console.log("MYSELF CREATED");
             } else {
                 player = Players.createOtherPlayer("0 0 5");
-                console.log("OTHER"+i+" "+"CREATED");
+                console.log("OTHER" + i + " " + "CREATED");
             }
             playersDict[globalState.players[i].id] = player;
             console.log(globalState.players[i].id);
@@ -49,20 +50,37 @@ gameRoom.onUpdate.add(function(state) {
         return;
     }
     // this signal is triggered on each patch
-   
+
     for (var i = 0; i < globalState.players.length; i++) {
         if (i === playerNumber) {
             continue;
         } else if (!isEquivalent(globalState.players[i], state.players[i], state.players[i].id)) {
             // TODO: change to player's coordinates
             console.log("CHANGE PLAYER COORD");
-    
+
         }
     }
     // UPDATE CLIENT STATE
     globalState = state;
     //  console.log(state);
 });
+
+gameRoom.onJoin.add(function() {
+    console.log("JOIN_SUCCESSFUL");
+})
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function(item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
 
 function isEquivalent(a, b, id) {
     // Create arrays of property names
@@ -77,11 +95,11 @@ function isEquivalent(a, b, id) {
 
     for (var i = 0; i < aProps.length; i++) {
         var propName = aProps[i];
-       
+
         // If values of same property are not equal,
         // objects are not equivalent
         if (JSON.stringify(a[propName]) != JSON.stringify(b[propName])) {
-            console.log(JSON.stringify( a[propName]));
+            console.log(JSON.stringify(a[propName]));
             console.log(a[propName]);
             var newPos = b[propName].position;
             console.log(id)
@@ -89,15 +107,15 @@ function isEquivalent(a, b, id) {
 
             var player = playersDict[id];
             var animation = b[propName].moveAnimation;
-            player.setAttribute("position",newPos);
+            player.setAttribute("position", newPos);
             console.log(player);
             var preAnimation = player.getAttribute("animation-mixer").clip;
-            console.log(preAnimation); 
-            if(preAnimation.includes(animation) == false){
-                console.log("animation= "+animation)
-                Animation.setAnimation(player,animation);
+            console.log(preAnimation);
+            if (preAnimation.includes(animation) == false) {
+                console.log("animation= " + animation)
+                Animation.setAnimation(player, animation);
             }
-            
+
             console.log("updated", playersDict[id].getAttribute("position"));
             return false;
         }
@@ -105,7 +123,5 @@ function isEquivalent(a, b, id) {
 
     // If we made it this far, objects
     // are considered equivalent
-    return true;        
+    return true;
 }
-
-

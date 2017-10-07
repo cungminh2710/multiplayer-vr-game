@@ -1,17 +1,14 @@
 import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
-
-enum Action {
-  Create,
-  Leave,
-  Join
-}
+import { GameArena } from './game-arena';
+import { gameServer } from '../index';
 
 interface RoomData {
   name: string,
   players: Array<string>,
   readyPlayers: Array<string>,
-  maxPlayers: number
+  maxPlayers: number,
+  isReady: boolean
 }
 
 export class GameRoom extends Room {
@@ -21,11 +18,24 @@ export class GameRoom extends Room {
   }
 
   private markPlayerReady(name: string) {
+    let roomIndex: number; // this will be the room that 'name' is in
     for(let i = 0; i < this.state.rooms.length; i++){
       if(this.state.rooms[i].players.includes(name)){
         this.state.rooms[i].readyPlayers.push(name);
+        roomIndex = i;
         break;
       }
+    }
+
+    // check if all players are ready
+    if(this.state.rooms[roomIndex].players.length == this.state.rooms[roomIndex].readyPlayers.length){
+      gameServer.register(
+        this.state.rooms[roomIndex].name,
+        GameArena,
+        { players: this.state.rooms[roomIndex].players }
+      );
+
+      this.state.rooms[roomIndex].isReady = true;
     }
   }
 
@@ -57,6 +67,11 @@ export class GameRoom extends Room {
     }
   }
 
+  private removePlayer(id: string){
+    let i = this.state.players.indexOf(id);
+    this.state.players.splice(i, 1);
+  }
+
   onInit (options) {
       this.setState({
         rooms: [],
@@ -74,6 +89,7 @@ export class GameRoom extends Room {
       // this.state.players.push(client.id);
       let index: number = this.state.players.indexOf(client.id);
       this.state.players.splice(index, 1);
+      this.leaveRoom(client.id);
   }
 
   onMessage (client: Client, data) {
@@ -87,7 +103,8 @@ export class GameRoom extends Room {
             name: data.payload.roomName,
             maxPlayers: data.payload.maxPlayers,
             players: [ client.id ],
-            readyPlayers: []
+            readyPlayers: [],
+            isReady: false
           }
           
           if(!this.roomNameExists(data.payload.roomName)){

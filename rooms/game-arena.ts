@@ -21,51 +21,50 @@ interface Coords {
 
 export class GameArena extends Room {
   private numJoined: number = 0;
+  private maxPlayers: number;
+  
   onInit (options) {
-    let newPlayer1: PlayerInfo = {
-      team: "blue",
-      character: "tank",
-      health: 100,
-      data:{
-        position: {
-          x: 10,
-          y: 10,
-          z: 1
+    let players: Array<PlayerInfo> = [];
+    for (var i: number = 0; i < options.players.length; i++) {
+      var playerId: string = options.players[i];
+      let newPlayer: PlayerInfo = {
+        id: playerId,
+        team: i % 2 == 0 ? "red":"blue",
+        character: "tank",
+        health: 100,
+        data: {
+          position: {
+            x: 1.5,
+            y: 1.5 + i,
+            z: 4
+          },
+          moveAnimation: "idle"
         },
-        moveAnimation: "idle"
-      },
-      skillAnimation: "skill1"
-    };
+        skillAnimation: "skill1"
+      }
 
-    let newPlayer2: PlayerInfo = {
-      team: "red",
-      character: "tank",
-      health: 100,
-      data: {
-        position: {
-          x: 1.5,
-          y: 3.5,
-          z: 4
-        },
-        moveAnimation: "idle"
-      },
-      skillAnimation: "skill1"
-    };
+      players.push(newPlayer);
+    }
 
     this.setState({
-      players: <Array<PlayerInfo>> [newPlayer1, newPlayer2],
+      players,
     });
     console.log("Arena created!", options);
   }
 
+  requestJoin (options: any) {
+    let clientId = options.id;
+    let ret = false;
+    this.state.players.forEach(player => {
+      if(player.id == clientId){
+        ret = true;
+      }
+    });
+    return ret;
+  }
+
   onJoin (client: Client) {
     console.log("NEW CLIENT JOINED");
-    if(this.numJoined == 0){
-      this.state.players[0].id = client.id;
-      this.numJoined++;
-    }else if(this.numJoined == 1){
-      this.state.players[1].id = client.id;
-    }
 
     console.log("SENDING INITIAL DATA")
     this.send(client, {

@@ -32,13 +32,12 @@ const httpServer = createServer(app);
 const gameServer = new Server({ server: httpServer });
 
 // Register ChatRoom as "chat"
-gameServer.register("chat", ChatRoom);
 gameServer.register("game-room", GameRoom);
 gameServer.register("test-arena", GameArena);
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}));
 
-gameServer.listen(port);
-
+gameServer.listen(port)
 console.log(`Listening on http://localhost:${ port }`);
+export { gameServer };
