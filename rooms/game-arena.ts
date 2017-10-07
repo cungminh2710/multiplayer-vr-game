@@ -22,7 +22,7 @@ export class GameArena extends Room {
   onInit (options) {
     let newPlayer1: PlayerInfo = {
       team: "blue",
-      character: "tank1",
+      character: "tank",
       health: 100,
       data:{
         position: {
@@ -37,15 +37,12 @@ export class GameArena extends Room {
 
     let newPlayer2: PlayerInfo = {
       team: "red",
-      character: "tank2",
+      character: "tank",
       health: 100,
-      data:{
-        position: {
-          x: 15,
-          y: 15,
-          z: 1
-        },
-        moveAnimation: "idle"
+      position: {
+        x: 1.5,
+        y: 3.5,
+        z: 4
       },
       skillAnimation: "skill1"
     };
@@ -79,11 +76,11 @@ export class GameArena extends Room {
   }
 
   onMessage (client: Client, data) {
-
      // console.log("Game Arena:", client.id, data);
       if(data.action == "idle"){
         return;
       }
+      if(data.action == "MOVE"){
       console.log(data);
       if(data.action== "MOVE"){
         for (var index = 0; index < this.state.players.length; index++) {
