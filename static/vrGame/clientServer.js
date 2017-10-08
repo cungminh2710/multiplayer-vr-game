@@ -7,7 +7,6 @@ var gameRoom = client.join(roomName != null ? roomName : "test-arena", { id: cli
 var playersDict = {};
 
 // PLAYER AND GAME INFO
-var playerNumber = 0; // index in state.players[] array that will correspond to this player
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = null // it is a good idea to store state changes from server on client
 
@@ -22,15 +21,7 @@ gameRoom.onData.add(function(data) {
         // THIS WILL UPDATE playerNumber 
         // TO UPDATE YOUR POSITION LATER
         for (var i = 0; i < globalState.players.length; i++) {
-            if (myPlayerName == globalState.players[i].id) {
-                playerNumber = i;
 
-                player = Players.createMyself("0 0 5");
-                console.log("MYSELF CREATED");
-            } else {
-                player = Players.createOtherPlayer("0 0 5");
-                console.log("OTHER" + i + " " + "CREATED");
-            }
             playersDict[globalState.players[i].id] = player;
             console.log(globalState.players[i].id);
 
@@ -45,29 +36,49 @@ gameRoom.onData.add(function(data) {
 });
 
 // THIS WILL LISTEN FOR STATE UPDATES (movements, HP changes, deaths, etc)
-gameRoom.onUpdate.add(function(state) {
-    if (globalState === null) {
-        return;
-    }
-    // this signal is triggered on each patch
+// gameRoom.onUpdate.add(function(state) {
+//     console.log("IN UPDATE", state, globalState);
+//     if (globalState === null) {
+//         return;
+//     }
+//     // this signal is triggered on each patch
+//     for (var key in state.players) {
+//         // skip loop if the property is from prototype
+//         if (!state.players.hasOwnProperty(key)) continue;
+//         var player = state.players[key];
+//         if (key == client.id) {
+//             // check health
+//             continue;
+//         } else if (!isEquivalent(globalState.players[key], state.players[key], state.players[key].id)) {
+//             // TODO: change to player's coordinates
+//             console.log("CHANGE PLAYER COORD");
+//         }
+//     }
+//     // UPDATE CLIENT STATE
+//     globalState = state;
+//     console.log(state);
+// });
 
-    for (var i = 0; i < globalState.players.length; i++) {
-        if (i === playerNumber) {
-            continue;
-        } else if (!isEquivalent(globalState.players[i], state.players[i], state.players[i].id)) {
-            // TODO: change to player's coordinates
-            console.log("CHANGE PLAYER COORD");
+gameRoom.listen("players/:id", function(change) {
+    console.log("CHANGE OF PLAYER NUMBERS");
+    console.log(change.path); // => { id: "f98h3f", attribute: "y" }
+    console.log(change.operation); // => "replace" (can be "add", "remove" or "replace")
+    console.log(change.value); // => 1
 
-        }
+    if (change.path.id == client.id) {
+        player = Players.createMyself("0 0 5");
+        console.log("MYSELF CREATED");
+    } else {
+        player = Players.createOtherPlayer("0 0 5");
+        console.log("OTHER" + change.path.id + " " + "CREATED");
     }
-    // UPDATE CLIENT STATE
-    globalState = state;
-    console.log(state);
-});
+})
 
 gameRoom.listen("players/:id/:attribute", function(change) {
     console.log("CHANGE LISTENED");
-    console.log(change.path.id, change.path.attribute, change.operation, change.value);
+    console.log(change.path); // => { id: "f98h3f", attribute: "y" }
+    console.log(change.operation); // => "replace" (can be "add", "remove" or "replace")
+    console.log(change.value); // => 1
 });
 
 gameRoom.onJoin.add(function() {
