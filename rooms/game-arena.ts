@@ -24,6 +24,8 @@ export class GameArena extends Room {
   private maxPlayers: number;
   
   onInit (options) {
+    console.log("Arena created!", options);
+    this.maxPlayers = <number> options.maxPlayers;
     let players: Array<PlayerInfo> = [];
     for (var i: number = 0; i < options.players.length; i++) {
       var playerId: string = options.players[i];
@@ -49,7 +51,6 @@ export class GameArena extends Room {
     this.setState({
       players,
     });
-    console.log("Arena created!", options);
   }
 
   requestJoin (options: any) {
