@@ -1,8 +1,10 @@
 AFRAME.registerComponent('move', {
     schema: {
         DELTA_MOVE: {
-
-          default:'0.05'
+          default: 0.02
+        },
+        DELTA_RUN:{
+            default: 0.05
         }
       },
     init: function () {
@@ -12,6 +14,7 @@ AFRAME.registerComponent('move', {
         var count = this.count = 0;
         var el = this.el;
         var DELTA_MOVE = this.data.DELTA_MOVE;
+        var DELTA_RUN = this.data.DELTA_RUN;
         var moveFlag = "idle"; 
         var preKey = 0;
         var preTime;
@@ -52,7 +55,7 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
+                    var newPos =  {x:pos.x-direction.x*DELTA_RUN, y:pos.y, z:pos.z-direction.z*DELTA_RUN};
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 
@@ -77,7 +80,7 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
+                    var newPos =  {x:pos.x+direction.x*DELTA_RUN    , y:pos.y, z:pos.z+direction.z*DELTA_RUN};
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 })
