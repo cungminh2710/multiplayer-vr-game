@@ -30,13 +30,9 @@ export class GameRoom extends Room {
     // check if all players are ready
     console.log("CHECK IF ALL PLAYERS ARE READY +++++", this.state.rooms[roomIndex].players.length == this.state.rooms[roomIndex].readyPlayers.length);
     if(this.state.rooms[roomIndex].players.length == this.state.rooms[roomIndex].readyPlayers.length && !this.state.rooms[roomIndex].isReady){
-      console.log("~~~~~~~~~~~ IM IN HERE NOW ~~~~~~~~~~~");
       let playerArray = this.state.rooms[roomIndex].readyPlayers.slice();;
       let numPlayers = this.state.rooms[roomIndex].maxPlayers;
-      console.log("~~~~~~~~~~~ SENDING ~~~~~~~~~~~", {
-        players: playerArray,
-        numPlayers
-      });
+
       gameServer.register(
         this.state.rooms[roomIndex].name,
         GameArena,

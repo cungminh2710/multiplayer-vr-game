@@ -33,7 +33,7 @@ const gameServer = new Server({ server: httpServer });
 
 // Register ChatRoom as "chat"
 gameServer.register("game-room", GameRoom);
-gameServer.register("test-arena", GameArena);
+gameServer.register("test-arena", GameArena, { TEST: true });
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}));

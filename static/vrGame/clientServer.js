@@ -3,7 +3,7 @@ var count = 0;
 var host = window.document.location.host.replace(/:.*/, '');
 var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
 var roomName = findGetParameter("roomName");
-var gameRoom = client.join(roomName != null ? roomName : "test-arena", {id: client.id});
+var gameRoom = client.join(roomName != null ? roomName : "test-arena", { id: client.id, test: roomName == null });
 var playersDict = {};
 
 // PLAYER AND GAME INFO
@@ -62,7 +62,12 @@ gameRoom.onUpdate.add(function(state) {
     }
     // UPDATE CLIENT STATE
     globalState = state;
-    //  console.log(state);
+    console.log(state);
+});
+
+gameRoom.listen("players/:id/:attribute", function(change) {
+    console.log("CHANGE LISTENED");
+    console.log(change.path.id, change.path.attribute, change.operation, change.value);
 });
 
 gameRoom.onJoin.add(function() {

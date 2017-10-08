@@ -28,31 +28,17 @@ AFRAME.registerComponent('move', {
         window.addEventListener('keydown', function(e) {
             e.preventDefault();
 
-<<<<<<< Updated upstream
             if (this.repeating == true) {
                 if (this.repeatRateTimer == null) {
                     this.repeatRateTimer = setTimeout(function() {
                         this.repeating = false;
                         clearTimeout(this.repeatRateTimer);
                         this.repeatRateTimer = null;
-=======
-            if( this.repeating == true )
-            {
-            if( this.repeatRateTimer == null ){
-                    this.repeatRateTimer = setTimeout( function( ) {
-                    this.repeating = false;
-                    clearTimeout( this.repeatRateTimer );
-                    this.repeatRateTimer = null;
->>>>>>> Stashed changes
                     }, 1);
                 }
                 return;
             }
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
             var camera = document.querySelector("#camera").object3D;
             var direction = camera.getWorldDirection();
             var player = document.querySelector("#playerWrapper");
@@ -63,34 +49,19 @@ AFRAME.registerComponent('move', {
             e = e || window.event; // to deal with IE
             var map = {};
             map[e.keyCode] = e.type == 'keydown';
-<<<<<<< Updated upstream
-
-            if (map[40]) { // up arrow
+            console.log("kedown");
+            if (map[65]) {
+                console.log("successssssssssssssssssssssssss")
+            } else if (map[40]) { // up arrow
                 el.setAttribute("position", pos);
                 var newPos = { x: pos.x + direction.x * DELTA_MOVE, y: pos.y, z: pos.z + direction.z * DELTA_MOVE };
                 player.setAttribute('position', newPos);
                 map = {};
-                //console.log("adfafasfadsf");
-                // console.log(el);
+
+
                 if (moveFlag != "run") {
 
                     Animation.setAnimation(el.children[0], "run");
-=======
-            console.log("kedown");
-            if (map[65]){
-                    console.log("successssssssssssssssssssssssss")
-            }
-            else if(map[40]){// up arrow
-                el.setAttribute("position",pos);
-                var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
-                player.setAttribute('position', newPos);
-                map = {};
-
-           
-                if(moveFlag != "run") {
-                    
-                    Animation.setAnimation(el.children[0],"run");
->>>>>>> Stashed changes
                     moveFlag = "run";
 
                 }
