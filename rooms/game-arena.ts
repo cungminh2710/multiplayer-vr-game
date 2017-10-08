@@ -75,9 +75,8 @@ export class GameArena extends Room {
       return;
     }
 
-    console.log(data);
     if(data.action == "MOVE"){
-      this.state.players[client.id] = data.data;
+      this.state.players[client.id].data = data.data;
     } else if(data.action == "DAMAGE"){
       let target = data.target;
       let clientCoords = target.position;

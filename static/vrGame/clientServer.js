@@ -74,11 +74,62 @@ gameRoom.listen("players/:id", function(change) {
     }
 })
 
-gameRoom.listen("players/:id/:attribute", function(change) {
+
+// THIS STUFF ONLY HAPPENS WHEN A PLAYER'S ANIMATION OR 
+gameRoom.listen("players/:id/data/:attribute", function(change) {
+    console.log("CHANGE ANIMATION");
+    // console.log(change.path);
+    // console.log(change.operation);
+    // console.log(change.value);
+
+    if(change.path.id == client.id){
+        console.log("ITS MY OWN CHANGE");
+        return;
+    }else{
+        var personThatMoved = change.path.id;
+        var newValue = change.value;
+        if(change.path.attribute == "moveAnimation"){
+            //CHANGE THIS OPPONENT'S MOVE ANIMATION
+        }
+    }
+});
+
+gameRoom.listen("players/:id/data/position/:attribute", function(change) {
+    console.log("CHANGE POS");
+    // console.log(change.path);
+    // console.log(change.operation);
+    // console.log(change.value);
+
+    if(change.path.id == client.id){
+        console.log("ITS MY OWN CHANGE");
+        return;
+    }else{
+        var personThatMoved = change.path.id;
+        var newValue = change.value;
+        if(change.path.attribute == "x"){
+            //CHANGE THIS OPPONENT'S X POS
+        }else if(change.path.attribute == "y"){
+            //CHANGE THIS OPPONENT'S Y POSITION
+        }else{
+            //CHANGE THIS OPPONENT'S Z POSITION
+        }
+    }
+});
+
+
+gameRoom.listen("players/:id/health/:number", function(change) {
     console.log("CHANGE LISTENED");
-    console.log(change.path); // => { id: "f98h3f", attribute: "y" }
-    console.log(change.operation); // => "replace" (can be "add", "remove" or "replace")
-    console.log(change.value); // => 1
+    // console.log(change.path);
+    // console.log(change.operation);
+    // console.log(change.value);
+
+    if(change.path.id != client.id){
+        return;
+    }else if(change.value == 100){
+        // REVIVE YOUR PLAYER
+    }else{
+        // DO ANIMATION TO SHOW THAT YOU TOOK DAMAGE
+    }
 });
 
 gameRoom.onJoin.add(function() {

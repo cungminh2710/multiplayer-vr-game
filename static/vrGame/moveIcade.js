@@ -27,12 +27,12 @@ AFRAME.registerComponent('move', {
             var player = document.querySelector("#playerWrapper");
             var pos = player.getAttribute("position");
             this.repeating = true;
-            console.log("press");
+            // console.log("press");
             var pos = el.getAttribute("position");
             e = e ||window.event; // to deal with IE
             var map = {};
             map[e.keyCode] = e.type == 'keydown';
-            console.log("kedown");
+            // console.log("kedown");
             if (map[67] || map[69]||map[81]||map[90]){
                 tween.stop();
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
