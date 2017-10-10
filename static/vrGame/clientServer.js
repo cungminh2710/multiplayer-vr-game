@@ -182,5 +182,5 @@ function findGetParameter(parameterName) {
 
     // If we made it this far, objects
     // are considered equivalent
-    return true;
-}
+//     return true;
+// }
