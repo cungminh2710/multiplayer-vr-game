@@ -7,9 +7,10 @@ interface PlayerInfo {
   team: string,
   health: number,
   data: {
-    position: Coords,
+    position: string,
     moveAnimation: string
-  }
+  },
+  rotation: string 
   skillAnimation: string
 }
 
@@ -39,14 +40,17 @@ export class GameArena extends Room {
       team: this.numJoined % 2 == 0 ? "red":"blue",
       character: "tank",
       health: 100,
+      
       data: {
-        position: {
-          x: 1.5,
-          y: 1.5 + this.numJoined,
-          z: 4
-        },
-        moveAnimation: "idle"
+        position:"0 0 0",
+        // {
+        //   x: 1.5,
+        //   y: 1.5 + this.numJoined,
+        //   z: 4
+        // }
+        moveAnimation: "idle",
       },
+      rotation: "0 0 0",
       skillAnimation: "skill1"
     };
     return newPlayer;
@@ -82,8 +86,14 @@ export class GameArena extends Room {
     }
 
     if(data.action == "MOVE"){
+      console.log(data)
       this.state.players[client.id].data = data.data;
-    } else if(data.action == "DAMAGE"){
+    } else if(data.action == "ROTATION"){
+      this.state.players[client.id].rotation = data.data;
+      console.log(data)
+    }
+    
+    else if(data.action == "DAMAGE"){
       let target = data.target;
       let clientCoords = target.position;
       let targetPlayer = this.state.players[target.id];

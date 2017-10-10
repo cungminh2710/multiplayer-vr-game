@@ -33,9 +33,9 @@ class Players {
   }
   
 
-  static createOtherPlayer(playerInfo){
+  static createOtherPlayer(playerInfo,id){
       var player = document.createElement("a-entity");
-      player.setAttribute("id",client.id);
+      player.setAttribute("id",id);
       player.setAttribute("position",playerInfo );
       player.setAttribute("animation-mixer","clip: idle");
       player.setAttribute("json_model","src: url(models/adc.json);");
@@ -76,7 +76,8 @@ class Players {
         if (evt.detail.name !== 'rotation') return;
           
           var rotation = camera.components.rotation.data;
-         // player.setAttribute("rotation",0+" "+rotation.y+" "+0);
+          gameRoom.send({action: "ROTATION", data: 0+" "+rotation.y+" "+0}); 
+         //player.setAttribute("rotation",0+" "+rotation.y+" "+0);
           var head = player.object3D.children[0].children[0].children[0].children[0];
           head.rotation.x = -Math.PI*rotation.x/180;
     

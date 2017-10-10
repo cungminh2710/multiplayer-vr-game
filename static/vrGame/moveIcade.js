@@ -36,7 +36,7 @@ AFRAME.registerComponent('move', {
             if (map[67] || map[69]||map[81]||map[90]){
                 tween.stop();
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
-                gameRoom.send({action: "MOVE", data:{position: pos, moveAnimation:"idle"}}); 
+                gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
                 preKey = 0;              
             }
             else if(map[87]&& preKey != 87){// w
@@ -55,7 +55,10 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    var newPos =  {x:pos.x-direction.x*DELTA_RUN, y:pos.y, z:pos.z-direction.z*DELTA_RUN};
+                    newX = pos.x-direction.x*DELTA_RUN;
+                    newY = pos.y;
+                    newZ = pos.z-direction.z*DELTA_RUN;
+                    var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 
@@ -80,7 +83,10 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    var newPos =  {x:pos.x+direction.x*DELTA_RUN    , y:pos.y, z:pos.z+direction.z*DELTA_RUN};
+                    newX = pos.x+direction.x*DELTA_RUN;
+                    newY = pos.y;
+                    newZ = pos.z+direction.z*DELTA_RUN;
+                    var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 })
@@ -108,7 +114,10 @@ AFRAME.registerComponent('move', {
                     var axis = new THREE.Vector3( 0, 1, 0 );
                     var angle = Math.PI / 2;
                     direction.applyAxisAngle( axis, angle );
-                    var newPos =  {x:pos.x-direction.x*DELTA_MOVE, y:pos.y, z:pos.z-direction.z*DELTA_MOVE};
+                    newX = pos.x-direction.x*DELTA_MOVE;
+                    newY = pos.y;
+                    newZ = pos.z-direction.z*DELTA_MOVE;
+                    var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 
                 })
@@ -135,7 +144,10 @@ AFRAME.registerComponent('move', {
                     var angle = Math.PI / 2;
 
                     direction.applyAxisAngle( axis, angle );
-                    var newPos =  {x:pos.x+direction.x*DELTA_MOVE, y:pos.y, z:pos.z+direction.z*DELTA_MOVE};
+                    newX = pos.x+direction.x*DELTA_MOVE;
+                    newY = pos.y;
+                    newZ = pos.z+direction.z*DELTA_MOVE;
+                    var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 
                 })
