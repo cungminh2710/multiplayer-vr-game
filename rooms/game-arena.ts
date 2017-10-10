@@ -58,7 +58,12 @@ export class GameArena extends Room {
   }
 
   onJoin (client: Client) {
-    console.log("NEW CLIENT JOINED");
+    if(!(Object.keys(this.state.players).length === 0)){
+      this.send(client, {
+        type: "initial",
+        state: this.state.players
+      });
+    }
     this.state.players[client.id] = this.newPlayerInfo(client.id);
   }
 
@@ -67,6 +72,7 @@ export class GameArena extends Room {
       //this.state.players.splice(index, 1);
       console.log("CLIENT GONE");
       console.log(client);
+      delete this.state.players[client.id];
   }
 
   onMessage (client: Client, data) {

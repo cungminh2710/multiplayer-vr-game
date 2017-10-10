@@ -16,15 +16,15 @@ gameRoom.onData.add(function(data) {
         console.log("initial room data:", data.state);
 
         // STORE STATE
-        globalState = data.state
-        console.log(globalState);
+        console.log(data.state);
         // THIS WILL UPDATE playerNumber 
         // TO UPDATE YOUR POSITION LATER
-        for (var i = 0; i < globalState.players.length; i++) {
-
-            playersDict[globalState.players[i].id] = player;
-            console.log(globalState.players[i].id);
-
+        for (var p in data.state) {
+            // check if the property/key is defined in the object itself, not in parent
+            if (data.state.hasOwnProperty(p)) {
+                console.log(p, data.state[p]);
+                player = Players.createOtherPlayer("0 0 5");
+            }
         }
         //console.log(playersDict);
         //console.log(playersDict["BJ26x2ljW"]);
@@ -34,30 +34,6 @@ gameRoom.onData.add(function(data) {
 
     // Players.createMyself("2.5 2.5 5");
 });
-
-// THIS WILL LISTEN FOR STATE UPDATES (movements, HP changes, deaths, etc)
-// gameRoom.onUpdate.add(function(state) {
-//     console.log("IN UPDATE", state, globalState);
-//     if (globalState === null) {
-//         return;
-//     }
-//     // this signal is triggered on each patch
-//     for (var key in state.players) {
-//         // skip loop if the property is from prototype
-//         if (!state.players.hasOwnProperty(key)) continue;
-//         var player = state.players[key];
-//         if (key == client.id) {
-//             // check health
-//             continue;
-//         } else if (!isEquivalent(globalState.players[key], state.players[key], state.players[key].id)) {
-//             // TODO: change to player's coordinates
-//             console.log("CHANGE PLAYER COORD");
-//         }
-//     }
-//     // UPDATE CLIENT STATE
-//     globalState = state;
-//     console.log(state);
-// });
 
 gameRoom.listen("players/:id", function(change) {
     console.log("CHANGE OF PLAYER NUMBERS");
