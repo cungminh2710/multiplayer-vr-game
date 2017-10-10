@@ -26,7 +26,7 @@ export class GameArena extends Room {
 
   onInit (options) {
     console.log("Arena created!", options);
-    this.allowedPlayers = options.playerArray;
+    this.allowedPlayers = options.players;
 
     this.setState({
       players: {}
