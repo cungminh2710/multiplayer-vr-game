@@ -40,7 +40,7 @@
 
     <form id="form">
         <input type="text" id="game-name" value="" placeholder="Game Room Name" />
-        <input type="number" id="game-max-players" step="2" min="2" max="6" value="" placeholder="Max Players" />
+        <input type="number" id="game-max-players" step="2" min="2" max="6" value="" required placeholder="Max Players" />
         <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
     </form>
 
@@ -59,7 +59,7 @@
                 </div>
                 <div class="modal-body">
                     <p>CONGRATS, YOUR ROOM IS READY:
-                        <a id="arena-url">click here</a>
+                        <a id="arena-url">Click here</a>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -84,13 +84,13 @@
                 </tr>
             </thead>
             <tbody id="current-rooms-tbody">
-                <tr>
+<!--                 <tr>
                     <td>Something here</td>
                     <td>Something here</td>
                     <td>Something here</td>
                     <td>Something here</td>
                 </tr>
-            </tbody>
+ -->            </tbody>
         </table>
     </div>
 
@@ -101,7 +101,6 @@
         <ul id="player-list">
 
         </ul>
-        <h4>Buttons</h4>
         <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
         <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
     </div>
@@ -145,13 +144,17 @@
                 var maxPlayers = document.createElement("td");
                 maxPlayers.innerHTML = globalState.rooms[i].maxPlayers;
                 var joinBtn = document.createElement("td");
+                var joinClass = document.createElement("button");
+                joinClass.className = "room-join";
+                joinClass.innerHTML = "Join";
                 joinBtn.className = "join-room";
-                joinBtn.innerHTML = "Join";
+                // joinBtn.innerHTML = "Join";
+                joinBtn.appendChild(joinClass);
                 joinBtn.disabled = globalState.rooms[i].players.length == globalState.rooms[i].maxPlayers;
 
                 newRow.appendChild(roomName);
-                newRow.appendChild(currentNumPlayers)
-                newRow.appendChild(maxPlayers)
+                newRow.appendChild(currentNumPlayers);
+                newRow.appendChild(maxPlayers);
                 newRow.appendChild(joinBtn);
                 gameRoomList.appendChild(newRow);
             }
@@ -159,7 +162,7 @@
             // populate bottom section
             if (joinedRoom > -1) {
                 //disabled join room buttons
-                var el = document.getElementsByClassName("join-room");
+                var el = document.getElementsByClassName("room-join");
                 for (var i = 0; i < el.length; i++) {
                     el[i].disabled = true;
                 }
@@ -199,6 +202,10 @@
                     $('#arena-url').attr('href', "http://localhost:2657/vrGame/map.html?roomName=" + globalState.rooms[joinedRoom].name);
                     $('#ready-modal').modal('show')
                 }
+            } else {
+                // disable leave button
+                document.getElementById("leave-room").disabled = true;
+                document.getElementById("player-ready").disabled = true;
             }
         }
 

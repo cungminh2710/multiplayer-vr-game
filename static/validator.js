@@ -1,7 +1,8 @@
 
 $.validator.setDefaults( {
     submitHandler: function () {
-        alert( "submitted!" );
+        $("#messages").html("Your registration has been completed!");
+        alert( "Submitted!" );
     }
 } );
 
