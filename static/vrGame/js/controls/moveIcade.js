@@ -1,7 +1,7 @@
 AFRAME.registerComponent('move', {
     schema: {
         DELTA_MOVE: {
-          default: 0.02
+          default: 0.03
         },
         DELTA_RUN:{
             default: 0.05
@@ -57,10 +57,9 @@ AFRAME.registerComponent('move', {
                     direction = camera.getWorldDirection();
                     newX = pos.x-direction.x*DELTA_RUN;
                     newZ = pos.z-direction.z*DELTA_RUN;
-                    newY = DetectHeight.isAvaiable(pos.y,pos.z,newX,newZ);
-        
+                    newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
                     if(newY == -1) return;
-                    console.log("U     ",newY);
+
                     var newPos =  newX +" "+newY+" "+newZ;
                     
                     player.setAttribute('position', newPos);
@@ -88,8 +87,10 @@ AFRAME.registerComponent('move', {
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
                     newX = pos.x+direction.x*DELTA_RUN;
-                    newY = pos.y;
                     newZ = pos.z+direction.z*DELTA_RUN;
+                    newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
+                    if(newY == -1) return;
+
                     var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
@@ -119,8 +120,9 @@ AFRAME.registerComponent('move', {
                     var angle = Math.PI / 2;
                     direction.applyAxisAngle( axis, angle );
                     newX = pos.x-direction.x*DELTA_MOVE;
-                    newY = pos.y;
                     newZ = pos.z-direction.z*DELTA_MOVE;
+                    newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
+                    if(newY == -1) return;
                     var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 
@@ -149,8 +151,9 @@ AFRAME.registerComponent('move', {
 
                     direction.applyAxisAngle( axis, angle );
                     newX = pos.x+direction.x*DELTA_MOVE;
-                    newY = pos.y;
                     newZ = pos.z+direction.z*DELTA_MOVE;
+                    newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
+                    if(newY == -1) return;
                     var newPos =  newX +" "+newY+" "+newZ;
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"move"}}); 

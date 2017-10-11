@@ -22,7 +22,7 @@ gameRoom.onData.add(function(data) {
             if (data.state.hasOwnProperty(p)) {
                 console.log(p, data.state[p].id);
                 //player = Players.createOtherPlayer(data.state[p]);
-                player = Players.createOtherPlayer("0 3 0", data.state[p].id);
+                player = Players.createOtherPlayer("39 0 -100", data.state[p].id);
                 playersDict[data.state[p].id] = player
             }
         }
@@ -42,25 +42,25 @@ gameRoom.listen("players/:id", function(change) {
     console.log(change.value); // => 1
 
     if (change.path.id == client.id) {
-        player = Players.createMyself("0 3 0");  
+        player = Players.createMyself("39 0 -100");  
         console.log("MYSELF CREATED");
     } else {
-        player = Players.createOtherPlayer("0 3 0");
+        player = Players.createOtherPlayer("39 0 -100");
         console.log("OTHER" + change.path.id + " " + "CREATED");
     }
     playersDict[change.path.id] = player
 })
 
 
-// THIS STUFF ONLY HAPPENS WHEN A PLAYER'S ANIMATION OR 
+// THIS STUFF ONLY HAPPENS WHEN A PLAYER'S ANIMATION
 gameRoom.listen("players/:id/data/:attribute", function(change) {
-    console.log("CHANGE ANIMATION");
+  //  console.log("CHANGE ANIMATION");
     // console.log(change.path);
     // console.log(change.operation);
     // console.log(change.value);
-    console.log(change)
+    //console.log(change)
     if(change.path.id == client.id){
-        console.log("ITS MY OWN CHANGE");
+        //console.log("ITS MY OWN CHANGE");
         return;
     }
     var newValue = change.value;
