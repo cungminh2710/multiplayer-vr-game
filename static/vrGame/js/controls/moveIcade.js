@@ -56,9 +56,13 @@ AFRAME.registerComponent('move', {
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
                     newX = pos.x-direction.x*DELTA_RUN;
-                    newY = pos.y;
                     newZ = pos.z-direction.z*DELTA_RUN;
+                    newY = DetectHeight.isAvaiable(pos.y,pos.z,newX,newZ);
+        
+                    if(newY == -1) return;
+                    console.log("U     ",newY);
                     var newPos =  newX +" "+newY+" "+newZ;
+                    
                     player.setAttribute('position', newPos);
                     gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"run"}}); 
                 

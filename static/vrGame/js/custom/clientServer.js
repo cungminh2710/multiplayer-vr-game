@@ -22,7 +22,7 @@ gameRoom.onData.add(function(data) {
             if (data.state.hasOwnProperty(p)) {
                 console.log(p, data.state[p].id);
                 //player = Players.createOtherPlayer(data.state[p]);
-                player = Players.createOtherPlayer("0 0 5", data.state[p].id);
+                player = Players.createOtherPlayer("0 3 0", data.state[p].id);
                 playersDict[data.state[p].id] = player
             }
         }
@@ -42,10 +42,10 @@ gameRoom.listen("players/:id", function(change) {
     console.log(change.value); // => 1
 
     if (change.path.id == client.id) {
-        player = Players.createMyself("0 0 5");  
+        player = Players.createMyself("0 3 0");  
         console.log("MYSELF CREATED");
     } else {
-        player = Players.createOtherPlayer("0 0 5");
+        player = Players.createOtherPlayer("0 3 0");
         console.log("OTHER" + change.path.id + " " + "CREATED");
     }
     playersDict[change.path.id] = player

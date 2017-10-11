@@ -7,59 +7,61 @@
       <script src="js/libs/Tween.js"></script>
 
       <script src="js/libs/aframe-extras.js"></script>
-      <script type="text/javascript" src="tank.js"></script>
-      <script type="text/javascript" src="animation.js"></script>
-      <script type="text/javascript" src="moveIcade.js"></script>
+      <script type="text/javascript" src="js//matrix.js"></script>
+      <script type="text/javascript" src="js/custom/detectHeight.js"></script>
+      <script type="text/javascript" src="js/custom/animation.js"></script></script>
+      <script type="text/javascript" src="js/controls/moveIcade.js"></script>
+    
     
   </head>
   <body>
   
       
-      <a-assets>
-    <img id="container" src="container2.png">
-    <img id="box" src="box.png">
-    <img id="stair" src="stair.png">
-    <img id="platform" src="platform.png">
-    <img id="ground" src="ground.png">
-    <img id="wall" src="wall.png">
-    </a-assets>
       <a-scene>
+      <a-assets>
+        <img id="container" src="textures/map/container2.png">
+        <img id="box" src="textures/map/box.png">
+        <img id="stair" src="textures/map/stair.png">
+        <img id="platform" src="textures/map/platform.png">
+        <img id="ground" src="textures/map/ground.png">
+        <img id="wall" src="textures/map/wall.png">
+      </a-assets>
         <a-entity position="0 0 0">
           <!--ground-->
-        <a-plane id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
-        <a-entity id="mainterrace" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -15"></a-entity>
-         <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -35"></a-plane>
-         <!--tower-->
-         <a-entity id="tower" tower position="60 3 -3"></a-entity>
+          <a-plane id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
+          <a-entity id="mainterrace" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -15"></a-entity>
+          <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -35"></a-plane>
+          <!--tower-->
+          <a-entity id="tower" tower position="60 3 -3"></a-entity>
           <a-entity id="bluewall1"  physics-body="boundingBox: 1 1 1; mass: 5; velocity: 0.2 0 0"  geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -78"></a-entity>
           <a-entity id="bluewallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="20 0.5 -75.5"></a-entity>
-         <a-entity id="bluewall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -78"></a-entity>
+          <a-entity id="bluewall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -78"></a-entity>
           <a-entity id="frontwall1" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="44 3 -105.25"></a-entity>
-           <a-entity id="frontwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -105.25"></a-entity>
-         <a-entity id="frontdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -105.25"></a-entity>
-         <a-entity id="backwall1" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="44 3 -134.75"></a-entity>
-           <a-entity id="backwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -134.75"></a-entity>
-         <a-entity id="backdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -134.75"></a-entity>
-        <a-entity id="rightwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="30.25 3 -111.5"></a-entity>
+          <a-entity id="frontwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -105.25"></a-entity>
+          <a-entity id="frontdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -105.25"></a-entity>
+          <a-entity id="backwall1" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="44 3 -134.75"></a-entity>
+          <a-entity id="backwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -134.75"></a-entity>
+          <a-entity id="backdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -134.75"></a-entity>
+          <a-entity id="rightwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="30.25 3 -111.5"></a-entity>
           <a-entity id="rightwall2" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="30.25 3 -128.5"></a-entity>
           <a-entity id="rightdoor" geometry="primative:box;depth:4;height:1;width:0.5" material="src:#wall" position="30.25 5.5 -120 -"></a-entity>
-           <a-entity id="leftwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="89.75 3 -111.5"></a-entity>
+          <a-entity id="leftwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="89.75 3 -111.5"></a-entity>
           <a-entity id="leftwall2" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="89.75 3 -128.5"></a-entity>
           <a-entity id="leftdoor" geometry="primative:box;depth:4;height:1;width:0.5" material="src:#wall" position="89.75 5.5 -120 -"></a-entity>
           <a-entity id="redwall1" geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -162"></a-entity>
           <a-entity id="redwallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="100 0.5 -164.5"></a-entity>
-         <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -162"></a-entity>
-         <a-entity id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
-         <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
-         <!--tower-->
-         <a-entity id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
+          <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -162"></a-entity>
+          <a-entity id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
+          <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
+          <!--tower-->
+          <a-entity id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
          </a-entity>
      
   
       <a-sky color="#ECECEC"></a-sky>
     </a-scene>
-    <script type="text/javascript" src="players.js"></script>
-    <script type="text/javascript" src="clientServer.js"></script> 
+    <script type="text/javascript" src="js/custom/players.js"></script>
+    <script type="text/javascript" src="js/custom/clientServer.js"></script> 
 
   </body>
   
