@@ -30,7 +30,13 @@ export class GameArena extends Room {
     this.allowedPlayers = options.players;
 
     this.setState({
-      players: {}
+      turrets: {
+        blue: 100000,
+        red: 100000
+      },
+      players: {},
+      stats: {},
+      gameOver: false
     });
   }
 
@@ -43,11 +49,6 @@ export class GameArena extends Room {
       
       data: {
         position:"0 0 0",
-        // {
-        //   x: 1.5,
-        //   y: 1.5 + this.numJoined,
-        //   z: 4
-        // }
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
@@ -69,6 +70,10 @@ export class GameArena extends Room {
       });
     }
     this.state.players[client.id] = this.newPlayerInfo(client.id);
+    this.state.stats[client.id] = {
+      kills: 0,
+      deaths: 0
+    }
   }
 
   onLeave (client: Client) {
@@ -81,7 +86,7 @@ export class GameArena extends Room {
 
   onMessage (client: Client, data) {
      // console.log("Game Arena:", client.id, data);
-    if(data.action == "idle"){
+    if(data.action == "idle" || this.state.gameOver || !this.state.players.hasOwnProperty(client.id)){
       return;
     }
 
@@ -96,14 +101,29 @@ export class GameArena extends Room {
     else if(data.action == "DAMAGE"){
       let target = data.target;
       let clientCoords = target.position;
-      let targetPlayer = this.state.players[target.id];
-      if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
-        targetPlayer.health -= data.damage;
-        let newHealth = targetPlayer.health;
-        if(newHealth <= 0){
-          // Add one kill to client's stats
+      if(target.id = "TURRET"){
+        let targetTurretId = this.state.players[client.id].team == "red" ? "blue" : "red";
+        let newTurretHealth = this.state.turrets[targetTurretId] - data.damage;
+        this.state.turrets[targetTurretId] = newTurretHealth;
+        //check if game finished
+        if(newTurretHealth <= 0){
+          //GAME OVER
+          this.state.gameOver = true;
 
-          // Add one death to target's stats
+          //update player stats in database
+        }
+        return;
+      }else{
+        let targetPlayer = this.state.players[target.id];
+        if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
+          targetPlayer.health -= data.damage;
+          let newHealth = targetPlayer.health;
+          if(newHealth <= 0){
+            // Add one kill to client's stats
+            this.state.stats[client.id].kills += 1;
+            // Add one death to target's stats
+            this.state.stats[target.id].deaths += 1;
+          }
         }
       }
     } else if(data.action == "REVIVE"){
@@ -116,13 +136,16 @@ export class GameArena extends Room {
     // this.messageClient(client);
   }
 
-  euclideanDistance(a: Coords, b: Coords){ 
-    let sums = [ 
-      Math.pow(a.x - b.x, 2), 
-      Math.pow(a.y - b.y, 2), 
-      Math.pow(a.z - b.z, 2) 
-    ]; 
-    return Math.sqrt(sums.reduce((accumulator, currentValue) => accumulator + currentValue)); 
+  euclideanDistance(s1: string, s2: string){
+    let a = s1.split(" ");
+    let b = s2.split(" ");
+    let sums = 0;
+    for (var i = 0; i < 3; i++) {
+      let aAsNum = parseFloat(a[i]);
+      let bAsNum = parseFloat(b[i]);
+      sums += Math.pow(aAsNum - bAsNum, 2);
+    }
+    return Math.sqrt(sums); 
   } 
 
   messageClient (client: Client) {
