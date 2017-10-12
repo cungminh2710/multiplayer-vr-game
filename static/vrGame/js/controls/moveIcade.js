@@ -34,8 +34,10 @@ AFRAME.registerComponent('move', {
             map[e.keyCode] = e.type == 'keydown';
             // console.log("kedown");
             if (map[67] || map[69]||map[81]||map[90]){
-                tween.stop();
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                console.log("asdfasf");
+                if(tween) tween.stop();
+                console.log("asdfasf33");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2");
                 gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
                 preKey = 0;              
             }

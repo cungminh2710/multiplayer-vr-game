@@ -16,9 +16,10 @@ class Players {
      // player.setAttribute("id","testID");
       playerWrapper.setAttribute("position",playerInfo );
  
-      player.setAttribute("animation-mixer","clip:skill1,skill2");
+      //player.setAttribute("animation-mixer","clip:skill1");
+      player.setAttribute("animation-mixer","clip:run");
       playerWrapper.setAttribute("move","");
-      player.setAttribute("json_model","src: url(models/adc.json);");
+      player.setAttribute("json_model","src: url(models/tank.json);");
 
       //0.43 is radius of head
       // 0.85 is the distance from character's eye to feet, each character will be different

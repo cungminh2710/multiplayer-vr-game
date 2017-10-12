@@ -21766,14 +21766,28 @@ module.exports = {
   load: function (model) {
     var el = this.el;
     this.model = model;
+    var animations = this.animations = {};
     this.mixer = new THREE.AnimationMixer(model);
+    console.log(model);
+    var clips = model.animations || (model.geometry || {}).animations || [];
+    for (var clip, i = 0; (clip = clips[i]); i++) {
+      console.log(clip);
+      var action = this.mixer.clipAction(clip, model);
+      action.enabled = true;
+      if(clip.name=="run"||clip.name=="move"){
+        action.setLoop("repeat",Infinity);
+      }else{
+        action.setLoop(THREE.LoopOnce,1);
+      }
+      animations[clip.name]=action;
+    }
+    console.log(animations)
     this.mixer.addEventListener('loop', function (e) {
       el.emit('animation-loop', {action: e.action, loopDelta: e.loopDelta});
     }.bind(this));
     this.mixer.addEventListener('finished', function (e) {
       el.emit('animation-finished', {action: e.action, direction: e.direction});
     }.bind(this));
-
     if (this.data.clip) this.update({});
   },
 
@@ -21784,7 +21798,7 @@ module.exports = {
   update: function (previousData) {
     if (!previousData) return;
 
-    this.stopAction();
+    //this.stopAction();
     if (this.data.clip) {
       this.playAction();
     }
@@ -21793,44 +21807,56 @@ module.exports = {
   stopAction: function () {
     var data = this.data;
     for (var i = 0; i < this.activeActions.length; i++) {
-      data.crossFadeDuration
-        ? this.activeActions[i].fadeOut(data.crossFadeDuration)
-        : this.activeActions[i].stop();
+      //data.crossFadeDuration
+        //? this.activeActions[i].fadeOut(data.crossFadeDuration)
+        this.activeActions[i].stop();
     }
     this.activeActions.length = 0;
   },
 
   playAction: function () {
+    action = this.data.clip;
+    console.log("ACTION",action)
     if (!this.mixer) return;
-
-    var model = this.model,
-        data = this.data,
-        clips = model.animations || (model.geometry || {}).animations || [];
-
-    if (!clips.length) return;
-
-    var actions = data.clip.split(",");
-    for (var re, j = 0;(re=actions[j]);j++){
-      for (var clip, i = 0; (clip = clips[i]); i++) {
-        if (clip.name == re) {
-          if(re == "skill1"|| re=="skill2"||re=="attack"){
-            repeatTime =0;
-          }else{
-            repeatTime =  data.repetitions;
-          }
-         
-
-          var action = this.mixer.clipAction(clip, model);
-          action.enabled = true;
-          if (data.duration) action.setDuration(data.duration);
-          action
-            .setLoop(LoopMode[data.loop], repeatTime)
-            .fadeIn(data.crossFadeDuration)
-            .play()
-          this.activeActions.push(action);
-        }
-      }
+    if(action == "idle"||action==""){
+    this.animations["run"].stop();
+    this.animations["move"].stop();
+    return;
     }
+
+    // console.log(this.animations["run"].clip);
+    // var action = this.mixer.clipAction(this.model.geometry.animations[3], this.model);
+    // action.enabled = true;
+    // action.setLoop("repeat",0);
+    // action.play();
+    // var model = this.model,
+    //     data = this.data,
+    //     clips = model.animations || (model.geometry || {}).animations || [];
+
+    // if (!clips.length) return;
+
+    // var actions = data.clip.split(",");
+    // for (var re, j = 0;(re=actions[j]);j++){
+    //   for (var clip, i = 0; (clip = clips[i]); i++) {
+    //     if (clip.name == re) {
+    //       if(re == "skill1"|| re=="skill2"||re=="attack"){
+    //         repeatTime =0;
+    //       }else{
+    //         repeatTime =  data.repetitions;
+    //       }
+    //       if(re=="idle") continue;
+
+    //       var action = this.mixer.clipAction(clip, model);
+    //       action.enabled = true;
+    //       if (data.duration) action.setDuration(data.duration);
+    //       action
+    //         .setLoop(LoopMode[data.loop], repeatTime)
+    //         //.fadeIn(data.crossFadeDuration)
+    //         .play()
+    //       this.activeActions.push(action);
+    //     }
+    //   }
+   // }
   },
 
   tick: function (t, dt) {
