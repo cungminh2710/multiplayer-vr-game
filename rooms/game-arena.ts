@@ -3,7 +3,7 @@ import { Room } from "colyseus";
 
 interface PlayerInfo {
   id?: string,
-  character: string,
+  character: number,
   team: string,
   health: number,
   data: {
@@ -24,6 +24,10 @@ export class GameArena extends Room {
   private numJoined: number = 0;
   private maxPlayers: number;
   private allowedPlayers: Array<String>;
+  private takenCharacters: any = {
+    red: [],
+    blue: []
+  };
 
   onInit (options) {
     console.log("Arena created!", options);
@@ -41,14 +45,31 @@ export class GameArena extends Room {
   }
 
   newPlayerInfo (playerId: string): PlayerInfo{
+    let playerTeam: string;
+    let playerCoords: string;
+    let playerCharacter = Math.floor(Math.random() * 3) + 1;
+
+    if(this.numJoined % 2 == 0){
+      playerTeam = "red";
+      playerCoords = `${this.numJoined*5} 3 -235`;
+    }else{
+      playerTeam = "blue";
+      playerCoords = `${this.numJoined*5} 3 0`;
+    }
+
+    while(this.takenCharacters[playerTeam].indexOf(playerCharacter) != -1){
+      playerCharacter = Math.floor(Math.random() * 3) + 1;
+    }
+
+    this.takenCharacters[playerTeam].push(playerCharacter);
+
     let newPlayer: PlayerInfo = {
       id: playerId,
-      team: this.numJoined % 2 == 0 ? "red":"blue",
-      character: "tank",
+      team: playerTeam,
+      character: playerCharacter,
       health: 100,
-      
       data: {
-        position:"0 0 0",
+        position: playerCoords,
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
