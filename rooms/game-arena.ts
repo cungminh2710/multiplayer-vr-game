@@ -75,6 +75,8 @@ export class GameArena extends Room {
       rotation: "0 0 0",
       skillAnimation: "skill1"
     };
+
+    console.log(newPlayer);
     return newPlayer;
   }
 
@@ -90,6 +92,8 @@ export class GameArena extends Room {
         state: this.state.players
       });
     }
+
+    this.numJoined += 1;
     this.state.players[client.id] = this.newPlayerInfo(client.id);
     this.state.stats[client.id] = {
       kills: 0,
