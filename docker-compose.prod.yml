@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  lovr:
+    image: lovr
+    build: .
+    ports:
+      - 2657:2657
+    environment:
+      PORT: 2657
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mongo:27017/
+    depends_on:
+      - mongo
+    command: pm2-docker start index.ts
+  mongo:
+    image: mongo
+    volumes: 
+      - ~/docker/storage/loVR-mongo:/data/db
+    ports:
+      - 27017:27017
