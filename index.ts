@@ -2,7 +2,7 @@ import * as path from "path";
 import * as express from "express";
 import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 import { createServer } from "http";
 import { Server } from "colyseus";
