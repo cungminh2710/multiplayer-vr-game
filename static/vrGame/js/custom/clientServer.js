@@ -22,7 +22,8 @@ gameRoom.onData.add(function(data) {
             if (data.state.hasOwnProperty(p)) {
                 console.log(p, data.state[p].id);
                 //player = Players.createOtherPlayer(data.state[p]);
-                player = Players.createOtherPlayer(data.state[p].data.position, data.state[p].id);
+               // player = Players.createOtherPlayer(data.state[p].data.position, data.state[p].id);
+                player = Players.createOtherPlayer("39 0 -100", data.state[p].id);
                 playersDict[data.state[p].id] = player
             }
         }
@@ -42,10 +43,12 @@ gameRoom.listen("players/:id", function(change) {
     console.log(change.value); // => 1
 
     if (change.path.id == client.id) {
-        player = Players.createMyself(change.value.data.position);
+        player = Players.createMyself("39 0 -100");
+       // player = Players.createMyself(change.value.data.position);
         console.log("MYSELF CREATED");
     } else {
-        player = Players.createOtherPlayer(change.value.data.position);
+        player = Players.createOtherPlayer("39 0 -100", change.path.id);
+        //player = Players.createOtherPlayer(change.value.data.position, change.path.id);
         console.log("OTHER" + change.path.id + " " + "CREATED");
     }
     playersDict[change.path.id] = player
@@ -119,7 +122,7 @@ gameRoom.listen("players/:id/health/:number", function(change) {
 });
 
 gameRoom.listen("players/:id/:attribute", function(change) {
-
+    if (change.path.id == client.id)    return;
     // console.log(change.path);
     // console.log(change.operation);
     // console.log(change.value);

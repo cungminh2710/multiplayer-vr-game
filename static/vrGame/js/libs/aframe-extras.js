@@ -21812,12 +21812,19 @@ module.exports = {
     var actions = data.clip.split(",");
     for (var re, j = 0;(re=actions[j]);j++){
       for (var clip, i = 0; (clip = clips[i]); i++) {
-        if (clip.name.match(re)) {
+        if (clip.name == re) {
+          if(re == "skill1"|| re=="skill2"||re=="attack"){
+            repeatTime =0;
+          }else{
+            repeatTime =  data.repetitions;
+          }
+         
+
           var action = this.mixer.clipAction(clip, model);
           action.enabled = true;
           if (data.duration) action.setDuration(data.duration);
           action
-            .setLoop(LoopMode[data.loop], data.repetitions)
+            .setLoop(LoopMode[data.loop], repeatTime)
             .fadeIn(data.crossFadeDuration)
             .play()
           this.activeActions.push(action);
