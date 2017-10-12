@@ -1,10 +1,10 @@
-import * as path from 'path';
-import * as express from 'express';
-import * as serveIndex from 'serve-index';
+import * as path from "path";
+import * as express from "express";
+import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
 
-import { createServer } from 'http';
-import { Server } from 'colyseus';
+import { createServer } from "http";
+import { Server } from "colyseus";
 
 // Require ChatRoom handler
 import { ChatRoom } from "./rooms/01-basic";
@@ -17,13 +17,15 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-// mongoose.Promise = global.Promise;
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/");
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/");
 
-// mongoose.connection.on("error", () => {
-  // console.log("MongoDB connection error. Please make sure MongoDB is running.");
-  // process.exit();
-// });
+mongoose.connection.on("error", () => {
+	console.log(
+		"MongoDB connection error. Please make sure MongoDB is running."
+	);
+	process.exit();
+});
 
 // Create HTTP Server
 const httpServer = createServer(app);
@@ -36,8 +38,8 @@ gameServer.register("game-room", GameRoom);
 gameServer.register("test-arena", GameArena, { TEST: true });
 
 app.use(express.static(path.join(__dirname, "static")));
-app.use('/', serveIndex(path.join(__dirname, "static"), {'icons': true}));
+app.use("/", serveIndex(path.join(__dirname, "static"), { icons: true }));
 
-gameServer.listen(port)
-console.log(`Listening on http://localhost:${ port }`);
+gameServer.listen(port);
+console.log(`Listening on http://localhost:${port}`);
 export { gameServer };
