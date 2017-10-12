@@ -2,6 +2,7 @@ import * as path from "path";
 import * as express from "express";
 import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
+import Promise from "bluebird";
 
 import { createServer } from "http";
 import { Server } from "colyseus";
@@ -13,11 +14,10 @@ import { GameArena } from "./rooms/game-arena";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
-
 /**
  * Connect to MongoDB.
  */
-mongoose.Promise = global.Promise;
+mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/");
 
 mongoose.connection.on("error", () => {

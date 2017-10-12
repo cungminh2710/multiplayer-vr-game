@@ -1,4 +1,5 @@
-import { User, IUserModel, IUserStats } from "../models/user";
+import { User, IUserModel, IUserStats, Achievement } from "../models/user";
+import Promise from "bluebird";
 
 /**
  * Register a new user
@@ -45,6 +46,25 @@ export let readUserStats: { (id: string): Promise<IUserStats> } = _id =>
 	readUser(_id).then(user => Promise.resolve(user.stats));
 
 /**
+ * Read all User Achievements
+ * @param _id User ID
+ */
+
+export let readUserAchievements: {
+	(id: string): Promise<Achievement[]>;
+} = _id => readUser(_id).then(user => user.achievements);
+
+/**
+ * Add an achievement to a User's list of achievements
+ * @param id User ID
+ * @param newAchievement New Achievement
+ */
+export let updateUserAchievements: {
+	(id: string, newAchievement: Achievement): Promise<void>;
+} = (_id, newAchievement) =>
+	User.update({ _id }, { $push: { achievements: newAchievement } }).exec();
+
+/**
  * Update User Stats
  * @param id User ID 
  * @param newStats Updated User Stats
@@ -54,7 +74,7 @@ export let updateUserStats: {
 } = (_id, newStats) => User.update({ _id }, { stats: newStats }).exec();
 
 /**
- * Get User ID from sessionID
+ * Read User ID from sessionID
  * @param sessionID Session ID
  */
 
