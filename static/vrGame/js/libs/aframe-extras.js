@@ -21766,12 +21766,13 @@ module.exports = {
   load: function (model) {
     var el = this.el;
     this.model = model;
+    //model.geometry.computeBoundingBox();
     var animations = this.animations = {};
     this.mixer = new THREE.AnimationMixer(model);
     console.log(model);
     var clips = model.animations || (model.geometry || {}).animations || [];
     for (var clip, i = 0; (clip = clips[i]); i++) {
-      console.log(clip);
+      //console.log(clip);
       var action = this.mixer.clipAction(clip, model);
       action.enabled = true;
       if(clip.name=="run"||clip.name=="move"){
@@ -21781,7 +21782,7 @@ module.exports = {
       }
       animations[clip.name]=action;
     }
-    console.log(animations)
+    //console.log(animations)
     this.mixer.addEventListener('loop', function (e) {
       el.emit('animation-loop', {action: e.action, loopDelta: e.loopDelta});
     }.bind(this));
@@ -21818,7 +21819,7 @@ module.exports = {
     action = this.data.clip;
     console.log("ACTION",action)
     if (!this.mixer) return;
-    if(action == "idle"||action==""){
+    if(action == "idle"){
     this.animations["run"].stop();
     this.animations["move"].stop();
     return;

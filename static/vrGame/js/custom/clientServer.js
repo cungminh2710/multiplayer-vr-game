@@ -5,7 +5,7 @@ var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + locatio
 var roomName = findGetParameter("roomName");
 var gameRoom = client.join(roomName != null ? roomName : "test-arena", { id: client.id, test: roomName == null });
 var playersDict = {};
-
+var raycasterEl;
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = null // it is a good idea to store state changes from server on client
