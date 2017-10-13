@@ -22,26 +22,37 @@ AFRAME.registerComponent('move', {
 
         window.addEventListener( 'keydown', function( e ) {
             e.preventDefault( );
-            var camera = document.querySelector("#camera").object3D;
+            var camera = cameraEl.object3D;
             var direction = camera.getWorldDirection();
-            var player = document.querySelector("#playerWrapper");
+            var player = playerWrapperEl;
             var pos = player.getAttribute("position");
             this.repeating = true;
-            // console.log("press");
             var pos = el.getAttribute("position");
             e = e ||window.event; // to deal with IE
             var map = {};
             map[e.keyCode] = e.type == 'keydown';
-            // console.log("kedown");
             if (map[67] || map[69]||map[81]||map[90]){
-                console.log("asdfasf");
                 if(tween) tween.stop();
-                console.log("asdfasf33");
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
                 gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
                 preKey = 0;              
+            } else if(map[85]){ //attack
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack");
+                var materialColor = raycasterEl.getAttribute("material").color;
+                console.log(materialColor);
+                if(materialColor!="#ff0000"){
+
+                    console.log("no target");
+                    return;
+                }
+                
+         
+
+            }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation
+
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"");
             }
-            else if(map[87]&& preKey != 87){// w
+            else if(map[87]&& preKey != 87){// w front
                 preKey = 87;
                 el.setAttribute("position",pos);
                 console.log(el.object3D.position);
@@ -74,7 +85,7 @@ AFRAME.registerComponent('move', {
                 })
                 .start();   
             }
-            else if(map[88] && preKey != 88){//x
+            else if(map[88] && preKey != 88){//x back
                 preKey = 88;
                 map = {};
                 tween = new TWEEN.Tween()
@@ -104,7 +115,7 @@ AFRAME.registerComponent('move', {
                 .start();
                 
             }
-            else if(map[65] && preKey != 65){ //a
+            else if(map[65] && preKey != 65){ //a left
                 preKey = 65;
                 map = {};
                 tween = new TWEEN.Tween()
@@ -136,7 +147,7 @@ AFRAME.registerComponent('move', {
                 })
                 .start();
             }
-            else if(map[68]&& preKey != 68){ //d
+            else if(map[68]&& preKey != 68){ //d right
                 preKey = 68;
                 map = {};
                 tween = new TWEEN.Tween()

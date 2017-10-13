@@ -21797,8 +21797,9 @@ module.exports = {
   },
 
   update: function (previousData) {
+    console.log("before");
     if (!previousData) return;
-
+    console.log("after");
     //this.stopAction();
     if (this.data.clip) {
       this.playAction();
@@ -21818,12 +21819,16 @@ module.exports = {
   playAction: function () {
     action = this.data.clip;
     console.log("ACTION",action)
-    if (!this.mixer) return;
+  
+    if (!this.mixer || action == "*") return;
+
     if(action == "idle"){
-    this.animations["run"].stop();
-    this.animations["move"].stop();
-    return;
+      this.animations["run"].stop();
+      this.animations["move"].stop();
+      return;
     }
+    if(action == "attack"|| action == "skill1"|| action=="skill2")
+    this.animations[action].reset().play();
 
     // console.log(this.animations["run"].clip);
     // var action = this.mixer.clipAction(this.model.geometry.animations[3], this.model);

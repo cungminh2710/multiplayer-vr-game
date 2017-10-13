@@ -6,6 +6,8 @@ var roomName = findGetParameter("roomName");
 var gameRoom = client.join(roomName != null ? roomName : "test-arena", { id: client.id, test: roomName == null });
 var playersDict = {};
 var raycasterEl;
+var cameraEl;
+var playerWrapperEl;
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = null // it is a good idea to store state changes from server on client
@@ -21,14 +23,12 @@ gameRoom.onData.add(function(data) {
             // check if the property/key is defined in the object itself, not in parent
             if (data.state.hasOwnProperty(p)) {
                 console.log(p, data.state[p].id);
-                //player = Players.createOtherPlayer(data.state[p]);
                // player = Players.createOtherPlayer(data.state[p].data.position, data.state[p].id);
                 player = Players.createOtherPlayer("39 0 -100", data.state[p].id);
                 playersDict[data.state[p].id] = player
             }
         }
-        //console.log(playersDict);
-        //console.log(playersDict["BJ26x2ljW"]);
+
     } else if (data.type === "damage") {
         console.log("YOU GOT HIT");
     }
@@ -149,47 +149,3 @@ function findGetParameter(parameterName) {
         });
     return result;
 }
-
-// function isEquivalent(a, b, id) {
-//     // Create arrays of property names
-//     var aProps = Object.getOwnPropertyNames(a);
-//     var bProps = Object.getOwnPropertyNames(b);
-
-//     // If number of properties is different,
-//     // objects are not equivalent
-//     if (aProps.length !== bProps.length) {
-//         return false;
-//     }
-
-//     for (var i = 0; i < aProps.length; i++) {
-//         var propName = aProps[i];
-
-//         // If values of same property are not equal,
-//         // objects are not equivalent
-//         if (JSON.stringify(a[propName]) != JSON.stringify(b[propName])) {
-//             console.log(JSON.stringify(a[propName]));
-//             console.log(a[propName]);
-//             var newPos = b[propName].position;
-//             console.log(id)
-//             console.log(newPos);
-
-//             var player = playersDict[id];
-//             var animation = b[propName].moveAnimation;
-//             player.setAttribute("position", newPos);
-//             console.log(player);
-//             var preAnimation = player.getAttribute("animation-mixer").clip;
-//             console.log(preAnimation);
-//             if (preAnimation.includes(animation) == false) {
-//                 console.log("animation= " + animation)
-//                 Animation.setAnimation(player, animation);
-//             }
-
-//             console.log("updated", playersDict[id].getAttribute("position"));
-//             return false;
-//         }
-//     }
-
-// If we made it this far, objects
-// are considered equivalent
-//     return true;
-// }
