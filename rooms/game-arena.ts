@@ -73,7 +73,7 @@ export class GameArena extends Room {
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
-      skillAnimation: "skill1"
+      skillAnimation: "none"
     };
 
     console.log(newPlayer);

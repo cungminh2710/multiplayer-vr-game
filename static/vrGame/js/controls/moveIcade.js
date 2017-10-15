@@ -1,9 +1,9 @@
 AFRAME.registerComponent('move', {
     schema: {
-        DELTA_MOVE: {
+        moveSpeed: {
           default: 0.03
         },
-        DELTA_RUN:{
+        runSpeed:{
             default: 0.05
         }
       },
@@ -13,8 +13,8 @@ AFRAME.registerComponent('move', {
         this.repeatRateTimer = null;
         var count = this.count = 0;
         var el = this.el;
-        var DELTA_MOVE = this.data.DELTA_MOVE;
-        var DELTA_RUN = this.data.DELTA_RUN;
+        var moveSpeed = this.data.moveSpeed;
+        var runSpeed = this.data.runSpeed;
         var moveFlag = "idle"; 
         var preKey = 0;
         var preTime;
@@ -50,7 +50,7 @@ AFRAME.registerComponent('move', {
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation
 
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"none");
             }
             else if(map[87]&& preKey != 87){// w front
                 preKey = 87;
@@ -68,8 +68,8 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    newX = pos.x-direction.x*DELTA_RUN;
-                    newZ = pos.z-direction.z*DELTA_RUN;
+                    newX = pos.x-direction.x*runSpeed;
+                    newZ = pos.z-direction.z*runSpeed;
                     newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
                     if(newY == -1) return;
 
@@ -99,8 +99,8 @@ AFRAME.registerComponent('move', {
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
-                    newX = pos.x+direction.x*DELTA_RUN;
-                    newZ = pos.z+direction.z*DELTA_RUN;
+                    newX = pos.x+direction.x*runSpeed;
+                    newZ = pos.z+direction.z*runSpeed;
                     newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
                     if(newY == -1) return;
 
@@ -132,8 +132,8 @@ AFRAME.registerComponent('move', {
                     var axis = new THREE.Vector3( 0, 1, 0 );
                     var angle = Math.PI / 2;
                     direction.applyAxisAngle( axis, angle );
-                    newX = pos.x-direction.x*DELTA_MOVE;
-                    newZ = pos.z-direction.z*DELTA_MOVE;
+                    newX = pos.x-direction.x*moveSpeed;
+                    newZ = pos.z-direction.z*moveSpeed;
                     newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
                     if(newY == -1) return;
                     var newPos =  newX +" "+newY+" "+newZ;
@@ -163,8 +163,8 @@ AFRAME.registerComponent('move', {
                     var angle = Math.PI / 2;
 
                     direction.applyAxisAngle( axis, angle );
-                    newX = pos.x+direction.x*DELTA_MOVE;
-                    newZ = pos.z+direction.z*DELTA_MOVE;
+                    newX = pos.x+direction.x*moveSpeed;
+                    newZ = pos.z+direction.z*moveSpeed;
                     newY = DetectHeight.isAvaiable(pos.y,newX,newZ);
                     if(newY == -1) return;
                     var newPos =  newX +" "+newY+" "+newZ;

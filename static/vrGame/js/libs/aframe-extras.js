@@ -21737,7 +21737,7 @@ var LoopMode = {
  */
 module.exports = {
   schema: {
-    clip:  {default: '*'},
+    clip:  {default: 'none'},
     duration: {default: 0},
     crossFadeDuration: {default: 0},
     loop: {default: 'repeat', oneOf: Object.keys(LoopMode)},
@@ -21820,15 +21820,19 @@ module.exports = {
     action = this.data.clip;
     console.log("ACTION",action)
   
-    if (!this.mixer || action == "*") return;
+    if (!this.mixer || action == "none") return;
 
     if(action == "idle"){
       this.animations["run"].stop();
       this.animations["move"].stop();
       return;
     }
-    if(action == "attack"|| action == "skill1"|| action=="skill2")
-    this.animations[action].reset().play();
+    if(action == "attack"|| action == "skill1"|| action=="skill2"){
+      this.animations[action].reset().play();
+    }
+    else{
+      this.animations[action].play();
+    }
 
     // console.log(this.animations["run"].clip);
     // var action = this.mixer.clipAction(this.model.geometry.animations[3], this.model);
