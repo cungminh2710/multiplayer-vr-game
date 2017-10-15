@@ -16,7 +16,7 @@ class Players {
       var player = document.createElement("a-entity");
       player.setAttribute("id",client.id);
       player.setAttribute("animation-mixer","clip:idle");
-      player.setAttribute("json_model","src: url(models/tank.json);");
+      player.setAttribute("json_model","src: url(models/adc.json);");
       //0.43 is radius of head
       // 0.85 is the distance from character's eye to feet, each character will be different
 
@@ -41,7 +41,7 @@ class Players {
       player.setAttribute("position",playerInfo );
       player.setAttribute("animation-mixer","clip: idle");
 
-      player.setAttribute("json_model","src: url(models/tank.json);");
+      player.setAttribute("json_model","src: url(models/adc.json);");
       player.addEventListener('model-loaded', function (event) {
         var boundingBox = Players.getBoundingBox(player.object3D.children[0]);
         console.log("MODELLOADED*********************************")
