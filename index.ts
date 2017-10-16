@@ -12,6 +12,8 @@ import { ChatRoom } from "./rooms/01-basic";
 import { GameRoom } from "./rooms/game-room";
 import { GameArena } from "./rooms/game-arena";
 
+import { createNewUser, isUserExist } from "./src/helper";
+
 const port = Number(process.env.PORT || 2657);
 const app = express();
 /**
@@ -36,6 +38,37 @@ const gameServer = new Server({ server: httpServer });
 // Register ChatRoom as "chat"
 gameServer.register("game-room", GameRoom);
 gameServer.register("test-arena", GameArena, { TEST: true });
+
+app.post("/api/register", (req, res) => {
+	let { username, password, confirm_password, email } = req.body;
+	if (password !== confirm_password)
+		return res.status(403).json({
+			status: "error",
+			message: "Password and Confirmed password are not matched"
+		});
+	else
+		createNewUser({ username, password, email })
+			.then(_ =>
+				res.status(200).json({ status: "success", message: "Success" })
+			)
+			.catch(err =>
+				res.status(500).json({ status: "error", message: err.message })
+			);
+});
+
+app.post("/api/login", (req, res) => {
+	let { username, password } = req.body;
+	isUserExist(username, password).then(
+		user =>
+			user
+				? res.status(200).json({ status: "success", message: user })
+				: res.status(400).json({
+						status: "error",
+						message:
+							"Username is not found or password is not matched"
+					})
+	);
+});
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/", serveIndex(path.join(__dirname, "static"), { icons: true }));

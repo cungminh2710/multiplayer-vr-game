@@ -19,7 +19,7 @@ export interface IUserStats extends Document {
 
 export interface IUserModel extends Document {
 	email: string;
-	userName: string;
+	username: string;
 	password: string;
 	achievements: Array<Achievement>;
 	sessionID: string;
@@ -88,11 +88,6 @@ UserSchema.pre("save", next => {
 	});
 });
 
-UserSchema.methods.comparePassword = (candidatePassword, cb) => {
-	bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-		if (err) return cb(err);
-		cb(null, isMatch);
-	});
-};
-
+UserSchema.methods.comparePassword = candidatePassword =>
+	bcrypt.compareSync(candidatePassword, this.password);
 export const User: Model<IUserModel> = model<IUserModel>("User", UserSchema);

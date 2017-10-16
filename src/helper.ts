@@ -10,16 +10,28 @@ export let createNewUser: {
 		userData: {
 			username: string;
 			password: string;
+			email: string;
 		}
 	): Promise<IUserModel>;
-} = userData => new User.save(userData);
+} = userData => new User(userData).save();
 
 /**
  * Check if an user id is valid and existed
- * @param id User ID
+ * @param username Username
+ * @param password Password
  */
-export let isUserExist: { (id: string): Promise<boolean> } = _id =>
-	User.count({ _id }).exec();
+export let isUserExist: {
+	(username: string, password: string): Promise<boolean>;
+} = (username, password) =>
+	User.findOne({ username })
+		.exec()
+		.then(user => {
+			if (user)
+				return user.comparePassword(password)
+					? Promise.resolve(user)
+					: Promise.resolve(null);
+			else return Promise.resolve(null);
+		});
 
 /**
  * Update session ID of an user given his/her User ID
