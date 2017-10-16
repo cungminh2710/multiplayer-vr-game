@@ -65,7 +65,7 @@ export var UserSchema: Schema = new Schema({
 	}
 });
 
-UserSchema.pre("save", next => {
+UserSchema.pre("save", function(next) {
 	let user = this;
 
 	// only hash the password if it has been modified (or is new)

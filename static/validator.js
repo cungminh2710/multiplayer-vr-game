@@ -1,13 +1,6 @@
 
-$.validator.setDefaults( {
-    submitHandler: function () {
-        $("#messages").html("Your registration has been completed!");
-        alert( "Submitted!" );
-    }
-} );
-
 $( document ).ready( function () {
-    $( "#registration" ).validate( {
+    $( "#register" ).validate( {
         rules: {
             username: {
                 required: true,
@@ -42,6 +35,29 @@ $( document ).ready( function () {
                 equalTo: "Please enter the same password"
             },
             email: "Please enter a valid email address",
+        },
+        submitHandler: function (form) {
+            var formData = $(form).serialize();
+            console.log(formData);
+
+            $.ajax({
+              method: "post",
+              url: "/api/register",
+              data: formData,
+              dataType: "json",
+              success: function(data) {
+                $("#messages").html("Your registration was successful!");
+                var response = data;
+                console.log(data);
+              },
+              error: function(data) {
+                $("#messages").html("Registration failed.");
+                var response = data;
+                console.log(response);
+              }
+            });
+
+            return false;
         },
         errorElement: "em",
         errorPlacement: function ( error, element ) {

@@ -2,6 +2,7 @@ import * as path from "path";
 import * as express from "express";
 import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
+import * as bodyParser from "body-parser";
 import { Promise } from "bluebird";
 
 import { createServer } from "http";
@@ -16,6 +17,11 @@ import { createNewUser, isUserExist } from "./src/helper";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 /**
  * Connect to MongoDB.
  */
