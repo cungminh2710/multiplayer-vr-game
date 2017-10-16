@@ -21,7 +21,7 @@ export let createNewUser: {
  * @param password Password
  */
 export let isUserExist: {
-	(username: string, password: string): Promise<boolean>;
+	(username: string, password: string): Promise<IUserModel>;
 } = (username, password) =>
 	User.findOne({ username })
 		.exec()
