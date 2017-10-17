@@ -1,74 +1,32 @@
 body {
-  background-color: #000;
+  background-color: #190F0F;
   font-family: Tahoma, Geneva, sans-serif;
 }
 
-.gameroom {
+.center-text {
   text-align: center;
-  color: #fff;
 }
 
-.gameroom table {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gameroom tr, th, td {
-  border: 1px solid #fff;
-  padding: 5px;
-}
-
-.gameroom input {
-  color: #000;
+.top-spacing {
+  margin-top: 20px;
 }
 
 .header-bar {
   background-color: #fff;
   background-image: url("bg_banner.jpg");
   background-size: cover;
+  border-bottom: 10px solid #AF9153;
 }
 
-.header-strip {
-  padding: 5px;
-  margin-bottom: 20px;
-  background-color: #AF9153;
-}
-
-a.header-logo {
-  display: block;
-  text-align: center;
+a.logo-brand {
   text-decoration: none;
   color: #fff;
   font-family: Garamond;
   font-size: 3em;
 }
 
-.rm-btn {
-  padding: 5px;
-  color: #000;
-  border-radius: 5px;
-  border-color: blue;
-  background-color: #45d2f6;
-}
-
-.btn-leave {
-  width: 7em;
-  background-color: #fff;
-}
-
-.btn-ready {
-  width: 7em;
-  background-color: #f0004f;
-}
-
-.room-join {
-  background-color: #f0004f;
-}
-
-.login-hdr {
-  float: right;
-  margin-top: 15px;
-  margin-right: 15px;
+.registration {
+  width: 50%;
 }
 
 .banner {
@@ -109,10 +67,52 @@ a.header-logo {
   text-shadow: 2px 2px 6px #0b0b3d;
 }
 
+.gameroom {
+  text-align: center;
+  color: #fff;
+}
+
+.gameroom table {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gameroom tr, th, td {
+  border: 1px solid #fff;
+  padding: 5px;
+}
+
+.gameroom input {
+  color: #000;
+}
+
+.rm-btn {
+  color: #000;
+  border-radius: 5px;
+  border-color: blue;
+  background-color: #45d2f6;
+  padding: 5px;
+}
+
+.btn-leave {
+  width: 7em;
+  background-color: #fff;
+}
+
+.btn-ready {
+  width: 7em;
+  background-color: #f0004f;
+}
+
+.room-join {
+  background-color: #f0004f;
+}
+
 .btn-play {
   padding: 12px 40px;
   background-color: #373232;
   border: 5px outset #dd44f4;
+  transition: border-color ease 0.3s;
 }
 
 .btn-play:hover, .btn-play:focus, .btn-play:active {
@@ -120,7 +120,54 @@ a.header-logo {
   border-color: #21e9fc;
 }
 
-.registration {
-  margin: auto;
-  width: 50%;
+ul.navlist {
+  list-style-type: none;
+  margin: 0 0 20px 0;
+  padding: 0 20px;
+  overflow: hidden;
+  background-color: #7DC0C7;
+  border-bottom: 5px solid #6C3499;
+}
+
+li.navitem {
+  float: left;
+}
+
+li.navLogo {
+  float: left;
+  margin-right: 20px;
+}
+
+li.navLogo a {
+  font-size: 2em;
+}
+
+li.navitem a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 13px 16px;
+  text-decoration: none;
+  transition: background-color ease 0.2s;
+}
+
+li.navitem a:hover {
+  background-color: #EF2D5E;
+}
+
+li.navitem a:active {
+  background-color: purple;
+}
+
+.strip {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.strip-primary {
+  background-color: #337AB7;
+}
+
+.strip-fluoro {
+  background-color: #EF2D5E;
 }
