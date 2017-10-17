@@ -38,21 +38,18 @@ $( document ).ready( function () {
         },
         submitHandler: function (form) {
             var formData = $(form).serialize();
-            console.log(formData);
 
             $.ajax({
               method: "post",
               url: "/api/register",
               data: formData,
               dataType: "json",
-              success: function(data) {
-                $("#messages").html("Your registration was successful!");
-                var response = data;
-                console.log(data);
+              success: function(response) {
+                console.log(response);
+                $("#messages").html(response.message);
               },
-              error: function(data) {
-                $("#messages").html("Registration failed.");
-                var response = data;
+              error: function(response) {
+                $("#messages").html(response.responseJSON.message);
                 console.log(response);
               }
             });

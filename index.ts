@@ -13,7 +13,7 @@ import { ChatRoom } from "./rooms/01-basic";
 import { GameRoom } from "./rooms/game-room";
 import { GameArena } from "./rooms/game-arena";
 
-import { createNewUser, isUserExist } from "./src/helper";
+import { createNewUser, isUserExist, updateUserSession } from "./src/helper";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
