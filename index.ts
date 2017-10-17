@@ -65,24 +65,34 @@ app.post("/api/register", (req, res) => {
 app.post("/api/login", (req, res) => {
 	let { username, password } = req.body;
 	isUserExist(username, password).then(
-		user =>
-			user
-				? res.status(200).json(
-				{ 
-					status: "success", message: {
+		user => {
+			if (user) {
+				updateUserSession(user._id, req.sessionID);
+				res.status(200).json({ 
+					status: "success", 
+					message: {
 						username: user.username,
 						email: user.email,
 						stats: user.stats,
 						achievements: user.achievements
-					}
-			 	})
-				: res.status(400).json({
+					},
+					redirect: '/profile.html'
+			 	});
+			} else {
+				res.status(400).json({
 						status: "error",
 						message:
 							"Username is not found or password is not matched"
 					})
+			}
+		}
 	);
 });
+
+app.get("/api/logout", (req, res) => {
+	delete req.sessionID;
+	res.redirect('/index.html');
+})
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/", serveIndex(path.join(__dirname, "static"), { icons: true }));

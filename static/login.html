@@ -15,7 +15,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.js"></script>
 
-  <script src="validator.js"></script>
+  <script src="userAuth.js"></script>
 
   <link href="webtheme.css" type="text/css" rel="stylesheet">
 
@@ -77,7 +77,7 @@
 
         <div id="login-form" class="tab-pane fade">
           <h3>Login</h3>
-          <form method="POST" action="/api/login">
+          <form id="login">
             <div class="form-group">
               <label for="usr">Username:</label>
               <input type="text" class="form-control" id="usr" name="username">
