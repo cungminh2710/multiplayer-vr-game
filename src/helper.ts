@@ -1,5 +1,5 @@
 import { User, IUserModel, IUserStats, Achievement } from "../models/user";
-import Promise from "bluebird";
+import { Promise } from "bluebird";
 
 /**
  * Register a new user
@@ -31,6 +31,10 @@ export let isUserExist: {
 					? Promise.resolve(user)
 					: Promise.resolve(null);
 			else return Promise.resolve(null);
+		})
+		.catch(err => {
+			console.log("+++++ SOMETHING BAD +++++++");
+			console.log(err);
 		});
 
 /**

@@ -81,6 +81,7 @@ UserSchema.pre("save", function(next) {
 		bcrypt.hash(user.password, salt, function(err, hash) {
 			if (err) return next(err);
 
+
 			// override the cleartext password with the hashed one
 			user.password = hash;
 			next();
@@ -88,6 +89,7 @@ UserSchema.pre("save", function(next) {
 	});
 });
 
-UserSchema.methods.comparePassword = candidatePassword =>
-	bcrypt.compareSync(candidatePassword, this.password);
+UserSchema.methods.comparePassword = candidatePassword => {
+	return bcrypt.compareSync(candidatePassword, this.password);
+}
 export const User: Model<IUserModel> = model<IUserModel>("User", UserSchema);

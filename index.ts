@@ -67,7 +67,15 @@ app.post("/api/login", (req, res) => {
 	isUserExist(username, password).then(
 		user =>
 			user
-				? res.status(200).json({ status: "success", message: user })
+				? res.status(200).json(
+				{ 
+					status: "success", message: {
+						username: user.username,
+						email: user.email,
+						stats: user.stats,
+						achievements: user.achievements
+					}
+			 	})
 				: res.status(400).json({
 						status: "error",
 						message:
