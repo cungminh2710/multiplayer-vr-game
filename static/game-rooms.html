@@ -109,7 +109,9 @@
         var host = window.document.location.host.replace(/:.*/, '');
         var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
         var myPlayerName = client.id;
-        var gameRoom = client.join("game-room");
+        var gameRoom = client.join("game-room", {
+            client: client.id
+        });
 
         var globalState = {};
         gameRoom.onJoin.add(function() {

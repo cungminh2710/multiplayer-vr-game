@@ -2,6 +2,7 @@ import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 import { GameArena } from './game-arena';
 import { gameServer } from '../index';
+import * as helper from '../src/helper';
 
 interface RoomData {
   name: string,
@@ -12,6 +13,12 @@ interface RoomData {
 }
 
 export class GameRoom extends Room {
+  // CHANGE THIS SO ITS A USERNAME INSTEAD OF A SESSION ID
+  // IF THE CLIENTID ISN'T TIED TO A USER RETURN UNDEFINED
+  private getUsername(clientId: string) {
+    return clientId;
+  }
+
   private roomNameExists(name: string) {
     let arr = this.state.rooms;
     return arr.filter(room => room.name == name) > 0;
@@ -87,27 +94,37 @@ export class GameRoom extends Room {
       console.log("GameRoom created!", options);
   }
 
+  // Returns true/false based on if the clientId is associated with a user's 
+  requestJoin (options: any) {
+    let username: string|undefined = this.getUsername(options.client);
+    return (typeof username === "string");
+  }
+
   onJoin (client: Client) {
     console.log("NEW CLIENT!", client);
-    this.state.players.push(client.id);
+
+    //get username from db
+    let username: string = this.getUsername(client.id);
+    this.state.players.push(username);
   }
 
   onLeave (client: Client) {
-      // this.state.players.push(client.id);
-      let index: number = this.state.players.indexOf(client.id);
+      let username: string = this.getUsername(client.id);
+      let index: number = this.state.players.indexOf(username);
       this.state.players.splice(index, 1);
-      this.leaveRoom(client.id);
+      this.leaveRoom(username);
   }
 
   onMessage (client: Client, data) {
       let action: string = data.action;
+      let username: string = this.getUsername(client.id);
       switch (action) {
         case "CREATE":
           console.log("make new room");
           let newRoom: RoomData = {
             name: data.payload.roomName,
             maxPlayers: data.payload.maxPlayers,
-            players: [ client.id ],
+            players: [ username ],
             readyPlayers: [],
             isReady: false
           }
@@ -119,15 +136,15 @@ export class GameRoom extends Room {
         case "JOIN":
           console.log("Join existing room");
           const roomName: string = data.payload.roomName;
-          this.joinRoom(roomName, client.id);
+          this.joinRoom(roomName, username);
           break;
         case "READY":
           console.log("PLAYER READY");
-          this.markPlayerReady(client.id);
+          this.markPlayerReady(username);
           break;
         default:
           console.log("Leaving current room");
-          this.leaveRoom(client.id);
+          this.leaveRoom(username);
           break;
       }
   }
