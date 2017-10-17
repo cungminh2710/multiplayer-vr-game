@@ -1,5 +1,7 @@
 import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
+import { IUserStats } from '../models/user';
+import * as helper from '../src/helper';
 
 interface PlayerInfo {
   id?: string,
@@ -42,6 +44,10 @@ export class GameArena extends Room {
       stats: {},
       gameOver: false
     });
+  }
+
+  revivePlayer (playerId: string) {
+    this.state.players[playerId].health = 100;
   }
 
   newPlayerInfo (playerId: string): PlayerInfo{
@@ -148,13 +154,12 @@ export class GameArena extends Room {
             this.state.stats[client.id].kills += 1;
             // Add one death to target's stats
             this.state.stats[target.id].deaths += 1;
+            setTimeout(function() {
+              console.log('bring back to life', target.id);
+              this.revivePlayer(target.id);
+            }, 1500)
           }
         }
-      }
-    } else if(data.action == "REVIVE"){
-      let player = this.state.players[client.id];
-      if(player.health <= 0){
-        player.health = 100;
       }
     }
 

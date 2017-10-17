@@ -92,12 +92,30 @@ export let updateUserStats: {
 /**
  * Read User ID from sessionID
  * @param sessionID Session ID
+ * @returns Promise<string>
+ * @throws Error when user sessionID not found or database gone wrong
  */
 
 export let readUserIDBySession: {
-	(sessionID: string): Promise<String>;
+	(sessionID: string): Promise<string>;
 } = sessionID =>
 	User.find({ sessionID })
 		.select("_id")
 		.exec()
 		.then(user => Promise.resolve(user._id));
+
+/**
+ * Read Username from sessionID
+ * @param sessionID Session ID
+ * @throws Error when user sessionID not found or database gone wrong
+ */
+
+export let readUsernameBySession: {
+	(sessionID: string): Promise<String | null>;
+} = sessionID =>
+	User.find({ sessionID })
+		.exec()
+		.then(user => {
+			if (user) return Promise.resolve(user.username);
+			else return Promise.resolve(null);
+		});
