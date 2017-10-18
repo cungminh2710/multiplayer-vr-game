@@ -96,6 +96,27 @@ export let updateUserStats: {
  * @throws Error when user sessionID not found or database gone wrong
  */
 
+export let readUserInfoBySession: {
+	(sessionID: string): Promise<string>;
+} = sessionID =>
+	User.findOne({ sessionID })
+		.exec()
+		.then(user => {
+			let retObj = {
+				stats: user.stats,
+				achievements: user.achievements,
+				email: user.email,
+				username: user.username
+			}
+			return Promise.resolve(retObj)});
+
+/**
+ * Read User obj stuff from sessionID
+ * @param sessionID Session ID
+ * @returns Promise<string>
+ * @throws Error when user sessionID not found or database gone wrong
+ */
+
 export let readUserIDBySession: {
 	(sessionID: string): Promise<string>;
 } = sessionID =>

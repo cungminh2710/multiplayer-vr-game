@@ -13,7 +13,7 @@ import { ChatRoom } from "./rooms/01-basic";
 import { GameRoom } from "./rooms/game-room";
 import { GameArena } from "./rooms/game-arena";
 
-import { createNewUser, isUserExist, updateUserSession } from "./src/helper";
+import { createNewUser, isUserExist, updateUserSession, readUserInfoBySession } from "./src/helper";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
@@ -68,7 +68,7 @@ app.post("/api/login", (req, res) => {
 		user => {
 			if (user) {
 				updateUserSession(user._id, sessionId);
-				res.status(200).json({ 
+				res.status(200).json({
 					status: "success", 
 					message: {
 						username: user.username,
@@ -76,7 +76,7 @@ app.post("/api/login", (req, res) => {
 						stats: user.stats,
 						achievements: user.achievements
 					},
-					redirect: '/profile.html'
+					redirect: `/profile.html`
 			 	});
 			} else {
 				res.status(400).json({
@@ -92,6 +92,32 @@ app.post("/api/login", (req, res) => {
 app.get("/api/logout", (req, res) => {
 	delete req.sessionID;
 	res.redirect('/index.html');
+})
+
+app.get("/api/user/:sessionId", (req, res) => {
+	let sessionId = req.params.sessionId;
+	readUserInfoBySession(sessionId).then(
+		user => {
+			if (user) {
+				console.log(user);
+				res.status(200).json({
+					status: "success", 
+					message: {
+						username: user.username,
+						email: user.email,
+						stats: user.stats,
+						achievements: user.achievements
+					}
+			 	});
+			} else {
+				res.status(400).json({
+						status: "error",
+						message:
+							"Username is not found or password is not matched"
+					})
+			}
+		}
+	);
 })
 
 app.use(express.static(path.join(__dirname, "static")));
