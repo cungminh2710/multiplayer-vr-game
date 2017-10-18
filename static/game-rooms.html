@@ -127,6 +127,8 @@
         gameRoom.onData.add(function(data){
             if(data.hasOwnProperty("error")){
                 console.log("ERROR: " + data.error);
+            }else if(data.hasOwnProperty("success")){
+                myPlayerName = data.username
             }
         })
 

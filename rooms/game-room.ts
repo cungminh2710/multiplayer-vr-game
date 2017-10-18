@@ -108,21 +108,24 @@ export class GameRoom extends Room {
 
     //get username from db
     // let username: string = this.getUsername(client.id);
-    readUsernameBySession(client.id).then(username => {
-      console.log(username);
+    readUsernameBySession(client.id).then(value => {
+      const username = value;
       if(username != null){
         this.state.players.push(username);
+        this.send(client, {
+          "success": true,
+          username
+        });
       }else{
         this.send(client, {
           "error": "You are not logged in!"
-        })
+        });
       }
     });
   }
 
   onLeave (client: Client) {
       readUsernameBySession(client.id).then(username => {
-        console.log(username);
         let index: number = this.state.players.indexOf(username);
         this.state.players.splice(index, 1);
         this.leaveRoom(username);
@@ -131,7 +134,8 @@ export class GameRoom extends Room {
 
   onMessage (client: Client, data) {
       let action: string = data.action;
-      readUsernameBySession(client.id).then(username => {
+      readUsernameBySession(client.id).then(value => {
+        const username = value;
         switch (action) {
           case "CREATE":
             console.log("make new room");
@@ -153,7 +157,6 @@ export class GameRoom extends Room {
             this.joinRoom(roomName, username);
             break;
           case "READY":
-            console.log("PLAYER READY");
             this.markPlayerReady(username);
             break;
           default:

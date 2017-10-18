@@ -5,8 +5,8 @@ $( document ).ready( function () {
     
     $("#login-form").submit(function() {
         var loginData = $("#login").serialize();
+        loginData += "&sessionId=" + client.id;
         console.log(loginData);
-        loginData.sessionId = client.id;
 
         $.ajax({
             method: "post",

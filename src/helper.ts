@@ -99,7 +99,7 @@ export let updateUserStats: {
 export let readUserIDBySession: {
 	(sessionID: string): Promise<string>;
 } = sessionID =>
-	User.find({ sessionID })
+	User.findOne({ sessionID })
 		.select("_id")
 		.exec()
 		.then(user => Promise.resolve(user._id));
@@ -113,7 +113,7 @@ export let readUserIDBySession: {
 export let readUsernameBySession: {
 	(sessionID: string): Promise<String | null>;
 } = sessionID =>
-	User.find({ sessionID })
+	User.findOne({ sessionID })
 		.exec()
 		.then(user => {
 			if (user) return Promise.resolve(user.username);
