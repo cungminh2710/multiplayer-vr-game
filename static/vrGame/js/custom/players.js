@@ -11,7 +11,7 @@ class Players {
       // console.log(characterConfig)
       // console.log(playerInfo);
       // console.log(playerInfo.character);
-      playerInfo.character = 1;
+      //playerInfo.character = 1;
       var config = characterConfig[playerInfo.character];
       
       //skill init
@@ -31,9 +31,9 @@ class Players {
       var player = document.createElement("a-entity");
       player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
       player.setAttribute("id",client.id);
-      player.setAttribute("health",playerInfo.health);
+      player.setAttribute("health",config.health);
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
-      console.log("asfdasfsfd",playerInfo.data.moveAnimation);
+      //console.log("CREATEMYSELF MOVEANIMATION: ",playerInfo.data.moveAnimation);
       //0.43 is radius of head
       // 0.85 is the distance from character's eye to feet, each character will be different
 
@@ -75,7 +75,7 @@ class Players {
       //player.setAttribute("position",playerInfo.data.position);
       //for debug
       player.setAttribute("position","10 0 -100");
-      player.setAttribute("health",playerInfo.health);
+      player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
 
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
@@ -109,7 +109,7 @@ class Players {
       cameraEl.setAttribute("id","camera");
       //raycaster
       Players.createRayCaster(); 
-      Players.createPanel();
+      Players.createPanel(config);
       cameraEl.appendChild(player);
       // add head movement and body rotation           
       cameraEl.addEventListener('componentchanged', function (evt) {
@@ -171,8 +171,7 @@ class Players {
 
   }
 
-static createPanel(){
-  var panel = document.createElement("a-entity");
+static createPanel(config){
   panel.setAttribute("geometry","primitive:plane;height: 0.03; width: 0.06");
   panel.setAttribute("material","color:gray;transparent:true;opacity:0.5");
   panel.setAttribute("position","0 0.05 -0.1");
@@ -180,17 +179,17 @@ static createPanel(){
   var healthtext = document.createElement("a-entity");
   healthtext.setAttribute("id","health");
   healthtext.setAttribute("position","0.04 0.01 0");
-  healthtext.setAttribute("text","value: Health:  90;width:0.1;color:white;");
+  healthtext.setAttribute("text","value: Health:  "+config.health+";width:0.1;color:white;");
   panel.appendChild(healthtext);
   var skill1 = document.createElement("a-entity");
   skill1.setAttribute("id","skll1");
   skill1.setAttribute("position","0.04 0 0");
-  skill1.setAttribute("text","value: skill1:  05;width:0.1;color:white;");
+  skill1.setAttribute("text","value: "+config.skill.skill1.name +": Ready;width:0.1;color:white;");
   panel.appendChild(skill1);
   var skill2 = document.createElement("a-entity");
   skill2.setAttribute("id","skll2");
   skill2.setAttribute("position","0.04 -0.01 0");
-  skill2.setAttribute("text","value: skill2:  06;width:0.1;color:white;");
+  skill2.setAttribute("text","value: "+config.skill.skill2.name+": Ready;width:0.1;color:white;");
   panel.appendChild(skill2);
   cameraEl.appendChild(panel);
   console.log("have created panel");

@@ -8,6 +8,7 @@ var playersDict = {};
 var raycasterEl;
 var cameraEl;
 var playerWrapperEl;
+var panel = document.createElement("a-entity");
 var team = "";
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
