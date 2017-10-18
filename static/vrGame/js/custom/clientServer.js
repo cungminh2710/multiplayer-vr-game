@@ -4,7 +4,7 @@ var host = window.document.location.host.replace(/:.*/, '');
 var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
 var roomName = findGetParameter("roomName");
 var user = findGetParameter("user");
-var gameRoom = client.join(roomName != null ? roomName : "test-arena", { id: user, test: roomName == null });
+var gameRoom = client.join(roomName != null ? roomName : "test-arena", { clientId: client.id, username: user, test: roomName == null });
 var playersDict = {};
 var raycasterEl;
 var cameraEl;
