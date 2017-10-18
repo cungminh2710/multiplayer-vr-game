@@ -2,8 +2,6 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>Game Rooms | LoVR</title>
     <!-- dummy Symbol polyfill -->
     <script>
         if (typeof(Symbol) === "undefined") {
@@ -19,35 +17,24 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="webtheme.css">
 </head>
 
 <body>
+    <nav>
+        <div class="header-bar">
+            <div class="container">
+                <a href="#" class="header-logo">LoVR</a>
+            </div>
 
-  <ul class="navlist">
-    <div class="pull-left">
-      <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
-      <li class="navitem">
-        <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>   Profile</a>
-      </li>
-      <li class="navitem">
-        <a href="/game-rooms.html"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>   Game Room</a>
-      </li>
-    </div>
-
-    <div class="pull-right">
-      <li class="navitem">
-        <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
-      </li>
-    </div>
-  </ul>
-
+        </div>
+        <div class="header-strip">
+        </div>
+    </nav>
 
     <div class="gameroom">
 
-    <h1>Game Rooms</h1>
+    <h1>LoVR Game Rooms</h1>
 
     <strong>Game Room</strong><br>
 
@@ -136,6 +123,12 @@
             globalState = state;
             updateDOM();
         });
+
+        gameRoom.onData.add(function(data){
+            if(data.hasOwnProperty("error")){
+                console.log("ERROR: " + data.error);
+            }
+        })
 
         function updateDOM() {
             console.log(globalState);
