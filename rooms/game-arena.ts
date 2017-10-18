@@ -4,6 +4,7 @@ import { IUserStats } from '../models/user';
 import * as helper from '../src/helper';
 
 interface PlayerInfo {
+  id?: string,
   character: number,
   team: string,
   health: number,
@@ -69,6 +70,7 @@ export class GameArena extends Room {
     this.takenCharacters[playerTeam].push(playerCharacter);
 
     let newPlayer: PlayerInfo = {
+      id: playerId,
       team: playerTeam,
       character: playerCharacter,
       health: 100,

@@ -34,7 +34,9 @@ gameRoom.onData.add(function(data) {
                 if(data.state[p].team == team ) data.state[p].team = "ally";
                 else data.state[p].team = "enemy";
                 player = Players.createOtherPlayer(data.state[p]);
-                playersDict[p] = player
+
+                console.log("ondata: ",player);
+                playersDict[data.state[p].id] = player
             }
         }
 
@@ -56,8 +58,7 @@ gameRoom.listen("players/:id", function(change) {
         else change.value.team = "enemy";
         player = Players.createOtherPlayer(change.value);
         console.log("listen: others ", player);
-        //player = Players.createOtherPlayer(change.value.data.position, change.path.id);
-        console.log("OTHER" + change.path.id + " " + "CREATED");
+
     }
     playersDict[change.path.id] = player
 })
