@@ -34,7 +34,7 @@ gameRoom.onData.add(function(data) {
                 if(data.state[p].team == team ) data.state[p].team = "ally";
                 else data.state[p].team = "enemy";
                 player = Players.createOtherPlayer(data.state[p]);
-                playersDict[data.state[p].id] = player
+                playersDict[p] = player
             }
         }
 
