@@ -7,14 +7,15 @@ class Players {
 
 
   static createMyself(playerInfo){
-      //playerInfo.character = 1;
-      var config = characterConfig[playerInfo.character];
+      character = playerInfo.character;
+      character = 1;
+      var config = characterConfig[character];
       
       //skill init
       skillInfo = config.skill;
-      skillCd.attack = config.skill.attack.cd;
-      skillCd.skill1 = config.skill.skill1.cd;
-      skillCd.skill2 = config.skill.skill2.cd;
+      // skillCd.attack = config.skill.attack.cd;
+      // skillCd.skill1 = config.skill.skill1.cd;
+      // skillCd.skill2 = config.skill.skill2.cd;
 
 
       playerWrapperEl = document.createElement("a-entity");
@@ -23,7 +24,7 @@ class Players {
       //playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
       playerWrapperEl.setAttribute("position","5 0 -100");
-      playerWrapperEl.setAttribute("move","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
+      playerWrapperEl.setAttribute("control","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
       player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
       player.setAttribute("id",client.id);
@@ -126,7 +127,7 @@ class Players {
     //raycaster setting
     raycasterEl = document.createElement("a-entity");
     raycasterEl.setAttribute("raycaster","objects: .collidable;far:20;recursive:false");
-    raycasterEl.setAttribute("collider-check","");
+   // raycasterEl.setAttribute("collider-check","");
     raycasterEl.setAttribute("id","caster");
     raycasterEl.setAttribute("position","0 0 -1");
     raycasterEl.setAttribute("geometry","primitive: ring; radiusOuter: 0.03; radiusInner: 0.015;");
@@ -194,18 +195,18 @@ class Players {
     skill1animation.setAttribute("attribute","color");
     skill1animation.setAttribute("begin","start");
     skill1animation.setAttribute("from","red");
-    skill1animation.setAttribute("to","green");
+    skill1animation.setAttribute("to","red");
     skill1animation.setAttribute("dur",config.skill.skill1.cd);
     skill1animation.setAttribute("repeat","0");
     skill1.appendChild(skill1animation);
     skill1.addEventListener("animationend",function(){
        skill1.setAttribute("value",config.skill.skill1.name+": Ready");
-       //if(tween) tween.stop();
-       console.log();
-       //Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+       skill1.setAttribute("color","green");
+       //Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
     });
     skill1.addEventListener("animationstart",function(){
        skill1.setAttribute("value",config.skill.skill1.name+": Not Ready");
+       
     });
     panel.appendChild(skill1);
     
@@ -219,22 +220,20 @@ class Players {
     skill2animation.setAttribute("attribute","color");
     skill2animation.setAttribute("begin","start");
     skill2animation.setAttribute("from","red");
-    skill2animation.setAttribute("to","green");
+    skill2animation.setAttribute("to","red");
     skill2animation.setAttribute("dur",config.skill.skill2.cd);
     skill2animation.setAttribute("repeat","0");
     skill2.appendChild(skill2animation);
     skill2.addEventListener("animationend",function(){
       skill2.setAttribute("value",config.skill.skill2.name+": Ready");
-      // if(tween) tween.stop();
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  
-      Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
+      skill2.setAttribute("color","green");
+      //Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
     });
     skill2.addEventListener("animationstart",function(){
        skill2.setAttribute("value",config.skill.skill2.name+": Not Ready");
     });
-    panel.appendChild(skill2);
 
+    panel.appendChild(skill2);
     cameraEl.appendChild(panel);
     console.log("have created panel");
 
