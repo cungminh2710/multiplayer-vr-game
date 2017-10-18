@@ -25,7 +25,9 @@ interface Coords {
 export class GameArena extends Room {
   private numJoined: number = 0;
   private maxPlayers: number;
-  private allowedPlayers: Array<String>;
+  private allowedPlayers: Array<string>;
+  private playerClientMap: any = {}; 
+  private statsAdded: Array<string>; 
   private takenCharacters: any = {
     red: [],
     blue: []
@@ -44,6 +46,9 @@ export class GameArena extends Room {
       stats: {},
       gameOver: false
     });
+    this.allowedPlayers.forEach(p => { 
+      this.playerClientMap[p] = ""; 
+    }); 
   }
 
   revivePlayer (playerId: string) {
@@ -87,8 +92,15 @@ export class GameArena extends Room {
   }
 
   requestJoin (options: any) {
-    let clientId = options.id;
-    return options.test || this.allowedPlayers.indexOf(clientId) > -1;
+    let clientId = options.clientId;
+    let userId = options.username;
+
+    if(options.test || this.allowedPlayers.indexOf(userId) > -1){
+
+      this.playerClientMap[userId] = clientId;
+      return true;
+    }
+    return false;
   }
 
   onJoin (client: Client) {
@@ -145,8 +157,23 @@ export class GameArena extends Room {
         if(newTurretHealth <= 0){
           //GAME OVER
           this.state.gameOver = true;
+          let winner = targetTurretId == "red" ? "blue" : "red";
 
           //update player stats in database
+          // this.autoDispose = false; 
+          // for (var player in this.playerClientMap) { 
+          //   if (this.playerClientMap.hasOwnProperty(player)) { 
+          //     var clientId = this.playerClientMap[player]; 
+          //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, this.state.[clientId].team == winner) 
+          //     .then(function() { 
+          //       let i = this.allowedPlayers.indexOf(player); 
+          //       this.allowedPlayers.splice(i); 
+          //       if(this.allowedPlayers.length === 0){ 
+          //         this.autoDispose = true; 
+          //       } 
+          //     }); 
+          //   } 
+          // } 
         }
         return;
       }else{
