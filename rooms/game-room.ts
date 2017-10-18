@@ -2,7 +2,8 @@ import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 import { GameArena } from './game-arena';
 import { gameServer } from '../index';
-import * as helper from '../src/helper';
+import { readUsernameBySession } from '../src/helper';
+import { Promise } from "bluebird";
 
 interface RoomData {
   name: string,
@@ -15,9 +16,9 @@ interface RoomData {
 export class GameRoom extends Room {
   // CHANGE THIS SO ITS A USERNAME INSTEAD OF A SESSION ID
   // IF THE CLIENTID ISN'T TIED TO A USER RETURN UNDEFINED
-  private getUsername(clientId: string) {
-    return clientId;
-  }
+  // private async getUsername(clientId: string){
+  //   return await readUsernameBySession(clientId);
+  // }
 
   private roomNameExists(name: string) {
     let arr = this.state.rooms;
@@ -95,58 +96,72 @@ export class GameRoom extends Room {
   }
 
   // Returns true/false based on if the clientId is associated with a user's 
-  requestJoin (options: any) {
-    let username: string|undefined = this.getUsername(options.client);
-    return (typeof username === "string");
-  }
+  // requestJoin (options: any) {
+  //   let username: string|undefined = this.getUsername(options.client);
+  //   console.log("REQUESTING JOIN");
+  //   console.log(typeof username);
+  //   return (typeof username === "string");
+  // }
 
   onJoin (client: Client) {
     console.log("NEW CLIENT!", client);
 
     //get username from db
-    let username: string = this.getUsername(client.id);
-    this.state.players.push(username);
+    // let username: string = this.getUsername(client.id);
+    readUsernameBySession(client.id).then(username => {
+      console.log(username);
+      if(username != null){
+        this.state.players.push(username);
+      }else{
+        this.send(client, {
+          "error": "You are not logged in!"
+        })
+      }
+    });
   }
 
   onLeave (client: Client) {
-      let username: string = this.getUsername(client.id);
-      let index: number = this.state.players.indexOf(username);
-      this.state.players.splice(index, 1);
-      this.leaveRoom(username);
+      readUsernameBySession(client.id).then(username => {
+        console.log(username);
+        let index: number = this.state.players.indexOf(username);
+        this.state.players.splice(index, 1);
+        this.leaveRoom(username);
+      });
   }
 
   onMessage (client: Client, data) {
       let action: string = data.action;
-      let username: string = this.getUsername(client.id);
-      switch (action) {
-        case "CREATE":
-          console.log("make new room");
-          let newRoom: RoomData = {
-            name: data.payload.roomName,
-            maxPlayers: data.payload.maxPlayers,
-            players: [ username ],
-            readyPlayers: [],
-            isReady: false
-          }
-          
-          if(!this.roomNameExists(data.payload.roomName)){
-            this.state.rooms.push(newRoom);
-          }
-          break;
-        case "JOIN":
-          console.log("Join existing room");
-          const roomName: string = data.payload.roomName;
-          this.joinRoom(roomName, username);
-          break;
-        case "READY":
-          console.log("PLAYER READY");
-          this.markPlayerReady(username);
-          break;
-        default:
-          console.log("Leaving current room");
-          this.leaveRoom(username);
-          break;
-      }
+      readUsernameBySession(client.id).then(username => {
+        switch (action) {
+          case "CREATE":
+            console.log("make new room");
+            let newRoom: RoomData = {
+              name: data.payload.roomName,
+              maxPlayers: data.payload.maxPlayers,
+              players: [ username ],
+              readyPlayers: [],
+              isReady: false
+            }
+            
+            if(!this.roomNameExists(data.payload.roomName)){
+              this.state.rooms.push(newRoom);
+            }
+            break;
+          case "JOIN":
+            console.log("Join existing room");
+            const roomName: string = data.payload.roomName;
+            this.joinRoom(roomName, username);
+            break;
+          case "READY":
+            console.log("PLAYER READY");
+            this.markPlayerReady(username);
+            break;
+          default:
+            console.log("Leaving current room");
+            this.leaveRoom(username);
+            break;
+        }
+      });
   }
 
   onDispose () {
