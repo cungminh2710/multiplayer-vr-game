@@ -201,8 +201,8 @@ class Players {
     skill1.appendChild(skill1animation);
     skill1.addEventListener("animationend",function(){
        skill1.setAttribute("value",config.skill.skill1.name+": Ready");
-       skill1.setAttribute("color","green");
        Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
+       skill1.setAttribute("color","green");
     });
     skill1.addEventListener("animationstart",function(){
        skill1.setAttribute("value",config.skill.skill1.name+": Not Ready");
@@ -226,7 +226,9 @@ class Players {
     skill2.appendChild(skill2animation);
     skill2.addEventListener("animationend",function(){
       skill2.setAttribute("value",config.skill.skill2.name+": Ready");
-      skill2.setAttribute("color","green");
+      // if(tween) tween.stop();
+      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+  
       Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
     });
     skill2.addEventListener("animationstart",function(){
