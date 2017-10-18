@@ -21797,9 +21797,9 @@ module.exports = {
   },
 
   update: function (previousData) {
-    console.log("before");
+    //console.log("before");
     if (!previousData) return;
-    console.log("after");
+    //console.log("after");
     //this.stopAction();
     if (this.data.clip) {
       this.playAction();
@@ -21818,7 +21818,7 @@ module.exports = {
 
   playAction: function () {
     action = this.data.clip;
-    console.log("ACTION",action)
+    //console.log("ACTION",action)
   
     if (!this.mixer || action == "none") return;
 

@@ -124,11 +124,15 @@ export class GameArena extends Room {
     if(data.action == "MOVE"){
       console.log(data)
       this.state.players[client.id].data = data.data;
-    } else if(data.action == "ROTATION"){
+    } 
+    else if(data.action == "ROTATION"){
       this.state.players[client.id].rotation = data.data;
       console.log(data)
     }
-    
+    else if(data.action == "SKILLANIMATION"){
+      this.state.players[client.id].skillAnimation = data.data;
+
+    }
     else if(data.action == "DAMAGE"){
       let target = data.target;
       let clientCoords = target.position;

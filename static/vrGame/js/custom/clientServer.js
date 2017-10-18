@@ -11,15 +11,12 @@ var cameraEl;
 var playerWrapperEl;
 var panel;
 var team = "";
+var character = Infinity;
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = [] // it is a good idea to store state changes from server on client
 var skillInfo ={}
-var skillCd = {
-    attack: Infinity,
-    skill1: Infinity,
-    skill2: Infinity
-}
+
 // THIS IS THE FIRST STAETE THIS CLIENT WILL SEE WHEN THEY JOIN THE GAME
 gameRoom.onData.add(function(data) {
     if (data.type == "initial") {
@@ -31,12 +28,9 @@ gameRoom.onData.add(function(data) {
             console.log("````````````````````````````````````");
             // check if the property/key is defined in the object itself, not in parent
             if (data.state.hasOwnProperty(p)) {
-                console.log(p, data.state[p].id);
-                console.log("````````````````````````````````````");
                 if(data.state[p].team == team ) data.state[p].team = "ally";
                 else data.state[p].team = "enemy";
                 player = Players.createOtherPlayer(data.state[p]);
-
                 console.log("ondata: ",player);
                 playersDict[data.state[p].id] = player
             }
