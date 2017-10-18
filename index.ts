@@ -63,11 +63,11 @@ app.post("/api/register", (req, res) => {
 });
 
 app.post("/api/login", (req, res) => {
-	let { username, password } = req.body;
+	let { username, password, sessionId } = req.body;
 	isUserExist(username, password).then(
 		user => {
 			if (user) {
-				updateUserSession(user._id, req.sessionID);
+				updateUserSession(user._id, sessionId);
 				res.status(200).json({ 
 					status: "success", 
 					message: {

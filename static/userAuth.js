@@ -1,9 +1,12 @@
 
 $( document ).ready( function () {
+    var host = window.document.location.host.replace(/:.*/, '');
+    var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
     
     $("#login-form").submit(function() {
         var loginData = $("#login").serialize();
         console.log(loginData);
+        loginData.sessionId = client.id;
 
         $.ajax({
             method: "post",
