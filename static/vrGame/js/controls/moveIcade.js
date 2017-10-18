@@ -36,17 +36,20 @@ AFRAME.registerComponent('move', {
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
                 gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
                 preKey = 0;              
-            } else if(map[85]){ //attack
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack");
-                var materialColor = raycasterEl.getAttribute("material").color;
-                console.log(materialColor);
-                if(materialColor!="#ff0000"){
+            }else if(map[85]){ //Attack u
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
 
-                    console.log("no target");
-                    return;
-                }
-                
-         
+            }else if(map[81]){ //Skill1 q
+                console.log(panel)
+                var skill1 = panel.querySelector("#skill1");
+                skill1.emit("start");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill1")
+    
+            }else if(map[82]){ //Skill2 r
+                console.log(panel)
+                var skill2 = panel.querySelector("#skill2");
+                skill2.emit("start");
+                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation
 

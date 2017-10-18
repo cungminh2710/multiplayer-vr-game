@@ -7,13 +7,17 @@ characterConfig[1] = {
     localPosition:"0 -1.4 0",
     moveSpeed:0.03,
     runSpeed: 0.05,
+    boundingBox:{
+        width:1.4649,
+        length:1.4012
+    },
     skill:{
         attack:{
             damage:50,
             target: false,
             maxDistance: 3,
             buff:"",
-            cd:1.5
+            cd:1500
         },
         skill1:{
             name: "Cage",
@@ -21,7 +25,7 @@ characterConfig[1] = {
             target: true,
             maxDistance: 10,
             buff: "disableMove",
-            cd: 8
+            cd: 8000
         },
         skill2:{
             name: "Rocket",
@@ -29,7 +33,7 @@ characterConfig[1] = {
             target: false,
             maxDistance: 20,
             buff:"",
-            cd: 8
+            cd: 8000
         }
 
     }
@@ -43,13 +47,17 @@ characterConfig[2] = {
     localPosition:"0 -0.85 0.21",
     moveSpeed: 0.025,
     runSpeed: 0.045,
+    boundingBox:{
+        width:0.5660,
+        length:0.7255
+    },
     skill:{
         attack:{
             damage: 30,
             target: false,
             maxDistance: 3,
             buff:"",
-            cd:1.5
+            cd:1500
         },
         skill1:{            
             name: "Flash",
@@ -57,7 +65,7 @@ characterConfig[2] = {
             target: false,
             maxDistance: 10,
             buff: "flash",
-            cd: 5
+            cd: 5000
         },
         skill2:{
             name: "Lazer",            
@@ -65,7 +73,7 @@ characterConfig[2] = {
             target: true,
             maxDistance: 20,
             buff:"",
-            cd: 8
+            cd: 8000
         }
 
     }
@@ -79,13 +87,17 @@ characterConfig[3] = {
     localPosition:"0 -0.75 0.17",
     moveSpeed: 0.035,
     runSpeed: 0.055,
+    boundingBox:{
+        width:0.5337,
+        length:0.5127
+    },
     skill:{
         attack:{
             damage: -10,
             target: true,
             maxDistance: 3,
             buff:"",
-            cd:1.5
+            cd:1500
         },
         skill1:{
             name: "Cure",
@@ -93,7 +105,7 @@ characterConfig[3] = {
             target: true,
             maxDistance: 10,
             buff: "disableMove",
-            cd: 8
+            cd: 8000
         },
         skill2:{
             name: "Wish",
@@ -101,7 +113,7 @@ characterConfig[3] = {
             target: false,
             maxDistance: Infinity,
             buff:"",
-            cd: 15
+            cd: 15000
         }
 
     }
