@@ -8,9 +8,10 @@ var playersDict = {};
 var raycasterEl;
 var cameraEl;
 var playerWrapperEl;
+var team = "";
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
-var globalState = null // it is a good idea to store state changes from server on client
+var globalState = [] // it is a good idea to store state changes from server on client
 var skillInfo ={}
 var skillCd = {
     attack: Infinity,
@@ -25,12 +26,14 @@ gameRoom.onData.add(function(data) {
         // THIS WILL UPDATE playerNumber 
         // TO UPDATE YOUR POSITION LATER
         for (var p in data.state) {
+            console.log("````````````````````````````````````");
             // check if the property/key is defined in the object itself, not in parent
             if (data.state.hasOwnProperty(p)) {
                 console.log(p, data.state[p].id);
-               // player = Players.createOtherPlayer(data.state[p].data.position, data.state[p].id);
+                console.log("````````````````````````````````````");
+                if(data.state[p].team == team ) data.state[p].team = "ally";
+                else data.state[p].team = "enemy";
                 player = Players.createOtherPlayer(data.state[p]);
-                console.log("ondata: others ", data.state[p]);
                 playersDict[data.state[p].id] = player
             }
         }
@@ -39,22 +42,20 @@ gameRoom.onData.add(function(data) {
         console.log("YOU GOT HIT");
     }
 
-    // Players.createMyself("2.5 2.5 5");
 });
-
+//create players
 gameRoom.listen("players/:id", function(change) {
     console.log("CHANGE OF PLAYER NUMBERS");
-    // console.log(change.path); // => { id: "f98h3f", attribute: "y" }
-    // console.log(change.operation); // => "replace" (can be "add", "remove" or "replace")
-    // console.log(change.value); // => 1
-
     if (change.path.id == client.id) {
-        console.log("MESELF",change);
+        team = change.value.team;
+        console.log("MESELF",team);
         player = Players.createMyself(change.value);
         console.log("MYSELF CREATED");
     } else {
+        if(change.value.team == team) change.value.team = "ally";
+        else change.value.team = "enemy";
         player = Players.createOtherPlayer(change.value);
-        console.log("listen: others ", change);
+        console.log("listen: others ", player);
         //player = Players.createOtherPlayer(change.value.data.position, change.path.id);
         console.log("OTHER" + change.path.id + " " + "CREATED");
     }

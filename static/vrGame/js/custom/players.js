@@ -29,7 +29,7 @@ class Players {
       playerWrapperEl.setAttribute("position","5 0 -100");
       playerWrapperEl.setAttribute("move","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
-      player.setAttribute("json_model","src: url("+config.model+");");
+      player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
       player.setAttribute("id",client.id);
       player.setAttribute("health",playerInfo.health);
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
@@ -52,12 +52,17 @@ class Players {
   
 
   static createOtherPlayer(playerInfo){
-
+    console.log(playerInfo);
+    console.log(playerInfo.character);  
+      var model = characterConfig[playerInfo.character].model;
+  
+      if(playerInfo.team == "ally") model += "-yellow.json";
+      else model += "-red.json";
 
       var player = document.createElement("a-entity");
 
       //load model
-      player.setAttribute("json_model","src: url("+ characterConfig[playerInfo.character].model+");");
+      player.setAttribute("json_model","src: url("+model+");");
       player.addEventListener('model-loaded', function (event) {
         var boundingBox = Players.getBoundingBox(player.object3D.children[0]);
         player.setAttribute("class","collidable" );
@@ -65,6 +70,8 @@ class Players {
       })
 
       player.setAttribute("id",playerInfo.id);
+      console.log(playerInfo);
+      player.setAttribute("team",playerInfo.team);
       //player.setAttribute("position",playerInfo.data.position);
       //for debug
       player.setAttribute("position","10 0 -100");
@@ -131,6 +138,11 @@ class Players {
     raycasterEl.setAttribute("cursor","");
     raycasterEl.setAttribute("material","color: cyan; shader: flat");
 
+    raycasterEl.addEventListener("mouseenter",function(evt){
+      console.log(evt);
+      //raycasterEl.emit('targetAlly');
+
+    });
     // cursor animation
     var cursorEnter = document.createElement("a-animation");
     cursorEnter.setAttribute("begin","mouseenter");
@@ -144,8 +156,8 @@ class Players {
     cursorLeave.setAttribute("from","red");
     cursorLeave.setAttribute("to","cyan");
     cursorLeave.setAttribute("dur","50");
-    raycasterEl.appendChild(cursorEnter);
-    raycasterEl.appendChild(cursorLeave);
+    //raycasterEl.appendChild(cursorEnter);
+   // raycasterEl.appendChild(cursorLeave);
 
   }
 

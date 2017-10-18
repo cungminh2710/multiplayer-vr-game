@@ -1,7 +1,7 @@
 var characterConfig = {}
 //tank
 characterConfig[1] = {
-    model:"models/tank-yellow.json",
+    model:"models/tank",
     cameraHeight: 1.4,
     localPosition:"0 -1.4 0",
     moveSpeed:0.03,
@@ -34,7 +34,7 @@ characterConfig[1] = {
 }
 //adc
 characterConfig[2] = {
-    model:"models/adc-yellow.json",
+    model:"models/adc",
     cameraHeight: 0.85,
     localPosition:"0 -0.85 0.21",
     moveSpeed: 0.025,
@@ -67,7 +67,7 @@ characterConfig[2] = {
 }
 //healer
 characterConfig[3] = {
-    model:"models/healer-yellow.json",
+    model:"models/healer",
     cameraHeight: 0.75,
     localPosition:"0 -0.75 0.17",
     moveSpeed: 0.035,
