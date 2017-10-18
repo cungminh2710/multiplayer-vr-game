@@ -50,6 +50,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     console.log(playerInfo);
     console.log(playerInfo.character);  
+    playerInfo.character = 1;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -73,7 +74,7 @@ class Players {
       player.setAttribute("position","10 0 -100");
       player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
-
+    
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
        
       document.querySelector("a-scene").appendChild(player);
@@ -227,8 +228,7 @@ class Players {
     skill2.addEventListener("animationend",function(){
       skill2.setAttribute("value",config.skill.skill2.name+": Ready");
       // if(tween) tween.stop();
-      console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-  
+      skill2.setAttribute("color","green");
       Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
     });
     skill2.addEventListener("animationstart",function(){

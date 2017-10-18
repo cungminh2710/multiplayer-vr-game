@@ -130,6 +130,7 @@ export class GameArena extends Room {
       console.log(data)
     }
     else if(data.action == "SKILLANIMATION"){
+      console.log("SKILLANIMATION: ",data)
       this.state.players[client.id].skillAnimation = data.data;
 
     }

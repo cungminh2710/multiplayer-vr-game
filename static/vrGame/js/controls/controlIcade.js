@@ -37,7 +37,7 @@ AFRAME.registerComponent('control', {
                 gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
                 preKey = 0;              
             }else if(map[85]){ //Attack u
-                // if(character == 1) Tank.attack();
+                 if(character == 1) Tank.attack();
                 // if(character == 2) Adc.attack();
                 // if(character == 3) healer.attack();
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
@@ -45,7 +45,7 @@ AFRAME.registerComponent('control', {
             }else if(map[72]){ //Skill1 h
                 var skill1 = panel.querySelector("#skill1");
                 if(skill1.getAttribute("color") == "#ff0000") return;
-                // if(character == 1) Tank.skill1();
+                 if(character == 1) Tank.skill1();
                 // if(character == 2) Adc.skill1();
                 // if(character == 3) healer.skill1();
                 skill1.emit("start");
@@ -53,7 +53,7 @@ AFRAME.registerComponent('control', {
     
             }else if(map[74]){ //Skill2 j
                 var skill2 = panel.querySelector("#skill2");
-                // if(character == 1) Tank.skill2();
+                 if(character == 1) Tank.skill2();
                 // if(character == 2) Adc.skill2();
                 // if(character == 3) healer.skill2();
                 //console.log(raycasterEl.components.raycaster.intersectedEls[0]);

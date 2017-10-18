@@ -67,14 +67,9 @@ gameRoom.listen("turrets/:attribute", function(change) {
     console.log("DAMAGE TO TURRET");
 });
 
-// THIS STUFF ONLY HAPPENS WHEN A PLAYER'S ANIMATION
+//MOVEANIMATION AND POSITION UPDATE
 gameRoom.listen("players/:id/data/:attribute", function(change) {
-    //  console.log("CHANGE ANIMATION");
-    // console.log(change.path);
-    // console.log(change.operation);
-    // console.log(change.value);
     if (change.path.id == client.id) {
-        //console.log("ITS MY OWN CHANGE");
         return;
     }
     var newValue = change.value;
@@ -127,15 +122,20 @@ gameRoom.listen("players/:id/health/:number", function(change) {
 });
 
 gameRoom.listen("players/:id/:attribute", function(change) {
+    console.log(change)
     if (change.path.id == client.id)    return;
     // console.log(change.path);
     // console.log(change.operation);
     // console.log(change.value);
     var newValue = change.value;
     var id = change.path.id;
+
     if (change.path.attribute == "rotation") {
         console.log("CHANGE ROTATION");
         playersDict[id].setAttribute("rotation", newValue)
+    }else if(change.path.attribute=="skillAnimation"){
+        console.log("SKILLANIMATION: ",newValue);
+        Animation.setAnimation(playersDict[id], newValue);
     }
 });
 gameRoom.onJoin.add(function() {

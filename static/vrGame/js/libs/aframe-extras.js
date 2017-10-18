@@ -21767,6 +21767,7 @@ module.exports = {
     var el = this.el;
     this.model = model;
     //model.geometry.computeBoundingBox();
+    var data = this.data;
     var animations = this.animations = {};
     this.mixer = new THREE.AnimationMixer(model);
     console.log(model);
@@ -21788,6 +21789,7 @@ module.exports = {
     }.bind(this));
     this.mixer.addEventListener('finished', function (e) {
       el.emit('animation-finished', {action: e.action, direction: e.direction});
+      //data.clip = "none";
     }.bind(this));
     if (this.data.clip) this.update({});
   },
