@@ -209,7 +209,7 @@
                 }
 
                 if (globalState.rooms[joinedRoom].isReady) {
-                    $('#arena-url').attr('href', "http://localhost:2657/vrGame/map.html?roomName=" + globalState.rooms[joinedRoom].name);
+                    $('#arena-url').attr('href', "http://localhost:2657/vrGame/map.html?roomName=" + globalState.rooms[joinedRoom].name + "&user=" + myPlayerName);
                     $('#ready-modal').modal('show')
                 }
             } else {
