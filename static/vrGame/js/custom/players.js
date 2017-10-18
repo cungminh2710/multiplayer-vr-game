@@ -109,7 +109,7 @@ class Players {
       cameraEl.setAttribute("id","camera");
       //raycaster
       Players.createRayCaster(); 
-      cameraEl.appendChild(raycasterEl);
+      Players.createPanel();
       cameraEl.appendChild(player);
       // add head movement and body rotation           
       cameraEl.addEventListener('componentchanged', function (evt) {
@@ -139,26 +139,61 @@ class Players {
     raycasterEl.setAttribute("material","color: cyan; shader: flat");
 
     raycasterEl.addEventListener("mouseenter",function(evt){
-      console.log(evt);
-      //raycasterEl.emit('targetAlly');
+      console.log(evt)
+      if(evt.detail.intersectedEl.getAttribute("team")=="enemy")raycasterEl.emit('targetEnemy');
+      else raycasterEl.emit('targetAlly');
 
     });
     // cursor animation
     var cursorEnter = document.createElement("a-animation");
-    cursorEnter.setAttribute("begin","mouseenter");
+    cursorEnter.setAttribute("begin","targetEnemy");
     cursorEnter.setAttribute("attribute","material.color");
-    cursorEnter.setAttribute("from","cyan");
+    cursorEnter.setAttribute("from","black");
     cursorEnter.setAttribute("to","red");
-    cursorEnter.setAttribute("dur","50");
+    cursorEnter.setAttribute("dur","0");
+    var cursorEnter = document.createElement("a-animation");
+    cursorEnter.setAttribute("begin","targetAlly");
+    cursorEnter.setAttribute("attribute","material.color");
+    cursorEnter.setAttribute("from","black");
+    cursorEnter.setAttribute("to","cyan");
+    cursorEnter.setAttribute("dur","0");
+
     var cursorLeave= document.createElement("a-animation");
     cursorLeave.setAttribute("begin","mouseleave");
     cursorLeave.setAttribute("attribute","material.color");
-    cursorLeave.setAttribute("from","red");
-    cursorLeave.setAttribute("to","cyan");
-    cursorLeave.setAttribute("dur","50");
-    //raycasterEl.appendChild(cursorEnter);
-   // raycasterEl.appendChild(cursorLeave);
+
+    cursorLeave.setAttribute("from","black");
+    cursorLeave.setAttribute("to","black");
+    cursorLeave.setAttribute("dur","0");
+    raycasterEl.appendChild(cursorEnter);
+    raycasterEl.appendChild(cursorLeave);
+    cameraEl.appendChild(raycasterEl);
 
   }
+
+static createPanel(){
+  var panel = document.createElement("a-entity");
+  panel.setAttribute("geometry","primitive:plane;height: 0.03; width: 0.06");
+  panel.setAttribute("material","color:gray;transparent:true;opacity:0.5");
+  panel.setAttribute("position","0 0.05 -0.1");
+  panel.setAttribute("id","panel");
+  var healthtext = document.createElement("a-entity");
+  healthtext.setAttribute("id","health");
+  healthtext.setAttribute("position","0.04 0.01 0");
+  healthtext.setAttribute("text","value: Health:  90;width:0.1;color:white;");
+  panel.appendChild(healthtext);
+  var skill1 = document.createElement("a-entity");
+  skill1.setAttribute("id","skll1");
+  skill1.setAttribute("position","0.04 0 0");
+  skill1.setAttribute("text","value: skill1:  05;width:0.1;color:white;");
+  panel.appendChild(skill1);
+  var skill2 = document.createElement("a-entity");
+  skill2.setAttribute("id","skll2");
+  skill2.setAttribute("position","0.04 -0.01 0");
+  skill2.setAttribute("text","value: skill2:  06;width:0.1;color:white;");
+  panel.appendChild(skill2);
+  cameraEl.appendChild(panel);
+  console.log("have created panel");
+}
 
 }
