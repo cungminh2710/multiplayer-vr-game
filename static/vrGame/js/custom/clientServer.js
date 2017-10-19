@@ -136,6 +136,8 @@ gameRoom.listen("players/:id/:attribute", function(change) {
     }else if(change.path.attribute=="skillAnimation"){
         console.log("SKILLANIMATION: ",newValue);
         Animation.setAnimation(playersDict[id], newValue);
+    }else if(change.path.attribute == "skill"){
+        console.log(newValue);
     }
 });
 gameRoom.onJoin.add(function() {

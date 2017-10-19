@@ -6,8 +6,12 @@ class Tank{
         if(target.getAttribute("team") == "ally") return;
         //WHAT IS THE FORMAT
         //damage
-        var deltaHealth = -skillInfo.attack.damage;
-        //gameRoom.send({action: "DAMAGE", data:"TODO"}); 
+        var data = {
+            target:[target.getAttribute("id")],
+            name:"cage",
+        }
+        console.log("SEND DAMGAE: ",data)
+        gameRoom.send({action: "DAMAGE", data}); 
         
 
     }
@@ -28,4 +32,4 @@ class Tank{
         gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
     }
 
-}
+}JSON.stringify(data.data)

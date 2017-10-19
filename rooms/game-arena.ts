@@ -12,7 +12,12 @@ interface PlayerInfo {
     position: string,
     moveAnimation: string
   },
-  rotation: string 
+  rotation: string
+  skill:{
+    target:Array<string>,
+    name:string,
+    damage:number
+  }, 
   skillAnimation: string
 }
 
@@ -84,6 +89,11 @@ export class GameArena extends Room {
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
+      skill:{
+        target:[],
+        name:"none",
+        damage:0
+      },
       skillAnimation: "none"
     };
 
@@ -147,49 +157,61 @@ export class GameArena extends Room {
 
     }
     else if(data.action == "DAMAGE"){
-      let target = data.target;
-      let clientCoords = target.position;
-      if(target.id = "TURRET"){
-        let targetTurretId = this.state.players[client.id].team == "red" ? "blue" : "red";
-        let newTurretHealth = this.state.turrets[targetTurretId] - data.damage;
-        this.state.turrets[targetTurretId] = newTurretHealth;
-        //check if game finished
-        if(newTurretHealth <= 0){
-          //GAME OVER
-          this.state.gameOver = true;
-          let winner = targetTurretId == "red" ? "blue" : "red";
+      console.log(data.data)
+  
+      //let clientCoords = target.position;
+      for(var i = 0; i < data.data.target.length; i++){
+        let targetId = data.data.target[i];
+        console.log("TARGET: ", targetId);
+        if(targetId == "TURRET"){
+          let targetTurretId = this.state.players[client.id].team == "red" ? "blue" : "red";
+          let newTurretHealth = this.state.turrets[targetTurretId] - data.data.damage;
+          this.state.turrets[targetTurretId] = newTurretHealth;
+          //check if game finished
+          if(newTurretHealth <= 0){
+            //GAME OVER
+            this.state.gameOver = true;
+            let winner = targetTurretId == "red" ? "blue" : "red";
 
-          //update player stats in database
-          // this.autoDispose = false; 
-          // for (var player in this.playerClientMap) { 
-          //   if (this.playerClientMap.hasOwnProperty(player)) { 
-          //     var clientId = this.playerClientMap[player]; 
-          //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, this.state.[clientId].team == winner) 
-          //     .then(function() { 
-          //       let i = this.allowedPlayers.indexOf(player); 
-          //       this.allowedPlayers.splice(i); 
-          //       if(this.allowedPlayers.length === 0){ 
-          //         this.autoDispose = true; 
-          //       } 
-          //     }); 
-          //   } 
-          // } 
-        }
+            //update player stats in database
+            // this.autoDispose = false; 
+            // for (var player in this.playerClientMap) { 
+            //   if (this.playerClientMap.hasOwnProperty(player)) { 
+            //     var clientId = this.playerClientMap[player]; 
+            //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, this.state.[clientId].team == winner) 
+            //     .then(function() { 
+            //       let i = this.allowedPlayers.indexOf(player); 
+            //       this.allowedPlayers.splice(i); 
+            //       if(this.allowedPlayers.length === 0){ 
+            //         this.autoDispose = true; 
+            //       } 
+            //     }); 
+            //   } 
+            // } 
+          }
+        
         return;
-      }else{
-        let targetPlayer = this.state.players[target.id];
-        if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
-          targetPlayer.health -= data.damage;
-          let newHealth = targetPlayer.health;
+      
+        }else{
+          let targetPlayer = this.state.players[targetId];
+          console.log("TARGETPLAYER: ",targetPlayer);
+      // if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
+          //targetPlayer.health -= data.damage;
+          let newHealth = targetPlayer.health -data.damage;
           if(newHealth <= 0){
             // Add one kill to client's stats
             this.state.stats[client.id].kills += 1;
             // Add one death to target's stats
-            this.state.stats[target.id].deaths += 1;
+            this.state.stats[targetId].deaths += 1;
             setTimeout(function() {
-              console.log('bring back to life', target.id);
-              this.revivePlayer(target.id);
+              console.log('bring back to life', targetId);
+              this.revivePlayer(targetId);
             }, 1500)
+  
+          }
+          else{
+            console.log("SENDBACK: ");
+            targetPlayer.skill = data.data;
           }
         }
       }
