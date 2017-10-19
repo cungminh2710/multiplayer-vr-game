@@ -13,6 +13,7 @@ characterConfig[1] = {
     },
     skill:{
         attack:{
+            name: "TankAttack",
             damage:50,
             target: false,
             maxDistance: 3,
@@ -53,6 +54,7 @@ characterConfig[2] = {
     },
     skill:{
         attack:{
+            name: "AdcAttack",
             damage: 30,
             target: false,
             maxDistance: 3,
@@ -93,6 +95,7 @@ characterConfig[3] = {
     },
     skill:{
         attack:{
+            name: "HealerAttack",
             damage: -10,
             target: true,
             maxDistance: 3,
