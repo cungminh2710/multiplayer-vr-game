@@ -57,7 +57,11 @@ app.post("/api/register", (req, res) => {
 			message: "Password and Confirmed password are not matched"
 		});
 	else
-		createNewUser({ username, password, email })
+		createNewUser({ username, password, email, achievements: [{
+			logoUrl: "smile-o",
+			name: "You made an account!",
+			description: "We have given you an account, but we do not grant you the rank of master"
+		}] })
 			.then(_ =>
 				res.status(200).json({ status: "success", message: "Success" })
 			)

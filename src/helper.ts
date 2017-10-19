@@ -11,6 +11,7 @@ export let createNewUser: {
 			username: string;
 			password: string;
 			email: string;
+			achievements: Array<Achievement>;
 		}
 	): Promise<IUserModel>;
 } = userData => new User(userData).save();
