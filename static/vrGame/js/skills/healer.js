@@ -1,43 +1,37 @@
 class Healer{
 
     static attack(){
+        // description: do not need target, shoot a light or a magic ball along the gaze(lookAt) direction, not 100% success,
+        // animation: a light or a magic ball will be fly from the healer's position to gaze direction with specific distance
         // do not need a target, release skill directly
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
-        gameRoom.send({action: "SKILLANIMATION", data:"skill1"});
-        //find a enemy target 
-        var target = raycasterEl.components.raycaster.intersectedEls[0];
-        if(!target) return;
-        if(target.getAttribute("team") == "ally") return;
-        //send damage
-        var data = {
-            //not AOE
-            target:[target.getAttribute("id")],
-            name:"HealerAttack",
-        }
-        console.log("SEND HealerAttack: ",data)
-        gameRoom.send({action: "DAMAGE", data}); 
+        gameRoom.send({action: "SKILLANIMATION", data:"attack"});
+        //TODO create a light or magic ball object
     }
     //cure
     static skill1(){
-    //must need an ally target
-    var target = raycasterEl.components.raycaster.intersectedEls[0];
-    if(!target) return;
-    if(target.getAttribute("team") != "ally") return;
-    // realease skill and update cd
-    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill1")
-    gameRoom.send({action: "SKILLANIMATION", data:"skill1"}); 
-    //send damage
-    var skill1 = panel.querySelector("#skill1");
-    var data = {
-        //not AOE
-        target:[target.getAttribute("id")],
-        name:"Cure",
-    }
-    console.log("SEND Cure: ",data)
-    gameRoom.send({action: "DAMAGE", data}); 
+        //description: heal an ally, need to target an ally, 100% success
+        //animation: a "+" symbol will be on the top of the target's 
+        //must need an ally target
+        var target = raycasterEl.components.raycaster.intersectedEls[0];
+        if(!target) return;
+        if(target.getAttribute("team") != "ally") return;
+        // realease skill and update cd
+        Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill1")
+        gameRoom.send({action: "SKILLANIMATION", data:"skill1"}); 
+        //send damage
+        var skill1 = panel.querySelector("#skill1");
+        var data = {
+            //not AOE
+            target:[target.getAttribute("id")],
+            name:"Cure",
+        }
+        console.log("SEND Cure: ",data)
+        gameRoom.send({action: "DAMAGE", data}); 
     }
     
     static skill2(){
+        //heal all allies, do not need target, 100% success
         var ally = [];
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
         gameRoom.send({action: "SKILLANIMATION", data:"skill2"});

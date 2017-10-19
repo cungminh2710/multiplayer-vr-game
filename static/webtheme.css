@@ -151,12 +151,29 @@ li.navitem a {
   transition: background-color ease 0.2s;
 }
 
-li.navitem a:hover {
+li.navitem p {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 13px 16px;
+  text-decoration: none;
+  margin: 0;
+}
+
+li.navitem a.active {
   background-color: #EF2D5E;
 }
 
-li.navitem a:active {
+li.navitem a.active:hover {
+  background-color: #EF2D5E;
+}
+
+li.navitem a:hover {
   background-color: purple;
+}
+
+li.navitem a:active {
+  background-color: #00B133;
 }
 
 .strip {
