@@ -8,14 +8,11 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 1;
+     // character = 1;
       var config = characterConfig[character];
       
       //skill init
       skillInfo = config.skill;
-      // skillCd.attack = config.skill.attack.cd;
-      // skillCd.skill1 = config.skill.skill1.cd;
-      // skillCd.skill2 = config.skill.skill2.cd;
 
 
       playerWrapperEl = document.createElement("a-entity");
@@ -48,9 +45,9 @@ class Players {
   
 
   static createOtherPlayer(playerInfo){
-    console.log(playerInfo);
-    console.log(playerInfo.character);  
-    playerInfo.character = 1;
+    //console.log(playerInfo);
+    //console.log(playerInfo.character);  
+    //playerInfo.character = 1;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
