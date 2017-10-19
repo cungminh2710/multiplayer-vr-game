@@ -10,6 +10,8 @@ function load() {
         url: "/api/getuser/" + client.id,
         dataType: "json",
         success: function(response) {
+            var info = response.message;
+            info.stats.numLost = info.stats.numGamesPlayed - (info.stats.numWon + info.stats.numDrew);
             console.log(response.message);
             set_welcome(response.message);
             set_usr_note(response.message);
