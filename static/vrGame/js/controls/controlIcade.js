@@ -40,7 +40,6 @@ AFRAME.registerComponent('control', {
                 if(character == 1) Tank.attack();
                 if(character == 2) Adc.attack();
                 if(character == 3) healer.attack();
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
 
             }else if(map[72]){ //Skill1 h
                 var skill1 = panel.querySelector("#skill1");
@@ -49,7 +48,7 @@ AFRAME.registerComponent('control', {
                 if(character == 2) Adc.skill1();
                 if(character == 3) Healer.skill1();
                 skill1.emit("start");
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill1")
+
     
             }else if(map[74]){ //Skill2 j
                 var skill2 = panel.querySelector("#skill2");

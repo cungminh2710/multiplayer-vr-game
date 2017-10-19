@@ -13,11 +13,7 @@ interface PlayerInfo {
     moveAnimation: string
   },
   rotation: string
-  skill:{
-    target:Array<string>,
-    name:string,
-    damage:number
-  }, 
+  skill: String
   skillAnimation: string
 }
 
@@ -89,11 +85,7 @@ export class GameArena extends Room {
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
-      skill:{
-        target:[],
-        name:"none",
-        damage:0
-      },
+      skill: String,
       skillAnimation: "none"
     };
 
@@ -196,9 +188,11 @@ export class GameArena extends Room {
           let targetPlayer = this.state.players[targetId];
           console.log("TARGETPLAYER: ",targetPlayer);
       // if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
-          //targetPlayer.health -= data.damage;
-          let newHealth = targetPlayer.health -data.damage;
-          if(newHealth <= 0){
+
+
+          //TODO no damage in package now
+          targetPlayer.health -= data.data.damage;
+          if(targetPlayer.health  <= 0){
             // Add one kill to client's stats
             this.state.stats[client.id].kills += 1;
             // Add one death to target's stats
@@ -211,7 +205,7 @@ export class GameArena extends Room {
           }
           else{
             console.log("SENDBACK: ");
-            targetPlayer.skill = data.data;
+            targetPlayer.skill = data.data.name;
           }
         }
       }
