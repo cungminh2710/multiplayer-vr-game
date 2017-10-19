@@ -3,6 +3,11 @@ $( document ).ready( function () {
     var host = window.document.location.host.replace(/:.*/, '');
     var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
     
+    $(document).on("click", "#trigger", function(){
+        $("#msgModal").modal('hide');
+        $('.nav-tabs a[href="#login-form"]').tab('show');
+    });
+
     $("#login-form").submit(function() {
         var loginData = $("#login").serialize();
         loginData += "&sessionId=" + client.id;
@@ -20,6 +25,9 @@ $( document ).ready( function () {
             },
             error: function(response) {
                 console.log(response);
+                $("#msgHeader").html(response.responseJSON.message);
+                $("#msgPrompt").html('<button type="button" class="btn btn-danger" data-dismiss="modal">Try Again</button>');
+                $("#msgModal").modal('show');
             }
         });
         return false;
@@ -64,6 +72,10 @@ $( document ).ready( function () {
         },
         submitHandler: function (form) {
             var regisData = $(form).serialize();
+            var success = '<p>Your registration has been completed. Click the button below to login.</p>';
+            success += '<button type="button" class="btn btn-success" id="trigger">To Login</button>';
+            var fail = '<p>Account registration failed. Username may already been taken.</p>';
+            fail += '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>';
 
             $.ajax({
               method: "post",
@@ -72,10 +84,14 @@ $( document ).ready( function () {
               dataType: "json",
               success: function(response) {
                 console.log(response);
-                $("#messages").html(response.message);
+                $("#msgHeader").html(response.message);
+                $("#msgPrompt").html(success);
+                $("#msgModal").modal('toggle');
               },
               error: function(response) {
-                $("#messages").html(response.responseJSON.message);
+                $("#msgHeader").html(response.responseJSON.message);
+                $("#msgPrompt").html(fail);
+                $("#msgModal").modal('toggle');
                 console.log(response);
               }
             });
