@@ -1,6 +1,8 @@
 class Healer{
 
     static attack(){
+        // do not need target, shoot a light or a magic ball along the gaze(lookAt) position, not 100% success,
+        // need to track collision later
         // do not need a target, release skill directly
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
         gameRoom.send({action: "SKILLANIMATION", data:"skill1"});
@@ -14,11 +16,10 @@ class Healer{
             target:[target.getAttribute("id")],
             name:"HealerAttack",
         }
-        console.log("SEND HealerAttack: ",data)
-        gameRoom.send({action: "DAMAGE", data}); 
     }
     //cure
     static skill1(){
+    //heal an ally, need to target an ally, 100% success
     //must need an ally target
     var target = raycasterEl.components.raycaster.intersectedEls[0];
     if(!target) return;
@@ -38,6 +39,7 @@ class Healer{
     }
     
     static skill2(){
+        //heal all allies, do not need target, 100% success
         var ally = [];
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
         gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
