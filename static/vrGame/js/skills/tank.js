@@ -5,7 +5,7 @@ class Tank{
         // animation: no extra animation required
         // do not need a target, release attack directly
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
-        gameRoom.send({action: "SKILLANIMATION", data:"skill1"}); 
+        gameRoom.send({action: "SKILLANIMATION", data:"attack"}); 
         //find a enemy target
         var target = raycasterEl.components.raycaster.intersectedEls[0];
         //TODO DISTANCE CHECK
