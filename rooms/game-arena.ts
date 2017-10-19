@@ -2,6 +2,7 @@ import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 import { IUserStats } from '../models/user';
 import * as helper from '../src/helper';
+import { skills } from '../src/skill-config';
 
 interface PlayerInfo {
   id?: string,
@@ -12,8 +13,8 @@ interface PlayerInfo {
     position: string,
     moveAnimation: string
   },
-  rotation: string
-  skill: String
+  rotation: string,
+  skill: string,
   skillAnimation: string
 }
 
@@ -47,10 +48,14 @@ export class GameArena extends Room {
       stats: {},
       gameOver: false
     });
-    this.allowedPlayers.forEach(p => { 
+    this.allowedPlayers.forEach(p => {
       this.playerClientMap[p] = ""; 
     }); 
   }
+
+  // resetSkillAnimation(playerId: string) {
+  //   this.state.players[playerId].weapon = "none";
+  // }
 
   revivePlayer (playerId: string) {
     this.state.players[playerId].health = 100;
@@ -85,7 +90,7 @@ export class GameArena extends Room {
         moveAnimation: "idle",
       },
       rotation: "0 0 0",
-      skill: String,
+      skill: "",
       skillAnimation: "none"
     };
 
@@ -149,7 +154,7 @@ export class GameArena extends Room {
 
     }
     else if(data.action == "DAMAGE"){
-      console.log(data.data)
+      console.log(data.data);
   
       //let clientCoords = target.position;
       for(var i = 0; i < data.data.target.length; i++){
@@ -157,7 +162,7 @@ export class GameArena extends Room {
         console.log("TARGET: ", targetId);
         if(targetId == "TURRET"){
           let targetTurretId = this.state.players[client.id].team == "red" ? "blue" : "red";
-          let newTurretHealth = this.state.turrets[targetTurretId] - data.data.damage;
+          let newTurretHealth = this.state.turrets[targetTurretId] - skills[data.data.name].damage;
           this.state.turrets[targetTurretId] = newTurretHealth;
           //check if game finished
           if(newTurretHealth <= 0){
@@ -191,7 +196,7 @@ export class GameArena extends Room {
 
 
           //TODO no damage in package now
-          targetPlayer.health -= data.data.damage;
+          targetPlayer.health -= skills[data.data.name].damage;
           if(targetPlayer.health  <= 0){
             // Add one kill to client's stats
             this.state.stats[client.id].kills += 1;
@@ -200,8 +205,14 @@ export class GameArena extends Room {
             setTimeout(function() {
               console.log('bring back to life', targetId);
               this.revivePlayer(targetId);
-            }, 1500)
-  
+            }, 1500);
+
+
+            this.state.players[client.id].skillAnimation = data.data.skillEffect;
+            // setTimeout(function(){
+            //   console.log('turning off animation');
+            //   this.resetweapon(client.id);
+            // }, skills[data.data.name].duration);
           }
           else{
             console.log("SENDBACK: ");
