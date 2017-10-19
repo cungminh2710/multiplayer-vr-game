@@ -3,119 +3,120 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>Profile | VRGame</title>
+    <meta charset="utf-8">
+    <title>Profile | VRGame</title>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
 
-  <script src="content-loader.js"></script>
+    <script src="content-loader.js"></script>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="webtheme.css"> 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="webtheme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body onload="loadAll()">
 
-  <ul class="navlist">
-    <div class="pull-left">
-      <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
-      <li class="navitem">
-        <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>   Profile</a>
-      </li>
-      <li class="navitem">
-        <a href="/game-rooms.html"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>   Game Room</a>
-      </li>
-    </div>
-
-    <div class="pull-right">
-      <li class="navitem">
-        <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
-      </li>
-    </div>
-  </ul>
-
-<div class="container">
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <hr class="strip strip-primary">
-
-      <div id="wel_panel"></div>
-
-      <div class="alert alert-info alert-dismissable fade in">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>For new Players!</strong> If this is your first time, click <a href="#" data-toggle="modal" data-target="#startModal" class="alert-link">here for a start guide.</a>
-      </div>
-
-      <hr class="strip strip-fluoro">
-      <h2>Join or Start a Game </h2>
-      <a href="/game-rooms.html" class="btn btn-default"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>  Join a Game</a>
-
-      <hr>
-
-      <div id="stats_panel"></div>
-
-      <hr>
-
-      <div id="achievements_panel"></div>
-
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="startModal" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Quick Start</h4>
+    <ul class="navlist">
+        <div class="pull-left">
+            <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
+            <li class="navitem">
+                <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>   Profile</a>
+            </li>
+            <li class="navitem">
+                <a href="/game-rooms.html"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>   Game Room</a>
+            </li>
         </div>
-        <div class="modal-body">
-          <p>How to get started.</p>
-          <ol>
-            <li><strong>Step 1.</strong>Something here</li>
-          </ol>
+
+        <div class="pull-right">
+            <li class="navitem">
+                <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
+            </li>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+    </ul>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <hr class="strip strip-primary">
+
+                <div id="wel_panel"></div>
+
+                <div class="alert alert-info alert-dismissable fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>For new Players!</strong> If this is your first time, click <a href="#" data-toggle="modal" data-target="#startModal" class="alert-link">here for a start guide.</a>
+                </div>
+
+                <hr class="strip strip-fluoro">
+                <h2>Join or Start a Game </h2>
+                <a href="/game-rooms.html" class="btn btn-default"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>  Join a Game</a>
+
+                <hr>
+
+                <div id="stats_panel"></div>
+
+                <hr>
+
+                <div id="achievements_panel"></div>
+
+            </div>
         </div>
-      </div>
-      
+
+        <!-- Modal -->
+        <div class="modal fade" id="startModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Quick Start</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>How to get started.</p>
+                        <ol>
+                            <li><strong>Step 1.</strong>Something here</li>
+                        </ol>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script id="wel_template" type="x-tmpl-mustache">
+            <h1>Welcome back {{ username }}</h1>
+        </script>
+
+        <script id="usr_note_template" type="x-tmpl-mustache">
+            <li class="navitem">{{ username }}</li>
+        </script>
+
+        <script id="stats_template" type="x-tmpl-mustache">
+            <h1>User Details</h1>
+            <p>Games played: {{ numGamesPlayed }}</p>
+            <p>Games won: {{ numWon }}</p>
+            <p>Games tied: {{ numDrew }}</p>
+            <p>Total Kills: {{ numKills }}</p>
+            <p>Total Deaths: {{ numDeaths }}</p>
+        </script>
+
+        <script id="achievement_template" type="x-tmpl-mustache">
+            <h1>Achievements</h1>
+            {{#achievements}}
+            <p>{{.}}</p>
+            {{/achievements}}
+        </script>
+
     </div>
-  </div>
-  
-  <script id="wel_template" type="x-tmpl-mustache">
-    <h1>Welcome back {{ username }}</h1>
-  </script>
-
-  <script id="usr_note_template" type="x-tmpl-mustache">
-    <li class="navitem">{{ username }}</li>
-  </script>
-
-  <script id="stats_template" type="x-tmpl-mustache">
-    <h1>User Details</h1>
-    <p>Games played: {{ numGamesPlayed }}</p>
-    <p>Games won: {{ numWon }}</p>
-    <p>Games tied: {{ numDrew }}</p>
-    <p>Total Kills: {{ numKills }}</p>
-    <p>Total Deaths: {{ numDeaths }}</p>
-  </script>
-
-  <script id="achievement_template" type="x-tmpl-mustache">
-    <h1>Achievements</h1>
-    {{#achievements}}
-    <p>{{.}}</p>
-    {{/achievements}}
-  </script>
-
-</div>
 
 
 </body>

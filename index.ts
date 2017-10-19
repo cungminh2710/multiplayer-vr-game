@@ -68,7 +68,6 @@ app.post("/api/register", (req, res) => {
 
 app.post("/api/login", (req, res) => {
 	let { username, password, sessionId } = req.body;
-	sessionId = req.sessionID;
 	console.log("Login SessionID: " + sessionId);
 	isUserExist(username, password).then(
 		user => {
@@ -100,8 +99,8 @@ app.get("/api/logout", (req, res) => {
 	res.redirect('/index.html');
 })
 
-app.get("/api/getuser/", (req, res) => {
-	let sessionId = req.sessionID;
+app.get("/api/getuser/:session", (req, res) => {
+	let sessionId = req.params.session;
 	console.log("getuser: " + sessionId);
 	readUserInfoBySession(sessionId).then(
 		user => {

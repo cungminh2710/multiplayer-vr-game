@@ -3,9 +3,11 @@ function loadAll() {
 }
 
 function load() {
+    var host = window.document.location.host.replace(/:.*/, '');
+    var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
     $.ajax({
         type: "get",
-        url: "/api/getuser/",
+        url: "/api/getuser/" + client.id,
         dataType: "json",
         success: function(response) {
             console.log(response.message);
