@@ -3,6 +3,7 @@ import * as express from "express";
 import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
 import * as bodyParser from "body-parser";
+// import * as session from "express-session";
 import { Promise } from "bluebird";
 
 import { createServer } from "http";
@@ -22,6 +23,9 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
+
+// app.use(session({ secret: "lovr" }))
+
 /**
  * Connect to MongoDB.
  */
@@ -64,6 +68,8 @@ app.post("/api/register", (req, res) => {
 
 app.post("/api/login", (req, res) => {
 	let { username, password, sessionId } = req.body;
+	sessionId = req.sessionID;
+	console.log("Login SessionID: " + sessionId);
 	isUserExist(username, password).then(
 		user => {
 			if (user) {
@@ -94,8 +100,9 @@ app.get("/api/logout", (req, res) => {
 	res.redirect('/index.html');
 })
 
-app.get("/api/user/:sessionId", (req, res) => {
-	let sessionId = req.params.sessionId;
+app.get("/api/getuser/", (req, res) => {
+	let sessionId = req.sessionID;
+	console.log("getuser: " + sessionId);
 	readUserInfoBySession(sessionId).then(
 		user => {
 			if (user) {
