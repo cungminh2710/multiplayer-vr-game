@@ -1,8 +1,8 @@
 class Healer{
 
     static attack(){
-        // do not need target, shoot a light or a magic ball along the gaze(lookAt) position, not 100% success,
-        // need to track collision later
+        // description: do not need target, shoot a light or a magic ball along the gaze(lookAt) direction, not 100% success,
+        // animation: a light or a magic ball will be fly from the healer's position to gaze direction with specific distance
         // do not need a target, release skill directly
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
         gameRoom.send({action: "SKILLANIMATION", data:"skill1"});
@@ -19,7 +19,8 @@ class Healer{
     }
     //cure
     static skill1(){
-    //heal an ally, need to target an ally, 100% success
+    //description: heal an ally, need to target an ally, 100% success
+    //animation: a "+" symbol will be on the top of the target's 
     //must need an ally target
     var target = raycasterEl.components.raycaster.intersectedEls[0];
     if(!target) return;

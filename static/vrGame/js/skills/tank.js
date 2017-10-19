@@ -1,7 +1,8 @@
 class Tank{
 
     static attack(){
-        // do not need target, punch an enemy if there has an enemy target in a small distance 
+        //description: do not need a target, punch an enemy if there has an enemy target in a small distance 
+        // animation: no extra animation required
         // do not need a target, release attack directly
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"attack")
         gameRoom.send({action: "SKILLANIMATION", data:"skill1"}); 
@@ -19,7 +20,8 @@ class Tank{
         console.log("SEND TankAttack: ",data)
         gameRoom.send({action: "DAMAGE", data}); 
     }
-    //disable someone's movement, need to target an enemy target, no damage, 100% success
+    //description: disable someone's movement, need to target an enemy target, no damage, 100% success
+    // animation: create a cage at target's position
     //cage 
     static skill1(){
         //must need an enemy target
