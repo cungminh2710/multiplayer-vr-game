@@ -18,44 +18,77 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="webtheme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-  <ul class="navlist">
-    <div class="pull-left">
-      <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
-      <li class="navitem">
-        <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>   Profile</a>
-      </li>
-      <li class="navitem">
-        <a href="/game-rooms.html"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>   Game Room</a>
-      </li>
+    <ul class="navlist">
+        <div class="pull-left">
+            <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
+            <li class="navitem">
+                <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o" aria-hidden="true"></i>   Profile</a>
+            </li>
+            <li class="navitem">
+                <a href="/game-rooms.html" class="active"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>   Game Room</a>
+            </li>
+        </div>
+
+        <div class="pull-right">
+            <li class="navitem">
+                <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
+            </li>
+        </div>
+    </ul>
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-body center-text game-table">
+                <h1>LoVR Game Rooms</h1>
+
+                <strong>Game Room</strong><br>
+
+                <form id="form">
+                    <input type="text" id="game-name" value="" placeholder="Game Room Name" />
+                    <input type="number" id="game-max-players" step="2" min="2" max="6" value="" required placeholder="Max Players" />
+                    <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
+                </form>
+                <div id="current-rooms">
+                    <h3>Available Rooms</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Num Players</th>
+                                <th>Max Num Players</th>
+                                <th>Join</th>
+                            </tr>
+                        </thead>
+                        <tbody id="current-rooms-tbody">
+            <!--                 <tr>
+                                <td>Something here</td>
+                                <td>Something here</td>
+                                <td>Something here</td>
+                                <td>Something here</td>
+                            </tr>
+             -->            </tbody>
+                    </table>
+                </div>
+
+
+                <div id="my-room" style="max-width: 400px; margin: auto;">
+                    <h3>My Room</h3>
+                    <h4>Members</h4>
+                    <ul id="player-list">
+
+                    </ul>
+                    <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
+                    <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
+                </div>
+
+            </div>
+        </div>
     </div>
-
-    <div class="pull-right">
-      <li class="navitem">
-        <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
-      </li>
-    </div>
-  </ul>
-
-
-    <div class="gameroom">
-
-    <h1>LoVR Game Rooms</h1>
-
-    <strong>Game Room</strong><br>
-
-    <form id="form">
-        <input type="text" id="game-name" value="" placeholder="Game Room Name" />
-        <input type="number" id="game-max-players" step="2" min="2" max="6" value="" required placeholder="Max Players" />
-        <input id="submit-create-room" class="rm-btn" type="submit" value="Create" />
-    </form>
-
-    </div>
-
-    <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#ready-modal">Open Modal</button> -->
-
+    
     <div id="ready-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
@@ -78,41 +111,6 @@
         </div>
     </div>
 
-    <div class="gameroom">
-
-    <div id="current-rooms">
-        <h3>Available Rooms</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Num Players</th>
-                    <th>Max Num Players</th>
-                    <th>Join</th>
-                </tr>
-            </thead>
-            <tbody id="current-rooms-tbody">
-<!--                 <tr>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                </tr>
- -->            </tbody>
-        </table>
-    </div>
-
-
-    <div id="my-room" style="max-width: 400px; margin: auto;">
-        <h3>My Room</h3>
-        <h4>Members</h4>
-        <ul id="player-list">
-
-        </ul>
-        <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
-        <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
-    </div>
-    </div>
     <script>
         var host = window.document.location.host.replace(/:.*/, '');
         var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));

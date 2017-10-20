@@ -54,7 +54,7 @@
                 </div>
 
                 <hr class="strip strip-fluoro">
-                <h2>Join or Start a Game </h2>
+                <h1>Join or Start a Game </h1>
                 <a href="/game-rooms.html" class="btn btn-default"><i class="fa fa-lg fa-gamepad" aria-hidden="true"></i>  Join a Game</a>
 
                 <hr>
@@ -117,10 +117,7 @@
         <script id="achievement_template" type="x-tmpl-mustache">
             {{ #achievements }}
             <tr>
-                <td>
-                    <i class="fa fa-lg {{logoUrl}}" aria-hidden="true"></i>
-                    {{ name }}
-                </td>
+                <td><i class="fa fa-lg fa-{{logoUrl}}" aria-hidden="true"></i>{{ name }}</td>
                 <td>{{description}}</td>
             </tr>
             {{/achievements}}
