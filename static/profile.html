@@ -59,11 +59,16 @@
 
                 <hr>
 
+                <h1><i class="fa fa-id-card" aria-hidden="true" style="color: purple;"></i> Your Game Statistics</h1>
                 <div id="stats_panel"></div>
 
                 <hr>
 
-                <div id="achievements_panel"></div>
+                <h1><i class="fa fa-trophy" aria-hidden="true" style="color:gold;"></i> Achievements</h1>
+                <table class="table table-hover">
+                    <tbody id="achievements_panel">
+                    </tbody>
+                </table>
 
             </div>
         </div>
@@ -93,7 +98,7 @@
         </div>
 
         <script id="wel_template" type="x-tmpl-mustache">
-            <h1>Welcome back {{ username }}</h1>
+            <h1>Welcome, {{ username }}</h1>
         </script>
 
         <script id="usr_note_template" type="x-tmpl-mustache">
@@ -101,7 +106,6 @@
         </script>
 
         <script id="stats_template" type="x-tmpl-mustache">
-            <h1>User Details</h1>
             <p>Games played: {{ numGamesPlayed }}</p>
             <p>Games won: {{ numWon }}</p>
             <p>Games tied: {{ numDrew }}</p>
@@ -111,10 +115,18 @@
         </script>
 
         <script id="achievement_template" type="x-tmpl-mustache">
-            <h1>Achievements</h1>
-            <p>You have no achievements yet!</p>
-            {{#achievements}}
-            <p>{{.}}</p>
+            {{ #achievements }}
+            <tr>
+                <td>
+                    <i class="fa fa-lg {{logoUrl}}" aria-hidden="true"></i>
+                    {{ name }}
+                </td>
+                <td>{{description}}</td>
+            </tr>
+            {{/achievements}}
+
+            {{^achievements}}
+            <p>No achievements sucker!</p>
             {{/achievements}}
         </script>
 
