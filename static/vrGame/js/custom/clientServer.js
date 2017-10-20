@@ -106,20 +106,7 @@ gameRoom.listen("players/:id/data/:attribute", function(change) {
 // });
 
 
-gameRoom.listen("players/:id/health/:number", function(change) {
-    console.log("CHANGE LISTENED");
-    // console.log(change.path);
-    // console.log(change.operation);
-    // console.log(change.value);
 
-    if (change.path.id != client.id) {
-        return;
-    } else if (change.value == 100) {
-        // REVIVE YOUR PLAYER
-    } else {
-        // DO ANIMATION TO SHOW THAT YOU TOOK DAMAGE
-    }
-});
 
 gameRoom.listen("players/:id/:attribute", function(change) {
     console.log(change)
@@ -136,13 +123,14 @@ gameRoom.listen("players/:id/:attribute", function(change) {
         playersDict[id].setAttribute("rotation", newValue)
     }else if(change.path.attribute=="skillAnimation"){
         if (id == client.id)    return;
-        console.log("SKILLANIMATION: ",newValue);
-        var skillAnimations  = JSON.parse(newValue);
+
+        // var skillAnimations  = JSON.parse(newValue);
     
-        Animation.setAnimation(playersDict[id], skillAnimations.name);
-        console.log("++++++++++++++++++++++++++++++++++++++++",skillAnimations);
-        if (skillAnimations.name=="none") return;
-        SkillEffectAni.shootBullet2(skillAnimations.from,skillAnimations.to);
+        // Animation.setAnimation(playersDict[id], skillAnimations.name);
+        // console.log("++++++++++++++++++++++++++++++++++++++++",skillAnimations);
+        // if (skillAnimations.name=="none") return;
+        SkillEffectAni.handleEffects(id,newValue);
+      
     }else if(change.path.attribute == "skill"){
         if (id == client.id)    return;
         console.log(newValue);

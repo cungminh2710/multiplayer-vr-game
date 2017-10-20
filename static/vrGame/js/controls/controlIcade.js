@@ -37,7 +37,7 @@ AFRAME.registerComponent('control', {
             }else if(map[85]){ //Attack u
                 if(character == 1) Tank.attack();
                 if(character == 2) Adc.attack();
-                if(character == 3) healer.attack();
+                if(character == 3) Healer.attack();
 
             }else if(map[72]){ //Skill1 h
               

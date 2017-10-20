@@ -95,20 +95,19 @@ characterConfig[3] = {
     },
     skill:{
         attack:{
-            name: "HealerAttack",
+            name: "Cure",
             damage: -10,
             target: true,
             maxDistance: 3,
             buff:"",
-            cd:1500
+            cd:2000
         },
         skill1:{
-            name: "Cure",
+            name: "FireBall",
             damage:-50,
             target: true,
             maxDistance: 10,
-            buff: "disableMove",
-            cd: 8000
+            cd: 3000
         },
         skill2:{
             name: "Wish",
@@ -116,7 +115,7 @@ characterConfig[3] = {
             target: false,
             maxDistance: Infinity,
             buff:"",
-            cd: 15000
+            cd: 4000
         }
 
     }

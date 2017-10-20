@@ -23,12 +23,12 @@ export let skills = {
     damage: 200,
     duration: 1000
   },
-  HealerAttack: {
-    damage: 10,
+  Cure: {
+    damage: -10,
     duration: 1000
   },
-  Cure: {
-    damage: -50,
+  FireBall: {
+    damage: 50,
     duration: 1000
   },
   Wish: {
