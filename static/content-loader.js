@@ -12,11 +12,11 @@ function load() {
         success: function(response) {
             var info = response.message;
             info.stats.numLost = info.stats.numGamesPlayed - (info.stats.numWon + info.stats.numDrew);
-            console.log(response.message);
-            set_welcome(response.message);
-            set_usr_note(response.message);
-            set_stats_panel(response.message);
-            set_achievements_panel(response.message);
+            console.log(info);
+            set_welcome(info);
+            set_usr_note(info);
+            set_stats_panel(info);
+            set_achievements_panel(info);
         },
         error: function(err) {
             console.log(err);
@@ -24,30 +24,31 @@ function load() {
     });
 }
 
-function set_welcome(message) {
+function set_welcome(info) {
     var template = $("#wel_template").html();
     Mustache.parse(template);
-    var rendered = Mustache.render(template, message);
+    var rendered = Mustache.render(template, info);
     $("#wel_panel").html(rendered);
 }
 
-function set_usr_note(message) {
+function set_usr_note(info) {
     var template = $("#usr_note_template").html();
     Mustache.parse(template);
-    var rendered = Mustache.render(template, message);
+    var rendered = Mustache.render(template, info);
     $("div.pull-right").prepend(rendered);
 }
 
-function set_stats_panel(message) {
+function set_stats_panel(info) {
     var template = $("#stats_template").html();
     Mustache.parse(template);
-    var rendered = Mustache.render(template, message.stats);
+    var rendered = Mustache.render(template, info.stats);
     $("#stats_panel").html(rendered);
 }
 
-function set_achievements_panel(message) {
+function set_achievements_panel(info) {
     var template = $("#achievement_template").html();
     Mustache.parse(template);
-    var rendered = Mustache.render(template, message.stats);
+    var achievements = info.achievements;
+    var rendered = Mustache.render(template, info);
     $("#achievements_panel").html(rendered);
 }

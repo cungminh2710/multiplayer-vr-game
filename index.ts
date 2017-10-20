@@ -3,7 +3,6 @@ import * as express from "express";
 import * as serveIndex from "serve-index";
 import * as mongoose from "mongoose";
 import * as bodyParser from "body-parser";
-// import * as session from "express-session";
 import { Promise } from "bluebird";
 
 import { createServer } from "http";
@@ -23,8 +22,6 @@ app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
-
-// app.use(session({ secret: "lovr" }))
 
 /**
  * Connect to MongoDB.
@@ -58,7 +55,7 @@ app.post("/api/register", (req, res) => {
 		});
 	else
 		createNewUser({ username, password, email, achievements: [{
-			logoUrl: "smile-o",
+			logoUrl: "fa-smile-o",
 			name: "You made an account!",
 			description: "We have given you an account, but we do not grant you the rank of master"
 		}] })
@@ -72,7 +69,6 @@ app.post("/api/register", (req, res) => {
 
 app.post("/api/login", (req, res) => {
 	let { username, password, sessionId } = req.body;
-	console.log("Login SessionID: " + sessionId);
 	isUserExist(username, password).then(
 		user => {
 			if (user) {
@@ -105,11 +101,9 @@ app.get("/api/logout", (req, res) => {
 
 app.get("/api/getuser/:session", (req, res) => {
 	let sessionId = req.params.session;
-	console.log("getuser: " + sessionId);
 	readUserInfoBySession(sessionId).then(
 		user => {
 			if (user) {
-				console.log(user);
 				res.status(200).json({
 					status: "success", 
 					message: {
