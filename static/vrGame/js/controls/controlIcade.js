@@ -22,8 +22,6 @@ AFRAME.registerComponent('control', {
 
         window.addEventListener( 'keydown', function( e ) {
             e.preventDefault( );
-            var camera = cameraEl.object3D;
-            var direction = camera.getWorldDirection();
             var player = playerWrapperEl;
             var pos = player.getAttribute("position");
             this.repeating = true;
@@ -42,12 +40,12 @@ AFRAME.registerComponent('control', {
                 if(character == 3) healer.attack();
 
             }else if(map[72]){ //Skill1 h
-                var skill1 = panel.querySelector("#skill1");
+              
                 if(skill1.getAttribute("color") == "#ff0000") return;
                 if(character == 1) Tank.skill1();
                 if(character == 2) Adc.skill1();
                 if(character == 3) Healer.skill1();
-                skill1.emit("start");
+                
 
     
             }else if(map[74]){ //Skill2 j
@@ -61,10 +59,12 @@ AFRAME.registerComponent('control', {
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation n  t
-                gameRoom.send({action: "SKILLANIMATION", data:"none"})
+                gameRoom.send({action: "SKILLANIMATION", data:JSON.stringify({name:"none"})})
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"none");
             }
             else if(map[87]&& preKey != 87){// w front
+                var camera = cameraEl.object3D;
+                var direction = camera.getWorldDirection();
                 preKey = 87;
                 el.setAttribute("position",pos);
                 console.log(el.object3D.position);
@@ -98,6 +98,8 @@ AFRAME.registerComponent('control', {
                 .start();   
             }
             else if(map[88] && preKey != 88){//x back
+                var camera = cameraEl.object3D;
+                var direction = camera.getWorldDirection();
                 preKey = 88;
                 map = {};
                 tween = new TWEEN.Tween()
@@ -128,6 +130,8 @@ AFRAME.registerComponent('control', {
                 
             }
             else if(map[65] && preKey != 65){ //a left
+                var camera = cameraEl.object3D;
+                var direction = camera.getWorldDirection();
                 preKey = 65;
                 map = {};
                 tween = new TWEEN.Tween()
@@ -160,6 +164,8 @@ AFRAME.registerComponent('control', {
                 .start();
             }
             else if(map[68]&& preKey != 68){ //d right
+                var camera = cameraEl.object3D;
+                var direction = camera.getWorldDirection();
                 preKey = 68;
                 map = {};
                 tween = new TWEEN.Tween()

@@ -10,16 +10,15 @@
       <script src="js/libs/aframe-extras.js"></script>
       <script type="text/javascript" src="js/custom/characterConfig.js"></script>
       <script type="text/javascript" src="js/matrix.js"></script>
+      <script type="text/javascript" src="js/skills/bullet.js"></script>
       <script type="text/javascript" src="js/custom/intersection.js"></script>
       <script type="text/javascript" src="js/custom/detectHeight.js"></script>
       <script type="text/javascript" src="js/custom/animation.js"></script></script>
       <script type="text/javascript" src="js/custom/clientServer.js"></script>  
       <script type="text/javascript" src="js/custom/players.js"></script>
-      <script type="text/javascript" src="js/skills/tank.js"></script>
-      <script type="text/javascript" src="js/skills/adc.js"></script>
-      <script type="text/javascript" src="js/skills/healer.js"></script>
-      <script type="text/javascript" src="js/controls/controlIcade.js"></script>
 
+
+      <script type="text/javascript" src="js/controls/controlIcade.js"></script>
       <script type="text/javascript" src="js/skills/cage.js"></script>
     
     
@@ -36,12 +35,12 @@
         <img id="ground" src="textures/map/ground.png">
         <img id="wall" src="textures/map/wall.png">
       </a-assets>
-        <a-entity position="0 0 0">
-          <!--ground-->
-          <a-plane id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
+        
+    
+          <a-plane class = "coll" id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
           <a-entity id="mainterrace" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -15"></a-entity>
           <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -35"></a-plane>
-          <!--tower-->
+        
           <a-entity id="tower" tower position="60 3 -3"></a-entity>
           <a-entity id="bluewall1"  physics-body="boundingBox: 1 1 1; mass: 5; velocity: 0.2 0 0"  geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -78"></a-entity>
           <a-entity id="bluewallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="20 0.5 -75.5"></a-entity>
@@ -61,17 +60,23 @@
           <a-entity id="redwall1" geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -162"></a-entity>
           <a-entity id="redwallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="100 0.5 -164.5"></a-entity>
           <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -162"></a-entity>
-          <a-entity id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
-          <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
-          <!--tower-->
-          <a-entity id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
-         </a-entity>
+          <a-entity  id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
+          <a-plane  id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
+  
+          <a-entity  id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
+
      
   
       <a-sky color="#ECECEC"></a-sky>
+
     </a-scene>
 
- 
+   
+    <script type="text/javascript" src="js/skills/skillEffect.js"></script>
+    <script type="text/javascript" src="js/skills/skillEffectAni.js"></script>
+    <script type="text/javascript" src="js/skills/tank.js"></script>
+    <script type="text/javascript" src="js/skills/adc.js"></script>
+    <script type="text/javascript" src="js/skills/healer.js"></script>
 
   </body>
   

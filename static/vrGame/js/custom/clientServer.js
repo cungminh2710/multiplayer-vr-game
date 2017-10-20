@@ -123,7 +123,7 @@ gameRoom.listen("players/:id/health/:number", function(change) {
 
 gameRoom.listen("players/:id/:attribute", function(change) {
     console.log(change)
-    if (change.path.id == client.id)    return;
+  
     // console.log(change.path);
     // console.log(change.operation);
     // console.log(change.value);
@@ -131,13 +131,27 @@ gameRoom.listen("players/:id/:attribute", function(change) {
     var id = change.path.id;
 
     if (change.path.attribute == "rotation") {
+        if (id == client.id)    return;
         console.log("CHANGE ROTATION");
         playersDict[id].setAttribute("rotation", newValue)
     }else if(change.path.attribute=="skillAnimation"){
+        if (id == client.id)    return;
         console.log("SKILLANIMATION: ",newValue);
-        Animation.setAnimation(playersDict[id], newValue);
+        var skillAnimations  = JSON.parse(newValue);
+    
+        Animation.setAnimation(playersDict[id], skillAnimations.name);
+        console.log("++++++++++++++++++++++++++++++++++++++++",skillAnimations);
+        if (skillAnimations.name=="none") return;
+        SkillEffectAni.shootBullet2(skillAnimations.from,skillAnimations.to);
     }else if(change.path.attribute == "skill"){
+        if (id == client.id)    return;
         console.log(newValue);
+    }else if(change.path.attribute == "health"){
+        playersDict[id].setAttribute("health", newValue);
+        if (id == client.id) {
+            panel.querySelector("#health").setAttribute("value","Health: "+newValue);
+        }
+        console.log(playersDict[id]);
     }
 });
 gameRoom.onJoin.add(function() {

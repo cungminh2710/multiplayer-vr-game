@@ -8,7 +8,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 1;
+      character = 2;
       var config = characterConfig[character];
       
       //skill init
@@ -17,7 +17,7 @@ class Players {
 
       playerWrapperEl = document.createElement("a-entity");
       playerWrapperEl.setAttribute("id","playerWrapper");
-
+      playerWrapperEl.setAttribute("class","collidable");
       //playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
       playerWrapperEl.setAttribute("position","5 0 -100");
@@ -47,7 +47,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 1;
+      playerInfo.character = 2;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -179,6 +179,7 @@ class Players {
     healthtext.setAttribute("id","health");
     healthtext.setAttribute("position","-0.01 0.01 0");
     healthtext.setAttribute("value","Health: "+config.health);
+    
     healthtext.setAttribute("width","0.1");
     healthtext.setAttribute("color","white");
     panel.appendChild(healthtext);

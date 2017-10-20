@@ -22858,9 +22858,11 @@ module.exports = {
     this.collisions = [];
 
     this.handleHit = this.handleHit.bind(this);
+    this.handleHitEnd = this.handleHitEnd.bind(this);
   },
 
   remove: function () {
+    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     this.pause();
   },
 
@@ -22901,18 +22903,22 @@ module.exports = {
   tick: (function () {
     var position = new THREE.Vector3(),
         meshPosition = new THREE.Vector3(),
+        meshScale = new THREE.Vector3(),
+        colliderScale = new THREE.Vector3(),
         distanceMap = new Map();
     return function () {
       var el = this.el,
           data = this.data,
           mesh = el.getObject3D('mesh'),
+          colliderRadius,
           collisions = [];
 
       if (!mesh) { return; }
 
       distanceMap.clear();
       position.copy(el.object3D.getWorldPosition());
-
+      el.object3D.getWorldScale(colliderScale);
+      colliderRadius = data.radius * scaleFactor(colliderScale);
       // Update collision list.
       this.els.forEach(intersect);
 
@@ -22929,31 +22935,38 @@ module.exports = {
       // Remove collision state from other elements.
       this.collisions.filter(function (el) {
         return !distanceMap.has(el);
-      }).forEach(function removeState (el) {
-        el.removeState(data.state);
-      });
+      }).forEach(this.handleHitEnd);
 
       // Store new collisions
       this.collisions = collisions;
 
       // Bounding sphere collision detection
       function intersect (el) {
-        var radius, mesh, distance;
+        var radius, mesh, distance, box, extent, size;
 
         if (!el.isEntity) { return; }
 
         mesh = el.getObject3D('mesh');
 
-        if (!mesh || !mesh.geometry) { return; }
+        if (!mesh) { return; }
 
-        mesh.getWorldPosition(meshPosition);
-        mesh.geometry.computeBoundingSphere();
-        radius = mesh.geometry.boundingSphere.radius;
+        box = new THREE.Box3().setFromObject(mesh);
+        size = box.getSize();
+        extent = Math.max(size.x, size.y, size.z) / 2;
+        radius = Math.sqrt(2 * extent * extent);
+        box.getCenter(meshPosition);
+
+        if (!radius) { return; }
+
         distance = position.distanceTo(meshPosition);
-        if (distance < radius + data.radius) {
+        if (distance < radius + colliderRadius) {
           collisions.push(el);
           distanceMap.set(el, distance);
         }
+      }
+      // use max of scale factors to maintain bounding sphere collision
+      function scaleFactor (scaleVec) {
+        return Math.max.apply(null, scaleVec.toArray());
       }
     };
   })(),
@@ -22962,6 +22975,11 @@ module.exports = {
     targetEl.emit('hit');
     targetEl.addState(this.data.state);
     this.el.emit('hit', {el: targetEl});
+  },
+  handleHitEnd: function (targetEl) {
+    targetEl.emit('hitend');
+    targetEl.removeState(this.data.state);
+    this.el.emit('hitend', {el: targetEl});
   }
 };
 
