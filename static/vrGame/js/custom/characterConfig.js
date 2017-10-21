@@ -2,11 +2,12 @@ var characterConfig = {}
 //tank
 characterConfig[1] = {
     model:"models/tank",
-    health:500,
+    health:2500,
     cameraHeight: 1.4,
+    healthBarPos: 2,
     localPosition:"0 -1.4 0",
-    moveSpeed:0.03,
-    runSpeed: 0.05,
+    moveSpeed:0.05,
+    runSpeed: 0.07,
     gazeDistance:17,
     boundingBox:{
         width:1.4649,
@@ -15,7 +16,7 @@ characterConfig[1] = {
     skill:{
         attack:{
             name: "Punch",
-            damage:50,
+            damage:100,
             target: false,
             maxDistance: 3,
             buff:"",
@@ -27,15 +28,15 @@ characterConfig[1] = {
             target: true,
             maxDistance: 10,
             buff: "disableMove",
-            cd: 8000
+            cd: 7000
         },
         skill2:{
             name: "Rocket",
-            damage: 100,
+            damage: 300,
             target: false,
             maxDistance: 20,
             buff:"",
-            cd: 8000
+            cd: 10000
         }
 
     }
@@ -44,11 +45,12 @@ characterConfig[1] = {
 //adc
 characterConfig[2] = {
     model:"models/adc",
-    health:200,
+    health:1500,
     cameraHeight: 0.85,
+    healthBarPos: 1.6,
     localPosition:"0 -0.85 0.21",
-    moveSpeed: 0.025,
-    runSpeed: 0.045,
+    moveSpeed: 0.035,
+    runSpeed: 0.05,
     gazeDistance:20,
     boundingBox:{
         width:0.5660,
@@ -57,11 +59,11 @@ characterConfig[2] = {
     skill:{
         attack:{
             name: "Bullet",
-            damage: 30,
+            damage: 70,
             target: false,
             maxDistance: 3,
             buff:"",
-            cd:1500
+            cd:1000
         },
         skill1:{            
             name: "Flash",
@@ -69,11 +71,11 @@ characterConfig[2] = {
             target: false,
             maxDistance: 10,
             buff: "flash",
-            cd: 5000
+            cd: 6500
         },
         skill2:{
             name: "Lazer",            
-            damage: 200,
+            damage: 400,
             target: true,
             maxDistance: 20,
             buff:"",
@@ -86,11 +88,12 @@ characterConfig[2] = {
 //healer
 characterConfig[3] = {
     model:"models/healer",
-    health:300,
+    health:1700,
     cameraHeight: 0.75,
+    healthBarPos: 1.45,
     localPosition:"0 -0.75 0.17",
-    moveSpeed: 0.035,
-    runSpeed: 0.055,
+    moveSpeed: 0.032,
+    runSpeed: 0.045,
     gazeDistance:14,
     boundingBox:{
         width:0.5337,
@@ -99,26 +102,26 @@ characterConfig[3] = {
     skill:{
         attack:{
             name: "Cure",
-            damage: -10,
+            damage: -40,
             target: true,
             maxDistance: 3,
             buff:"",
-            cd:2000
+            cd:1700
         },
         skill1:{
             name: "FireBall",
-            damage:-50,
+            damage:100,
             target: true,
             maxDistance: 10,
             cd: 3000
         },
         skill2:{
             name: "Wish",
-            damage: -100,
+            damage: -500,
             target: false,
             maxDistance: Infinity,
             buff:"",
-            cd: 4000
+            cd: 13000
         }
 
     }
