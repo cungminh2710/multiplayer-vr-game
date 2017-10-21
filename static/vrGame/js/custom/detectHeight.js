@@ -8,39 +8,38 @@ class DetectHeight {
         var floorX = Math.floor(newX);
         // console.log("come herererere");
         var nearestY = matrix[Math.round(-newZ)][Math.round(newX)]
-        console.log("Z",-newZ)
-        console.log("X",newX)
-        console.log("roundZ",Math.round(-newZ))
-        console.log("roundX",Math.round(newX))
+       // console.log("Z",-newZ)
+       // console.log("X",newX)
+       // console.log("roundZ",Math.round(-newZ))
+       // console.log("roundX",Math.round(newX))
         var floorY = matrix[floorZ][floorX];
-        console.log("oldY ", oldY);
-        console.log("*******************");
+        // console.log("oldY ", oldY);
+        // console.log("*******************");
         if(Math.abs(nearestY-oldY)>=1){
-            console.log("collide")
+            //console.log("collide")
             return -1;
         }
         if(ceilY!=oldY && Math.abs(ceilY-oldY)<0.5){
-    var altitude = 0;
-  
-    var x1 = Math.floor(newX);
-    var x2 = Math.ceil(newX);
-    var z1 = Math.floor(newZ);
-    var z2 = Math.ceil(newZ);
-    var y1 = matrix[-z1][x1];
-    var y2 = matrix[-z1][x2];
-    // var y1 = getGridAltitude(x1,z1);
-    // var y2 = getGridAltitude(x1,z2);
-    var ya1 = (newZ - z2) / (z1 - z2) * (y1 - y2) + y2;
-    var y3 = matrix[-z1][x2];
-    var y4 = matrix[-z2][x2];
-    // var y3 = getGridAltitude(x2,z1);
-    // var y4 = getGridAltitude(x2,z2);
-    var ya2 = (newZ - z2) / (z1 - z2) * (y3 - y4) + y4;
-     
-               altitude = (newX - x2) / (x1 - x2) * (ya1 - ya2) + ya2;
-               //System.out.println(altitude);
-                    
-              return altitude;
+            var altitude = 0;
+
+            var x1 = Math.floor(newX);
+            var x2 = Math.ceil(newX);
+            var z1 = Math.floor(newZ);
+            var z2 = Math.ceil(newZ);
+            var y1 = matrix[-z1][x1];
+            var y2 = matrix[-z1][x2];
+            // var y1 = getGridAltitude(x1,z1);
+            // var y2 = getGridAltitude(x1,z2);
+            var ya1 = (newZ - z2) / (z1 - z2) * (y1 - y2) + y2;
+            var y3 = matrix[-z1][x2];
+            var y4 = matrix[-z2][x2];
+            // var y3 = getGridAltitude(x2,z1);
+            // var y4 = getGridAltitude(x2,z2);
+            var ya2 = (newZ - z2) / (z1 - z2) * (y3 - y4) + y4;
+            altitude = (newX - x2) / (x1 - x2) * (ya1 - ya2) + ya2;
+                //System.out.println(altitude);
+                        
+        return altitude;
 
             // console.log("CALCULATE Y");
             // var currPos = new THREE.Vector2(newX,-newZ);

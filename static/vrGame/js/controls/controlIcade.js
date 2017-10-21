@@ -40,29 +40,27 @@ AFRAME.registerComponent('control', {
                 if(character == 3) Healer.attack();
 
             }else if(map[72]){ //Skill1 h
-              
-                if(skill1.getAttribute("color") == "#ff0000") return;
+                ///TODODODO
+                
                 if(character == 1) Tank.skill1();
                 if(character == 2) Adc.skill1();
                 if(character == 3) Healer.skill1();
+                skill1.emit("start");
                 
 
     
             }else if(map[74]){ //Skill2 j
                 var skill2 = panel.querySelector("#skill2");
                 if(character == 1) Tank.skill2();
-                if(character == 2) Adc.skill2();
+                if(character == 2) Adc.skill2(preKey);
                 if(character == 3) Healer.skill2();
-                //console.log(raycasterEl.components.raycaster.intersectedEls[0]);
-                if(skill2.getAttribute("color")== "#ff0000") return;
                 skill2.emit("start");
-                Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation n  t
                 gameRoom.send({action: "SKILLANIMATION", data:JSON.stringify({name:"none"})})
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"none");
             }
-            else if(map[87]&& preKey != 87){// w front
+            else if(map[87] && preKey != 87){// w front
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 87;

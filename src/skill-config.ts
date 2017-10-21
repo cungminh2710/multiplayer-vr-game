@@ -11,8 +11,8 @@ export let skills = {
     damage: 0,
     duration: 1000
   },
-  AdcAttack: {
-    damage: 30,
+  Bullet: {
+    damage: 10,
     duration: 1000
   },
   Flash: {

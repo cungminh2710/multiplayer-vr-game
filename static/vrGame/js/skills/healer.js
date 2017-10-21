@@ -5,6 +5,7 @@ class Healer{
         //description: heal an ally, need to target an ally, 100% success
         //animation: a "+" symbol will be on the top of the target's 
         //must need an ally target
+        
         var target = raycasterEl.components.raycaster.intersectedEls[0];
         if(!target) return;
         //if(target.getAttribute("team") != "ally") return;
@@ -33,13 +34,16 @@ class Healer{
     //magicBall
     //done
     static skill1(){
-        // description: do not need target, shoot a light or a magic ball along the gaze(lookAt) direction, not 100% success,
-        // animation: a light or a magic ball will be fly from the healer's position to gaze direction with specific distance
-        // do not need a target, release skill directly
+        //description: do not need target, shoot a light or a magic ball along the gaze(lookAt) direction, not 100% success,
+        //animation: a light or a magic ball will be fly from the healer's position to gaze direction with specific distance
+        //do not need a target, release skill directly
+        //check cd
+        var skill1 = panel.querySelector("#skill1");
+        if(skill1.getAttribute("color") == "#ff0000") return;
+        skill1.emit("start");
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill1");
         var camera = cameraEl.object3D;
         var direction = camera.getWorldDirection();
-      
         var pos = playerWrapperEl.getAttribute("position");
         var from = {
             x: pos.x - direction.x*0.5,
@@ -66,10 +70,14 @@ class Healer{
     
     static skill2(){
         //heal all allies, do not need target, 100% success
+        //check cd
+        var skill2 = panel.querySelector("#skill2");
+        if(skill2.getAttribute("color") == "#ff0000") return;
+        skill2.emit("start");
         var ally = [];
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2")
         gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
-       
+        panel.querySelector("#skill2").emit("start");
         for (var id in playersDict) {
             // check if the property/key is defined in the object itself, not in parent
             if (playersDict.hasOwnProperty(id)) {           

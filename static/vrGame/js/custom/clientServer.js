@@ -75,10 +75,11 @@ gameRoom.listen("players/:id/data/:attribute", function(change) {
     var newValue = change.value;
     if (newValue == "") return
     var id = change.path.id;
-    if (change.path.attribute == "moveAnimation") {
+    if (change.path.attribute == "moveAnimation" && newValue!="flash") {
         playersDict[id].setAttribute("animation-mixer", "clip: " + newValue);
 
     } else {
+        console.log("Position",id,newValue);
         playersDict[id].setAttribute("position", newValue);
 
 
@@ -109,7 +110,7 @@ gameRoom.listen("players/:id/data/:attribute", function(change) {
 
 
 gameRoom.listen("players/:id/:attribute", function(change) {
-    console.log(change)
+    //console.log(change)
   
     // console.log(change.path);
     // console.log(change.operation);
@@ -122,13 +123,7 @@ gameRoom.listen("players/:id/:attribute", function(change) {
         console.log("CHANGE ROTATION");
         playersDict[id].setAttribute("rotation", newValue)
     }else if(change.path.attribute=="skillAnimation"){
-        if (id == client.id)    return;
-
-        // var skillAnimations  = JSON.parse(newValue);
-    
-        // Animation.setAnimation(playersDict[id], skillAnimations.name);
-        // console.log("++++++++++++++++++++++++++++++++++++++++",skillAnimations);
-        // if (skillAnimations.name=="none") return;
+        if (id == client.id)   return;
         SkillEffectAni.handleEffects(id,newValue);
       
     }else if(change.path.attribute == "skill"){

@@ -8,7 +8,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 3;
+      character = 2;
       var config = characterConfig[character];
       
       //skill init
@@ -48,7 +48,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 3;
+      playerInfo.character = 2;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
