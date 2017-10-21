@@ -7,13 +7,14 @@ characterConfig[1] = {
     localPosition:"0 -1.4 0",
     moveSpeed:0.03,
     runSpeed: 0.05,
+    gazeDistance:17,
     boundingBox:{
         width:1.4649,
         length:1.4012
     },
     skill:{
         attack:{
-            name: "TankAttack",
+            name: "Punch",
             damage:50,
             target: false,
             maxDistance: 3,
@@ -48,13 +49,14 @@ characterConfig[2] = {
     localPosition:"0 -0.85 0.21",
     moveSpeed: 0.025,
     runSpeed: 0.045,
+    gazeDistance:20,
     boundingBox:{
         width:0.5660,
         length:0.7255
     },
     skill:{
         attack:{
-            name: "AdcAttack",
+            name: "Bullet",
             damage: 30,
             target: false,
             maxDistance: 3,
@@ -89,6 +91,7 @@ characterConfig[3] = {
     localPosition:"0 -0.75 0.17",
     moveSpeed: 0.035,
     runSpeed: 0.055,
+    gazeDistance:14,
     boundingBox:{
         width:0.5337,
         length:0.5127

@@ -1,5 +1,5 @@
 export let skills = {
-  TankAttack: {
+  Punch: {
     damage: 50,
     duration: 1000
   },

@@ -1,5 +1,6 @@
 class DetectHeight {
     static isAvaiable(oldY,newX,newZ){
+   
         var ceilZ = Math.ceil(-newZ);
         var ceilX = Math.ceil(newX);
         var ceilY = matrix[ceilZ][ceilX];

@@ -2,20 +2,51 @@
 var scene = document.querySelector('a-scene');
 class SkillEffect{
 
+
+    static cage(target){
+    
+        var targetId = target.getAttribute("id");
+        var dataAni = JSON.stringify({
+            name:"skill1",
+            skillName:"Cage",
+            targetId: targetId
+        });
+        gameRoom.send({action: "SKILLANIMATION", data:dataAni});
+        var pos = target.getAttribute("position");
+        console.log(pos);
+        var cage = document.createElement('a-entity');
+        cage.setAttribute("cage","");
+        cage.setAttribute("position",pos);
+        
+        var animation = document.createElement('a-animation');
+        animation.setAttribute("attribute","rotation");  
+
+        //animation.setAttribute("from",pos);   
+         
+        animation.setAttribute("to","0 90 0");
+
+        animation.setAttribute("dur",5000);
+        cage.appendChild(animation);
+        scene.appendChild(cage);
+
+        animation.addEventListener("animationend",function(e){
+            console.log("animationed",e);
+            scene.removeChild(cage);
+            
+        })
+
+    }
+
+
     static shootBullet(from, to){
-        // var d =cameraEl.getAttribute("rotation");
-          //var d = cameraEl.components.rotation.data;
+
           var bullet = document.createElement('a-entity');
-          bullet.setAttribute("id","bullet")
           bullet.setAttribute("bullet","")
           bullet.setAttribute("position",from.x+" "+from.y+" "+from.z);
-          
           var animation = document.createElement('a-animation');
           animation.setAttribute("attribute","position");  
           animation.setAttribute("from",from.x+" "+from.y+" "+from.z);    
           animation.setAttribute("to",to.x+" "+to.y+" "+to.z);
-          //animation.setAttribute("begin","bulletStart");
-          animation.setAttribute("id","bulletShoot");
           animation.setAttribute("dur",300);
           bullet.appendChild(animation);
           scene.appendChild(bullet);
@@ -24,8 +55,7 @@ class SkillEffect{
               console.log("animationed",e)
               scene.removeChild(bullet);
               
-          })
-         // bullet.emit("bulletStart");    
+          }) 
       }
 
     static flash(pos){
@@ -113,12 +143,10 @@ class SkillEffect{
         });
     }
 
-    static distanceVector( v1, v2 )
-    {
+    static distanceVector( v1, v2 ){
         var dx = v1.x - v2.x;
         var dy = v1.y - v2.y;
         var dz = v1.z - v2.z;
-    
         return  dx * dx + dy * dy + dz * dz;
     }
 

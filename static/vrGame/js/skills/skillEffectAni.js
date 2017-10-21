@@ -12,8 +12,45 @@ class SkillEffectAni{
         else if(ani.skillName =="Bullet") SkillEffectAni.shootBullet(ani.from,ani.to);
         else if(ani.skillName =="Flash") SkillEffectAni.flash(ani.pos);
         else if(ani.skillName =="Lazer") SkillEffectAni.lazer(ani.direction,ani.from);
+        else if(ani.skillName =="Cage") SkillEffectAni.cage(ani.targetId);
 
     }
+    static cage(id){
+
+            var pos;
+            if(id == client.id){
+                console.log("DISABLE",disableMove);
+                pos = playerWrapperEl.getAttribute("position");
+                disableMove = true;
+
+
+            }else{
+                pos = playersDict[id].getAttribute("position");
+            }
+            console.log(pos);
+
+            var cage = document.createElement('a-entity');
+            cage.setAttribute("cage","");
+            cage.setAttribute("position",pos);
+            
+            var animation = document.createElement('a-animation');
+            animation.setAttribute("attribute","rotation");  
+        
+            animation.setAttribute("to","0 180 0");
+    
+            animation.setAttribute("dur",5000);
+            cage.appendChild(animation);
+            scene.appendChild(cage);
+    
+            animation.addEventListener("animationend",function(e){
+                console.log("animationed",e);
+                disableMove = false;
+                scene.removeChild(cage);
+                
+            })
+    
+        }
+
 
     static shootBullet(from, to){
         // var d =cameraEl.getAttribute("rotation");

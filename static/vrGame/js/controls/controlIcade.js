@@ -38,29 +38,28 @@ AFRAME.registerComponent('control', {
                 if(character == 1) Tank.attack();
                 if(character == 2) Adc.attack();
                 if(character == 3) Healer.attack();
+                panel.querySelector("#attack").emit("start");
 
             }else if(map[72]){ //Skill1 h
-                ///TODODODO
-                
+
                 if(character == 1) Tank.skill1();
                 if(character == 2) Adc.skill1();
                 if(character == 3) Healer.skill1();
-                skill1.emit("start");
+           
                 
 
     
             }else if(map[74]){ //Skill2 j
-                var skill2 = panel.querySelector("#skill2");
                 if(character == 1) Tank.skill2();
                 if(character == 2) Adc.skill2(preKey);
                 if(character == 3) Healer.skill2();
-                skill2.emit("start");
+             
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation n  t
                 gameRoom.send({action: "SKILLANIMATION", data:JSON.stringify({name:"none"})})
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"none");
             }
-            else if(map[87] && preKey != 87){// w front
+            else if(map[87] && preKey != 87 ){// w front
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 87;
@@ -72,8 +71,9 @@ AFRAME.registerComponent('control', {
                 .onUpdate(function(){
                     var now = new Date().getTime();
                     //console.log(preTime);
-
+                    
                     if(now-preTime <10) return;
+                    if(disableMove == true) return;
                     preTime = now;
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
@@ -106,6 +106,7 @@ AFRAME.registerComponent('control', {
                     var now = new Date().getTime();
                     //console.log(preTime);
                     if(now-preTime <10) return;
+                    if(disableMove == true) return;
                     preTime = now;
                     console.log("send")
                     pos = player.getAttribute("position");
@@ -138,6 +139,7 @@ AFRAME.registerComponent('control', {
                     var now = new Date().getTime();
                     //console.log(preTime);
                     if(now-preTime <10) return;
+                    if(disableMove == true) return;
                     preTime = now;
                     console.log("send")
                     pos = player.getAttribute("position");
@@ -171,6 +173,7 @@ AFRAME.registerComponent('control', {
                 .onUpdate(function(){
                     var now = new Date().getTime();
                     if(now-preTime <10) return;
+                    if(disableMove == true) return;
                     preTime = now;
                     console.log("send")
                     pos = player.getAttribute("position");

@@ -8,7 +8,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 2;
+      character = 1;
       var config = characterConfig[character];
       
       //skill init
@@ -48,7 +48,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 2;
+      playerInfo.character = 1;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -103,7 +103,7 @@ class Players {
       cameraEl.setAttribute("rotation","0 0 0");
       cameraEl.setAttribute("id","camera");
       //raycaster
-      Players.createRayCaster(); 
+      Players.createRayCaster(config); 
       Players.createPanel(config);
       cameraEl.appendChild(player);
       // add head movement and body rotation           
@@ -122,10 +122,10 @@ class Players {
        });
   }
 
-  static createRayCaster(){
+  static createRayCaster(config){
     //raycaster setting
     raycasterEl = document.createElement("a-entity");
-    raycasterEl.setAttribute("raycaster","objects: .collidable;far:20;recursive:false");
+    raycasterEl.setAttribute("raycaster","objects: .collidable;far:"+config.gazeDistance+";recursive:false");
    // raycasterEl.setAttribute("collider-check","");
     raycasterEl.setAttribute("id","caster");
     raycasterEl.setAttribute("position","0 0 -1");
@@ -178,7 +178,7 @@ class Players {
     
     var healthtext = document.createElement("a-text");
     healthtext.setAttribute("id","health");
-    healthtext.setAttribute("position","-0.01 0.01 0");
+    healthtext.setAttribute("position","-0.02 0.011 0");
     console.log(config)
     healthtext.setAttribute("value","Health: "+config.health);
     
@@ -186,9 +186,36 @@ class Players {
     healthtext.setAttribute("color","white");
     panel.appendChild(healthtext);
     
+
+    var attack = document.createElement("a-text");
+    attack.setAttribute("id","attack");
+    attack.setAttribute("position","-0.02 0.004 0");
+    attack.setAttribute("value",config.skill.attack.name+": Ready");
+    attack.setAttribute("width","0.1");
+    attack.setAttribute("color","green");
+
+    var attackanimation = document.createElement("a-animation");
+    attackanimation.setAttribute("attribute","color");
+    attackanimation.setAttribute("begin","start");
+    attackanimation.setAttribute("from","red");
+    attackanimation.setAttribute("to","red");
+    attackanimation.setAttribute("dur",config.skill.attack.cd);
+    attackanimation.setAttribute("repeat","0");
+    attack.appendChild(attackanimation);
+    attack.addEventListener("animationend",function(){
+      attack.setAttribute("value",config.skill.attack.name+": Ready");
+       Animation.setAnimation(playerWrapperEl.querySelector("#"+client.id),"none");
+       attack.setAttribute("color","green");
+    });
+    attack.addEventListener("animationstart",function(){
+      attack.setAttribute("value",config.skill.attack.name+": Not Ready");
+       
+    });
+    panel.appendChild(attack);
+
     var skill1 = document.createElement("a-text");
     skill1.setAttribute("id","skill1");
-    skill1.setAttribute("position","-0.01 0 0");
+    skill1.setAttribute("position","-0.02 -0.003 0");
     skill1.setAttribute("value",config.skill.skill1.name+": Ready");
     skill1.setAttribute("width","0.1");
     skill1.setAttribute("color","green");
@@ -213,7 +240,7 @@ class Players {
     
     var skill2 = document.createElement("a-text");
     skill2.setAttribute("id","skill2");
-    skill2.setAttribute("position","-0.01 -0.01 0");
+    skill2.setAttribute("position","-0.02 -0.01 0");
     skill2.setAttribute("value",config.skill.skill2.name+": Ready");
     skill2.setAttribute("width","0.1");
     skill2.setAttribute("color","green");

@@ -49,6 +49,7 @@ class Adc{
     static skill1(preMovement){
         var skill1 = panel.querySelector("#skill1");
         if(skill1.getAttribute("color") == "#ff0000") return;
+        skill1.emit("start");
         var pos = playerWrapperEl.getAttribute("position");
         var direction = cameraEl.object3D.getWorldDirection();
         var oldY = pos.y;
@@ -102,8 +103,9 @@ class Adc{
     //animation:  draw a lazer animated from adc's eyes to along the gaze direction
     //lazer
     static skill2(){
-       var skill2 = panel.querySelector("#skill2");
-       if(skill2.getAttribute("color") == "#ff0000") return;
+        var skill2 = panel.querySelector("#skill1");
+        if(skill2.getAttribute("color") == "#ff0000") return;
+        skill2.emit("start");
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2")
         var pos = playerWrapperEl.getAttribute("position");
         var direction = cameraEl.object3D.getWorldDirection();

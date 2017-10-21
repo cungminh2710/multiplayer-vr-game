@@ -10,8 +10,10 @@ var raycasterEl;
 var cameraEl;
 var playerWrapperEl;
 var panel;
+var disableMove  = false;
 var team = "";
 var character = Infinity;
+
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = [] // it is a good idea to store state changes from server on client
