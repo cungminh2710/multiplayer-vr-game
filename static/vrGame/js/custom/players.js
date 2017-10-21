@@ -8,7 +8,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 2;
+      character = 3;
       var config = characterConfig[character];
       
       //skill init
@@ -26,6 +26,7 @@ class Players {
       player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
       player.setAttribute("id",client.id);
       player.setAttribute("health",config.health);
+      player.setAttribute("team","ally");
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
       //console.log("CREATEMYSELF MOVEANIMATION: ",playerInfo.data.moveAnimation);
       //0.43 is radius of head
@@ -47,7 +48,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 2;
+      playerInfo.character = 3;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -178,6 +179,7 @@ class Players {
     var healthtext = document.createElement("a-text");
     healthtext.setAttribute("id","health");
     healthtext.setAttribute("position","-0.01 0.01 0");
+    console.log(config)
     healthtext.setAttribute("value","Health: "+config.health);
     
     healthtext.setAttribute("width","0.1");

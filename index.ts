@@ -55,7 +55,7 @@ app.post("/api/register", (req, res) => {
 		});
 	else
 		createNewUser({ username, password, email, achievements: [{
-			logoUrl: "fa-smile-o",
+			logoUrl: "smile-o",
 			name: "You made an account!",
 			description: "We have given you an account, but we do not grant you the rank of master"
 		}] })

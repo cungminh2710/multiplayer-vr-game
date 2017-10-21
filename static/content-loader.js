@@ -1,8 +1,20 @@
-function loadAll() {
-    load();
+function loadNav(clientid) {
+    $.ajax({
+        type: "get",
+        url: "/api/getuser/" + clientid,
+        dataType: "json",
+        success: function(response) {
+            var info = response.message;
+            set_usr_note(info);
+            console.log(info);
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    });
 }
 
-function load() {
+function loadProfile() {
     var host = window.document.location.host.replace(/:.*/, '');
     var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
     $.ajax({
