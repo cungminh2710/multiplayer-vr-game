@@ -104,25 +104,25 @@ class Adc{
     static skill2(){
        // var skill1 = panel.querySelector("#skill2");
       //  if(skill1.getAttribute("color") == "#ff0000") return;
-        Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
+        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2")
         var pos = playerWrapperEl.getAttribute("position");
         var direction = cameraEl.object3D.getWorldDirection();
 
         var from = {
-            x: pos.x - direction.x*0.5,
-            y: pos.y + characterConfig[character].cameraHeight,
-            z:pos.z - direction.z*0.5
+            x: pos.x - direction.x*0.4,
+            y: pos.y + characterConfig[character].cameraHeight-0.5,
+            z:pos.z - direction.z*0.4
 
         };
 
         var to = {
-            x: pos.x - direction.x*7,
-            y: from.y -direction.y*7,
-            z:pos.z - direction.z*7
+            x: pos.x - direction.x*10,
+            y: from.y -direction.y*10,
+            z:pos.z - direction.z*10
 
         };
-        var direction = cameraEl.object3D.getWorldDirection();
-        SkillEffect.lazer(direction,pos,from,to);
+        console.log(to);
+        SkillEffect.lazer(pos,from,to);
 
         //gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
 

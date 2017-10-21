@@ -20,7 +20,7 @@ export let skills = {
     duration: 1000
   },
   Lazer: {
-    damage: 200,
+    damage: 10,
     duration: 1000
   },
   Cure: {
