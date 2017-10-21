@@ -87,7 +87,7 @@ app.post("/api/login", (req, res) => {
 	let { username, password, sessionId } = req.body;
 	isUserExist(username, password).then(user => {
 		if (user) {
-			updateUserSession(user._id, sessionId);
+			updateUserSession(user.username, sessionId);
 			res.status(200).json({
 				status: "success",
 				message: {

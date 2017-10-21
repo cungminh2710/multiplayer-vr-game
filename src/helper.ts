@@ -1,10 +1,11 @@
 import { User, IUserModel, IUserStats, Achievement } from "../models/user";
 // import { Promise } from "bluebird";
 
-import * as Bluebird from 'bluebird';
+import * as Bluebird from "bluebird";
 
 Promise = Bluebird as any;
 
+const IUserModelSelectString = "-_id stats achievements email username";
 /**
  * Register a new user
  * @param userData User Initial Data including username and password 
@@ -49,8 +50,8 @@ export let isUserExist: {
  */
 
 export let updateUserSession: {
-	(id: string, sessionID: string): Promise<void>;
-} = (_id, sessionID) => User.update({ _id }, { sessionID }).exec();
+	(username: string, sessionID: string): Promise<void>;
+} = (username, sessionID) => User.update({ username }, { sessionID }).exec();
 
 /**
  * Read user data based on User ID
@@ -86,9 +87,12 @@ export let updateUserAchievements: {
 	User.update({ _id }, { $push: { achievements: newAchievement } }).exec();
 
 export let updateUserAchievementsFromStats: {
-	(username: string, kills: number, death: number, won: boolean|string): Promise<
-		IUserModel
-	>;
+	(
+		username: string,
+		kills: number,
+		death: number,
+		won: boolean | string
+	): Promise<IUserModel>;
 } = (username, kills, death, won) =>
 	User.find({ username }).then(async user => {
 		let {
@@ -99,8 +103,8 @@ export let updateUserAchievementsFromStats: {
 		// Calculate new Stats
 		let newStats = {
 			numGamesPlayed: numGamesPlayed + 1,
-			numWon: (typeof won === "boolean") ? numWon + 1 : numWon,
-			numDrew: (typeof won !== "boolean") ? numDrew : numDrew + 1,
+			numWon: typeof won === "boolean" ? numWon + 1 : numWon,
+			numDrew: typeof won !== "boolean" ? numDrew : numDrew + 1,
 			numKills: numKills + kills,
 			numDeath: numDeath + death
 		};
@@ -148,7 +152,7 @@ export let updateUserAchievementsFromStats: {
 		else await updateUserStats(_id, newStats);
 
 		return User.findOne({ username })
-			.select("stats achievements email username")
+			.select(IUserModelSelectString)
 			.exec();
 	});
 /**
@@ -168,10 +172,10 @@ export let updateUserStats: {
  */
 
 export let readUserInfoBySession: {
-	(sessionID: string): Promise<string>;
+	(sessionID: string): Promise<IUserModel>;
 } = sessionID =>
 	User.findOne({ sessionID })
-		.select("stats achievements email username")
+		.select(IUserModelSelectString)
 		.exec();
 // .then(user =>Promise.resolve(user));
 
@@ -197,7 +201,7 @@ export let readUserIDBySession: {
  */
 
 export let readUsernameBySession: {
-	(sessionID: string): Promise<String | null>;
+	(sessionID: string): Promise<string | null>;
 } = sessionID =>
 	User.findOne({ sessionID })
 		.exec()
