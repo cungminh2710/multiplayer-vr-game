@@ -75,11 +75,11 @@ gameRoom.listen("players/:id/data/:attribute", function(change) {
     var newValue = change.value;
     if (newValue == "") return
     var id = change.path.id;
-    if (change.path.attribute == "moveAnimation" && newValue!="flash") {
-        playersDict[id].setAttribute("animation-mixer", "clip: " + newValue);
-
+    if (change.path.attribute == "moveAnimation") {
+        if(newValue != "flash") { 
+            playersDict[id].setAttribute("animation-mixer", "clip: " + newValue);
+        }
     } else {
-        console.log("Position",id,newValue);
         playersDict[id].setAttribute("position", newValue);
 
 

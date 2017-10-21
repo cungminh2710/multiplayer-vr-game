@@ -10,6 +10,7 @@ class SkillEffectAni{
         else if(ani.skillName =="Cure") SkillEffectAni.cure(ani.targetId);
         else if(ani.skillName =="Wish") SkillEffectAni.wish(ani.targetId);
         else if(ani.skillName =="Bullet") SkillEffectAni.shootBullet(ani.from,ani.to);
+        else if(ani.skillName =="Flash") SkillEffectAni.flash(ani.pos);
 
     }
 
@@ -38,13 +39,25 @@ class SkillEffectAni{
               
           })
           bullet.emit("bulletStart");    
-      }
+    }
+
+    static flash(pos){
+        var flashEl = document.createElement('a-entity');
+        flashEl.setAttribute('position',pos.x/2+" "+"0"+" "+pos.z/2);
+        console.log(pos);
+        scene.appendChild(flashEl);
+        flashEl.setAttribute("particle-system","accelerationValue:0 -20 0;velocitySpread:1 1 1;accelerationSpread:2 0 2;velocityValue:0 7 0;color: #FFFF33,#FFFF00;duration:0.5;particleCount:10;size:0.5;texture:js/skills/star.png");
+        flashEl.addEventListener("particleed",function(){  
+            scene.removeChild(flashEl);
+            console.log("remove");
+        })
+    }
 
     static fireBallAni(from, to){
        console.log(from, to);
         var fireBall = document.createElement('a-entity');
         fireBall.setAttribute("id","fireBall")
-        fireBall.setAttribute("bullet","")
+        fireBall.setAttribute("fireBall","")
         fireBall.setAttribute("position",from.x+" "+from.y+" "+from.z);
 
         var animation = document.createElement('a-animation');
@@ -75,9 +88,7 @@ class SkillEffectAni{
         //console.log(cureEl);
         scene.appendChild(cureEl);
         cureEl.setAttribute("particle-system","velocitySpread:1 1 1;accelerationSpread:2 0 2;velocityValue:0 10 0;color: #7FF000,#7FFF00;duration:3;particleCount:5;size:1;texture:js/skills/crosifixion.png");
-   
         cureEl.addEventListener("particleed",function(){
-  
         scene.removeChild(cureEl);
        })
          
