@@ -24,6 +24,8 @@ interface Coords {
   z: number
 }
 
+const EIGHT_MINUTES = 480000;
+
 export class GameArena extends Room {
   private numJoined: number = 0;
   private maxPlayers: number;
@@ -38,6 +40,7 @@ export class GameArena extends Room {
   onInit (options) {
     console.log("Arena created!", options);
     this.allowedPlayers = options.players;
+    this.maxPlayers = this.allowedPlayers.length;
 
     this.setState({
       turrets: {
@@ -46,7 +49,8 @@ export class GameArena extends Room {
       },
       players: {},
       stats: {},
-      gameOver: false
+      gameOver: false,
+      playersReady: false
     });
     this.allowedPlayers.forEach(p => {
       this.playerClientMap[p] = ""; 
@@ -124,14 +128,44 @@ export class GameArena extends Room {
       kills: 0,
       deaths: 0
     }
+
+    //Once all players have joined, set the game timer
+    if(this.numJoined == this.maxPlayers){
+      this.state.playersReady = true;
+      setTimeout(function() {
+        console.log('ENDING GAME');
+        this.endGame("draw");
+      }, EIGHT_MINUTES);
+    }
   }
 
   onLeave (client: Client) {
       //let index: number = this.state.messages.indexOf(client.id);
       //this.state.players.splice(index, 1);
       console.log("CLIENT GONE");
-      console.log(client);
+      console.log(client.id);
       delete this.state.players[client.id];
+      this.numJoined -= 1;
+  }
+
+  endGame(winner: string) {
+    this.state.gameOver = true;
+
+    //update player stats in database
+    // this.autoDispose = false; 
+    // for (var player in this.playerClientMap) { 
+    //   if (this.playerClientMap.hasOwnProperty(player)) { 
+    //     var clientId = this.playerClientMap[player]; 
+    //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, winner == "draw" ? "draw" : this.state.[clientId].team == winner) 
+    //     .then(function() { 
+    //       let i = this.allowedPlayers.indexOf(player); 
+    //       this.allowedPlayers.splice(i); 
+    //       if(this.allowedPlayers.length === 0){ 
+    //         this.autoDispose = true; 
+    //       } 
+    //     }); 
+    //   } 
+    // } 
   }
 
   onMessage (client: Client, data) {
@@ -167,24 +201,7 @@ export class GameArena extends Room {
           //check if game finished
           if(newTurretHealth <= 0){
             //GAME OVER
-            this.state.gameOver = true;
-            let winner = targetTurretId == "red" ? "blue" : "red";
-
-            //update player stats in database
-            // this.autoDispose = false; 
-            // for (var player in this.playerClientMap) { 
-            //   if (this.playerClientMap.hasOwnProperty(player)) { 
-            //     var clientId = this.playerClientMap[player]; 
-            //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, this.state.[clientId].team == winner) 
-            //     .then(function() { 
-            //       let i = this.allowedPlayers.indexOf(player); 
-            //       this.allowedPlayers.splice(i); 
-            //       if(this.allowedPlayers.length === 0){ 
-            //         this.autoDispose = true; 
-            //       } 
-            //     }); 
-            //   } 
-            // } 
+            this.endGame(targetTurretId == "red" ? "blue" : "red");
           }
         
         return;
