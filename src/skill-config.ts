@@ -8,11 +8,11 @@ export let skills = {
     duration: 5000
   },
   Rocket: {
-    damage: 10,
+    damage: 100,
     duration: 1000
   },
   Bullet: {
-    damage: 10,
+    damage: 30,
     duration: 1000
   },
   Flash: {
@@ -20,7 +20,7 @@ export let skills = {
     duration: 1000
   },
   Lazer: {
-    damage: 10,
+    damage: 200,
     duration: 1000
   },
   Cure: {
@@ -28,7 +28,7 @@ export let skills = {
     duration: 1000
   },
   FireBall: {
-    damage: 50,
+    damage: -50,
     duration: 1000
   },
   Wish: {

@@ -32,9 +32,15 @@ gameRoom.onData.add(function(data) {
             if (data.state.hasOwnProperty(p)) {
                 if(data.state[p].team == team ) data.state[p].team = "ally";
                 else data.state[p].team = "enemy";
-                player = Players.createOtherPlayer(data.state[p]);
-                console.log("ondata: ",player);
-                playersDict[data.state[p].id] = player
+                if(data.state[p].character == "turret"){
+                    console.log("THIS IS A TURRET");
+                    // player = MAKE TURRET HERE
+                }else{
+                    //MAKE NORMAL PLAYER HERE
+                    player = Players.createOtherPlayer(data.state[p]);
+                    playersDict[data.state[p].id] = player
+                    console.log("ondata: ", player);
+                }
             }
         }
 
@@ -62,7 +68,9 @@ gameRoom.listen("players/:id", function(change) {
 })
 
 gameRoom.listen("gameOver", function(change) {
-    console.log("GAME OVER");
+    if(change.value){
+        console.log("GAME OVER?");
+    }
 });
 
 gameRoom.listen("turrets/:attribute", function(change) {
