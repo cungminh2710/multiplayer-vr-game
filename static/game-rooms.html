@@ -33,6 +33,7 @@
     </div>
 
     <div class="pull-right">
+      <li class="navitem"><p id="username"></p></li>
       <li class="navitem">
         <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out" aria-hidden="true"></i></a>
       </li>
@@ -80,38 +81,38 @@
 
     <div class="gameroom">
 
-    <div id="current-rooms">
-        <h3>Available Rooms</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Num Players</th>
-                    <th>Max Num Players</th>
-                    <th>Join</th>
-                </tr>
-            </thead>
-            <tbody id="current-rooms-tbody">
-<!--                 <tr>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                    <td>Something here</td>
-                </tr>
- -->            </tbody>
-        </table>
-    </div>
+        <div id="current-rooms">
+            <h3>Available Rooms</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Num Players</th>
+                        <th>Max Num Players</th>
+                        <th>Join</th>
+                    </tr>
+                </thead>
+                <tbody id="current-rooms-tbody">
+    <!--                 <tr>
+                        <td>Something here</td>
+                        <td>Something here</td>
+                        <td>Something here</td>
+                        <td>Something here</td>
+                    </tr>
+    -->            </tbody>
+            </table>
+        </div>
 
 
-    <div id="my-room" style="max-width: 400px; margin: auto;">
-        <h3>My Room</h3>
-        <h4>Members</h4>
-        <ul id="player-list">
+        <div id="my-room" style="max-width: 400px; margin: auto; display: none;">
+            <h3>My Room</h3>
+            <h4>Members</h4>
+            <ul id="player-list">
 
-        </ul>
-        <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
-        <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
-    </div>
+            </ul>
+            <button id="leave-room" class="rm-btn btn-leave" disabled>Leave</button>
+            <button id="player-ready" class="rm-btn btn-ready" disabled>I'm Ready</button>
+        </div>
     </div>
     <script>
         var host = window.document.location.host.replace(/:.*/, '');
@@ -136,7 +137,8 @@
             if(data.hasOwnProperty("error")){
                 console.log("ERROR: " + data.error);
             }else if(data.hasOwnProperty("success")){
-                myPlayerName = data.username
+                myPlayerName = data.username;
+                document.getElementById('username').innerHTML = myPlayerName;
             }
         })
 
@@ -149,6 +151,7 @@
 
             for (var i = 0; i < globalState.rooms.length; i++) {
                 if (globalState.rooms[i].players.indexOf(myPlayerName) > -1) {
+                    $('#my-room').css("display", "block");
                     joinedRoom = i;
                 }
 
@@ -224,6 +227,7 @@
                 // disable leave button
                 document.getElementById("leave-room").disabled = true;
                 document.getElementById("player-ready").disabled = true;
+                $('#my-room').css("display", "none");
             }
         }
 
