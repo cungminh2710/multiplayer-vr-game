@@ -1,8 +1,9 @@
 import { Client } from 'colyseus/lib';
 import { Room } from "colyseus";
 import { IUserStats } from '../models/user';
-import * as helper from '../src/helper';
+import { updateUserAchievementsFromStats } from '../src/helper';
 import { skills } from '../src/skill-config';
+import { Promise } from "bluebird";
 
 interface PlayerInfo {
   id?: string,
@@ -152,20 +153,25 @@ export class GameArena extends Room {
     this.state.gameOver = true;
 
     //update player stats in database
-    // this.autoDispose = false; 
-    // for (var player in this.playerClientMap) { 
-    //   if (this.playerClientMap.hasOwnProperty(player)) { 
-    //     var clientId = this.playerClientMap[player]; 
-    //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, winner == "draw" ? "draw" : this.state.[clientId].team == winner) 
-    //     .then(function() { 
-    //       let i = this.allowedPlayers.indexOf(player); 
-    //       this.allowedPlayers.splice(i); 
-    //       if(this.allowedPlayers.length === 0){ 
-    //         this.autoDispose = true; 
-    //       } 
-    //     }); 
-    //   } 
-    // } 
+    this.autoDispose = false;
+
+    let loadAchievements = [];
+    for (var player in this.playerClientMap) { 
+      if (this.playerClientMap.hasOwnProperty(player)) { 
+        var clientId = this.playerClientMap[player]; 
+        loadAchievements.push(updateUserAchievementsFromStats(
+          player,
+          this.state.stats[clientId].kills,
+          this.state.stats[clientId].deaths,
+          winner == "draw" ? "draw" : this.state.[clientId].team == winner
+        ));
+      } 
+    }
+
+    Promise.all(loadAchievements).then(function() {
+      console.log("ALL ACHIEVEMENTS ADDED, SAFE TO DESTROY ARENA");
+      this.autoDispose = true;
+    })
   }
 
   onMessage (client: Client, data) {

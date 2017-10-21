@@ -86,7 +86,7 @@ export let updateUserAchievements: {
 	User.update({ _id }, { $push: { achievements: newAchievement } }).exec();
 
 export let updateUserAchievementsFromStats: {
-	(username: string, kills: number, death: number, won: boolean): Promise<
+	(username: string, kills: number, death: number, won: boolean|string): Promise<
 		IUserModel
 	>;
 } = (username, kills, death, won) =>
@@ -99,23 +99,24 @@ export let updateUserAchievementsFromStats: {
 		// Calculate new Stats
 		let newStats = {
 			numGamesPlayed: numGamesPlayed + 1,
-			numWon: won ? numWon + 1 : numWon,
-			numDrew: won ? numDrew : numDrew + 1,
+			numWon: (typeof won === "boolean") ? numWon + 1 : numWon,
+			numDrew: (typeof won !== "boolean") ? numDrew : numDrew + 1,
 			numKills: numKills + kills,
 			numDeath: numDeath + death
 		};
 		// Amazing Achievements
 		let achievement;
+		let youWon = typeof won === "boolean";
 		if (kills > death + 20 && death < 10)
 			achievement = {
-				logoUrl: won ? "smile-o" : "frown-o",
-				name: won ? "FPS Artist" : "Bad luck Brian",
+				logoUrl: youWon ? "smile-o" : "frown-o",
+				name: youWon ? "FPS Artist" : "Bad luck Brian",
 				description: "You are amazing player. GG WP !"
 			};
 		else if (kills > death + 10 && death < 10)
 			achievement = {
-				logoUrl: won ? "smile-o" : "frown-o",
-				name: won
+				logoUrl: youWon ? "smile-o" : "frown-o",
+				name: youWon
 					? "You completely smashed the opponent(s)"
 					: "You are great ... but not enough",
 				description: "You have amazing skills !"
