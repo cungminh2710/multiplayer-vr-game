@@ -1,5 +1,9 @@
 import { User, IUserModel, IUserStats, Achievement } from "../models/user";
-import { Promise } from "bluebird";
+// import { Promise } from "bluebird";
+
+import * as Bluebird from 'bluebird';
+
+Promise = Bluebird as any;
 
 /**
  * Register a new user
