@@ -1,6 +1,11 @@
 import { User, IUserModel, IUserStats, Achievement } from "../models/user";
-import { Promise } from "bluebird";
+// import { Promise } from "bluebird";
 
+import * as Bluebird from "bluebird";
+
+Promise = Bluebird as any;
+
+const IUserModelSelectString = "-_id stats achievements email username";
 /**
  * Register a new user
  * @param userData User Initial Data including username and password 
@@ -45,8 +50,8 @@ export let isUserExist: {
  */
 
 export let updateUserSession: {
-	(id: string, sessionID: string): Promise<void>;
-} = (_id, sessionID) => User.update({ _id }, { sessionID }).exec();
+	(username: string, sessionID: string): Promise<void>;
+} = (username, sessionID) => User.update({ username }, { sessionID }).exec();
 
 /**
  * Read user data based on User ID
@@ -81,6 +86,75 @@ export let updateUserAchievements: {
 } = (_id, newAchievement) =>
 	User.update({ _id }, { $push: { achievements: newAchievement } }).exec();
 
+export let updateUserAchievementsFromStats: {
+	(
+		username: string,
+		kills: number,
+		death: number,
+		won: boolean | string
+	): Promise<IUserModel>;
+} = (username, kills, death, won) =>
+	User.find({ username }).then(async user => {
+		let {
+			_id,
+			stats: { numGamesPlayed, numWon, numDrew, numKills, numDeath }
+		} = user;
+
+		// Calculate new Stats
+		let newStats = {
+			numGamesPlayed: numGamesPlayed + 1,
+			numWon: typeof won === "boolean" ? numWon + 1 : numWon,
+			numDrew: typeof won !== "boolean" ? numDrew : numDrew + 1,
+			numKills: numKills + kills,
+			numDeath: numDeath + death
+		};
+		// Amazing Achievements
+		let achievement;
+		let youWon = typeof won === "boolean";
+		if (kills > death + 20 && death < 10)
+			achievement = {
+				logoUrl: youWon ? "smile-o" : "frown-o",
+				name: youWon ? "FPS Artist" : "Bad luck Brian",
+				description: "You are amazing player. GG WP !"
+			};
+		else if (kills > death + 10 && death < 10)
+			achievement = {
+				logoUrl: youWon ? "smile-o" : "frown-o",
+				name: youWon
+					? "You completely smashed the opponent(s)"
+					: "You are great ... but not enough",
+				description: "You have amazing skills !"
+			};
+		else if (kills < death + 10 && won)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "You got carried by your team",
+				description: "Your team is better than you ... Poor them"
+			};
+		else if (kills < 1 && death > 15)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "Born to die",
+				description: "You can't help your teammates"
+			};
+		else if (kills < 1 && death > 10)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "Party crasher",
+				description: "You can't help your teammates"
+			};
+
+		if (achievement)
+			await Promise.all([
+				updateUserStats(_id, newStats),
+				updateUserAchievements(_id, achievement)
+			]);
+		else await updateUserStats(_id, newStats);
+
+		return User.findOne({ username })
+			.select(IUserModelSelectString)
+			.exec();
+	});
 /**
  * Update User Stats
  * @param id User ID 
@@ -98,18 +172,12 @@ export let updateUserStats: {
  */
 
 export let readUserInfoBySession: {
-	(sessionID: string): Promise<string>;
+	(sessionID: string): Promise<IUserModel>;
 } = sessionID =>
 	User.findOne({ sessionID })
-		.exec()
-		.then(user => {
-			let retObj = {
-				stats: user.stats,
-				achievements: user.achievements,
-				email: user.email,
-				username: user.username
-			}
-			return Promise.resolve(retObj)});
+		.select(IUserModelSelectString)
+		.exec();
+// .then(user =>Promise.resolve(user));
 
 /**
  * Read User obj stuff from sessionID
@@ -133,7 +201,7 @@ export let readUserIDBySession: {
  */
 
 export let readUsernameBySession: {
-	(sessionID: string): Promise<String | null>;
+	(sessionID: string): Promise<string | null>;
 } = sessionID =>
 	User.findOne({ sessionID })
 		.exec()

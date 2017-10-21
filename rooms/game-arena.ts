@@ -1,249 +1,279 @@
-import { Client } from 'colyseus/lib';
+import { Client } from "colyseus/lib";
 import { Room } from "colyseus";
-import { IUserStats } from '../models/user';
-import * as helper from '../src/helper';
-import { skills } from '../src/skill-config';
+import { IUserStats } from "../models/user";
+import { updateUserAchievementsFromStats } from "../src/helper";
+import { skills } from "../src/skill-config";
+import { Promise } from "bluebird";
 
 interface PlayerInfo {
-  id?: string,
-  character: number,
-  team: string,
-  health: number,
-  data: {
-    position: string,
-    moveAnimation: string
-  },
-  rotation: string,
-  skill: string,
-  skillAnimation: string
+	id?: string;
+	character: number;
+	team: string;
+	health: number;
+	data: {
+		position: string;
+		moveAnimation: string;
+	};
+	rotation: string;
+	skill: string;
+	skillAnimation: string;
 }
 
 interface Coords {
-  x: number,
-  y: number,
-  z: number
+	x: number;
+	y: number;
+	z: number;
 }
 
+const EIGHT_MINUTES = 480000;
+
 export class GameArena extends Room {
-  private numJoined: number = 0;
-  private maxPlayers: number;
-  private allowedPlayers: Array<string>;
-  private playerClientMap: any = {}; 
-  private statsAdded: Array<string>; 
-  private takenCharacters: any = {
-    red: [],
-    blue: []
-  };
+	private numJoined: number = 0;
+	private maxPlayers: number;
+	private allowedPlayers: Array<string>;
+	private playerClientMap: any = {};
+	private statsAdded: Array<string>;
+	private takenCharacters: any = {
+		red: [],
+		blue: []
+	};
 
-  onInit (options) {
-    console.log("Arena created!", options);
-    this.allowedPlayers = options.players;
+	onInit(options) {
+		console.log("Arena created!", options);
+		this.allowedPlayers = options.players;
+		this.maxPlayers = this.allowedPlayers.length;
 
-    this.setState({
-      turrets: {
-        blue: 100000,
-        red: 100000
-      },
-      players: {},
-      stats: {},
-      gameOver: false
-    });
-    this.allowedPlayers.forEach(p => {
-      this.playerClientMap[p] = ""; 
-    }); 
-  }
+		this.setState({
+			turrets: {
+				blue: 100000,
+				red: 100000
+			},
+			players: {},
+			stats: {},
+			gameOver: false,
+			playersReady: false
+		});
+		this.allowedPlayers.forEach(p => {
+			this.playerClientMap[p] = "";
+		});
+	}
 
-  // resetSkillAnimation(playerId: string) {
-  //   this.state.players[playerId].weapon = "none";
-  // }
+	// resetSkillAnimation(playerId: string) {
+	//   this.state.players[playerId].weapon = "none";
+	// }
 
-  revivePlayer (playerId: string) {
-    this.state.players[playerId].health = 100;
-  }
+	revivePlayer(playerId: string) {
+		this.state.players[playerId].health = 100;
+	}
 
-  newPlayerInfo (playerId: string): PlayerInfo{
-    let playerTeam: string;
-    let playerCoords: string;
-    let playerCharacter = Math.floor(Math.random() * 3) + 1;
+	newPlayerInfo(playerId: string): PlayerInfo {
+		let playerTeam: string;
+		let playerCoords: string;
+		let playerCharacter = Math.floor(Math.random() * 3) + 1;
 
-    if(this.numJoined % 2 == 0){
-      playerTeam = "red";
-      playerCoords = `${this.numJoined*5} 3 -235`;
-    }else{
-      playerTeam = "blue";
-      playerCoords = `${this.numJoined*5} 3 0`;
-    }
+		if (this.numJoined % 2 == 0) {
+			playerTeam = "red";
+			playerCoords = `${this.numJoined * 5} 3 -235`;
+		} else {
+			playerTeam = "blue";
+			playerCoords = `${this.numJoined * 5} 3 0`;
+		}
 
-    while(this.takenCharacters[playerTeam].indexOf(playerCharacter) != -1){
-      playerCharacter = Math.floor(Math.random() * 3) + 1;
-    }
+		while (
+			this.takenCharacters[playerTeam].indexOf(playerCharacter) != -1
+		) {
+			playerCharacter = Math.floor(Math.random() * 3) + 1;
+		}
 
-    this.takenCharacters[playerTeam].push(playerCharacter);
+		this.takenCharacters[playerTeam].push(playerCharacter);
 
-    let newPlayer: PlayerInfo = {
-      id: playerId,
-      team: playerTeam,
-      character: playerCharacter,
-      health: 100,
-      data: {
-        position: playerCoords,
-        moveAnimation: "idle",
-      },
-      rotation: "0 0 0",
-      skill: "",
-      skillAnimation: "none"
-    };
+		let newPlayer: PlayerInfo = {
+			id: playerId,
+			team: playerTeam,
+			character: playerCharacter,
+			health: 100,
+			data: {
+				position: playerCoords,
+				moveAnimation: "idle"
+			},
+			rotation: "0 0 0",
+			skill: "",
+			skillAnimation: "none"
+		};
 
-    console.log(newPlayer);
-    return newPlayer;
-  }
+		console.log(newPlayer);
+		return newPlayer;
+	}
 
-  requestJoin (options: any) {
-    let clientId = options.clientId;
-    let userId = options.username;
+	requestJoin(options: any) {
+		let clientId = options.clientId;
+		let userId = options.username;
 
-    if(options.test || this.allowedPlayers.indexOf(userId) > -1){
+		if (options.test || this.allowedPlayers.indexOf(userId) > -1) {
+			this.playerClientMap[userId] = clientId;
+			return true;
+		}
+		return false;
+	}
 
-      this.playerClientMap[userId] = clientId;
-      return true;
-    }
-    return false;
-  }
+	onJoin(client: Client) {
+		if (!(Object.keys(this.state.players).length === 0)) {
+			this.send(client, {
+				type: "initial",
+				state: this.state.players
+			});
+		}
 
-  onJoin (client: Client) {
-    if(!(Object.keys(this.state.players).length === 0)){
-      this.send(client, {
-        type: "initial",
-        state: this.state.players
-      });
-    }
+		this.numJoined += 1;
+		this.state.players[client.id] = this.newPlayerInfo(client.id);
+		this.state.stats[client.id] = {
+			kills: 0,
+			deaths: 0
+		};
 
-    this.numJoined += 1;
-    this.state.players[client.id] = this.newPlayerInfo(client.id);
-    this.state.stats[client.id] = {
-      kills: 0,
-      deaths: 0
-    }
-  }
+		//Once all players have joined, set the game timer
+		if (this.numJoined == this.maxPlayers) {
+			this.state.playersReady = true;
+			setTimeout(function() {
+				console.log("ENDING GAME");
+				this.endGame("draw");
+			}, EIGHT_MINUTES);
+		}
+	}
 
-  onLeave (client: Client) {
-      //let index: number = this.state.messages.indexOf(client.id);
-      //this.state.players.splice(index, 1);
-      console.log("CLIENT GONE");
-      console.log(client);
-      delete this.state.players[client.id];
-  }
+	onLeave(client: Client) {
+		//let index: number = this.state.messages.indexOf(client.id);
+		//this.state.players.splice(index, 1);
+		console.log("CLIENT GONE");
+		console.log(client.id);
+		delete this.state.players[client.id];
+		this.numJoined -= 1;
+	}
 
-  onMessage (client: Client, data) {
-     // console.log("Game Arena:", client.id, data);
-    if(data.action == "idle" || this.state.gameOver || !this.state.players.hasOwnProperty(client.id)){
-      return;
-    }
+	endGame(winner: string) {
+		this.state.gameOver = true;
 
-    if(data.action == "MOVE"){
-      console.log(data)
-      this.state.players[client.id].data = data.data;
-    } 
-    else if(data.action == "ROTATION"){
-      this.state.players[client.id].rotation = data.data;
-      console.log(data)
-    }
-    else if(data.action == "SKILLANIMATION"){
-      console.log("SKILLANIMATION: ",data)
-      this.state.players[client.id].skillAnimation = data.data;
+		//update player stats in database
+		this.autoDispose = false;
 
-    }
-    else if(data.action == "DAMAGE"){
-      console.log(data.data);
-  
-      //let clientCoords = target.position;
-      for(var i = 0; i < data.data.target.length; i++){
-        let targetId = data.data.target[i];
-        console.log("TARGET: ", targetId);
-        if(targetId == "TURRET"){
-          let targetTurretId = this.state.players[client.id].team == "red" ? "blue" : "red";
-          let newTurretHealth = this.state.turrets[targetTurretId] - skills[data.data.name].damage;
-          this.state.turrets[targetTurretId] = newTurretHealth;
-          //check if game finished
-          if(newTurretHealth <= 0){
-            //GAME OVER
-            this.state.gameOver = true;
-            let winner = targetTurretId == "red" ? "blue" : "red";
+		let loadAchievements = [];
+		for (var player in this.playerClientMap) {
+			if (this.playerClientMap.hasOwnProperty(player)) {
+				var clientId = this.playerClientMap[player];
+				loadAchievements.push(
+					updateUserAchievementsFromStats(
+						player,
+						this.state.stats[clientId].kills,
+						this.state.stats[clientId].deaths,
+						winner == "draw"
+							? "draw"
+							: this.state[clientId].team == winner
+					)
+				);
+			}
+		}
 
-            //update player stats in database
-            // this.autoDispose = false; 
-            // for (var player in this.playerClientMap) { 
-            //   if (this.playerClientMap.hasOwnProperty(player)) { 
-            //     var clientId = this.playerClientMap[player]; 
-            //     someFunctionThatUpdatesStats(player, this.state.stats[clientId].kills, this.state.stats[clientId].deaths, this.state.[clientId].team == winner) 
-            //     .then(function() { 
-            //       let i = this.allowedPlayers.indexOf(player); 
-            //       this.allowedPlayers.splice(i); 
-            //       if(this.allowedPlayers.length === 0){ 
-            //         this.autoDispose = true; 
-            //       } 
-            //     }); 
-            //   } 
-            // } 
-          }
-        
-        return;
-      
-        }else{
-          let targetPlayer = this.state.players[targetId];
-          console.log("TARGETPLAYER: ",targetPlayer);
-      // if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
+		Promise.all(loadAchievements).then(function() {
+			console.log("ALL ACHIEVEMENTS ADDED, SAFE TO DESTROY ARENA");
+			this.autoDispose = true;
+		});
+	}
 
+	onMessage(client: Client, data) {
+		// console.log("Game Arena:", client.id, data);
+		if (
+			data.action == "idle" ||
+			this.state.gameOver ||
+			!this.state.players.hasOwnProperty(client.id)
+		) {
+			return;
+		}
 
-          //TODO no damage in package now
-          targetPlayer.health -= skills[data.data.name].damage;
-          if(targetPlayer.health  <= 0){
-            // Add one kill to client's stats
-            this.state.stats[client.id].kills += 1;
-            // Add one death to target's stats
-            this.state.stats[targetId].deaths += 1;
-            setTimeout(function() {
-              console.log('bring back to life', targetId);
-              this.revivePlayer(targetId);
-            }, 1500);
+		if (data.action == "MOVE") {
+			console.log(data);
+			this.state.players[client.id].data = data.data;
+		} else if (data.action == "ROTATION") {
+			this.state.players[client.id].rotation = data.data;
+			console.log(data);
+		} else if (data.action == "SKILLANIMATION") {
+			console.log("SKILLANIMATION: ", data);
+			this.state.players[client.id].skillAnimation = data.data;
+		} else if (data.action == "DAMAGE") {
+			console.log(data.data);
 
+			//let clientCoords = target.position;
+			for (var i = 0; i < data.data.target.length; i++) {
+				let targetId = data.data.target[i];
+				console.log("TARGET: ", targetId);
+				if (targetId == "TURRET") {
+					let targetTurretId =
+						this.state.players[client.id].team == "red"
+							? "blue"
+							: "red";
+					let newTurretHealth =
+						this.state.turrets[targetTurretId] -
+						skills[data.data.name].damage;
+					this.state.turrets[targetTurretId] = newTurretHealth;
+					//check if game finished
+					if (newTurretHealth <= 0) {
+						//GAME OVER
+						this.endGame(targetTurretId == "red" ? "blue" : "red");
+					}
 
-            this.state.players[client.id].skillAnimation = data.data.skillEffect;
-            // setTimeout(function(){
-            //   console.log('turning off animation');
-            //   this.resetweapon(client.id);
-            // }, skills[data.data.name].duration);
-          }
-          else{
-            console.log("SENDBACK: ");
-            targetPlayer.skill = data.data.name;
-          }
-        }
-      }
-    }
+					return;
+				} else {
+					let targetPlayer = this.state.players[targetId];
+					console.log("TARGETPLAYER: ", targetPlayer);
+					// if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
 
-    // this.messageClient(client);
-  }
+					//TODO no damage in package now
+					targetPlayer.health -= skills[data.data.name].damage;
+					if (targetPlayer.health <= 0) {
+						// Add one kill to client's stats
+						this.state.stats[client.id].kills += 1;
+						// Add one death to target's stats
+						this.state.stats[targetId].deaths += 1;
+						setTimeout(function() {
+							console.log("bring back to life", targetId);
+							this.revivePlayer(targetId);
+						}, 1500);
 
-  euclideanDistance(s1: string, s2: string){
-    let a = s1.split(" ");
-    let b = s2.split(" ");
-    let sums = 0;
-    for (var i = 0; i < 3; i++) {
-      let aAsNum = parseFloat(a[i]);
-      let bAsNum = parseFloat(b[i]);
-      sums += Math.pow(aAsNum - bAsNum, 2);
-    }
-    return Math.sqrt(sums); 
-  } 
+						this.state.players[client.id].skillAnimation =
+							data.data.skillEffect;
+						// setTimeout(function(){
+						//   console.log('turning off animation');
+						//   this.resetweapon(client.id);
+						// }, skills[data.data.name].duration);
+					} else {
+						console.log("SENDBACK: ");
+						targetPlayer.skill = data.data.name;
+					}
+				}
+			}
+		}
 
-  messageClient (client: Client) {
-    this.send(client, {
-      message: "SOMETHING"
-    });
-  }
+		// this.messageClient(client);
+	}
 
-  onDispose () {
-      console.log("Dispose Arena");
-  }
+	euclideanDistance(s1: string, s2: string) {
+		let a = s1.split(" ");
+		let b = s2.split(" ");
+		let sums = 0;
+		for (var i = 0; i < 3; i++) {
+			let aAsNum = parseFloat(a[i]);
+			let bAsNum = parseFloat(b[i]);
+			sums += Math.pow(aAsNum - bAsNum, 2);
+		}
+		return Math.sqrt(sums);
+	}
+
+	messageClient(client: Client) {
+		this.send(client, {
+			message: "SOMETHING"
+		});
+	}
+
+	onDispose() {
+		console.log("Dispose Arena");
+	}
 }
