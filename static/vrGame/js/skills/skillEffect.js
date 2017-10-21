@@ -40,14 +40,46 @@ class SkillEffect{
             scene.removeChild(flashEl);
             console.log("remove");
         })
-      }
+    }
+
+    static lazer(dir,pos,from,to){
+
+        var maxX = Math.max(from.x,to.x);
+        var minX = Math.min(from.x,to.x);
+        var maxZ = Math.max(from.z,to.z);
+        var minZ = Math.min(from.z,to.z);
+        var animation = document.createElement("a-animation");
+
+        animation.addEventListener("animationend",function(){
+            for (var id in playersDict) {
+                // check if the property/key is defined in the object itself, not in parent
+                if (playersDict.hasOwnProperty(id)) {           
+                    if(playersDict[id].getAttribute("team")=="ally") continue
+                    var enemyPos = playersDict[id].getAttribute("position");
+                    if (enemyPos.x>maxX || enemyPos.x<minX || enemyPos.z>maxX || enemyPos.z<minZ) return;
+                        var start = new THREE.Vector3( from.x, from.y, from.z );
+                        var end = new THREE.Vector3( to.x, to.y, to.z );
+                        var currPos = new THREE.Vector3( enemyPos.x, enemyPos.y, enemyPos.z ); 
+                        if(start.distanceToSquared(end)>=currPos.distanceToSquared(end)+currPos.distanceToSquared(start)+1.5){
+
+                            ally.push(id)
+                        }
+                    
+                }
+            }
+
+        });
+
+
+    }
+    
 
     static fireBall(from, to){
       // var d =cameraEl.getAttribute("rotation");
         var d = cameraEl.components.rotation.data;
         var fireBall = document.createElement('a-entity');
         fireBall.setAttribute("id","fireBall")
-        fireBall.setAttribute("bullet","")
+        fireBall.setAttribute("fireBall","")
        // bullet.setAttribute("radius","0.025");
         fireBall.setAttribute("position",from.x+" "+from.y+" "+from.z);
         fireBall.setAttribute("raycaster","objects: .collidable;far: 0.5;recursive:false;interval:15");
@@ -65,13 +97,13 @@ class SkillEffect{
         fireBall.addEventListener("raycaster-intersection",function(evt){
             var target = evt.detail.intersections[0].object.el;
             if(target.getAttribute("team") == "enemy"){
-                console.log(evt.detail.intersections[0].object.el);
-                console.log("intersection!!!!!!!!!",evt);
+                // console.log(evt.detail.intersections[0].object.el);
+                // console.log("intersection!!!!!!!!!",evt);
                 var data = {
                     target:[target.getAttribute("id")],
                     name:"FireBall",
                 }
-                console.log("SEND FireBall: ",data)
+                //console.log("SEND FireBall: ",data)
                 gameRoom.send({action: "DAMAGE", data}); 
                 scene.removeChild(fireBall);
             }

@@ -13,15 +13,23 @@ import { ChatRoom } from "./rooms/01-basic";
 import { GameRoom } from "./rooms/game-room";
 import { GameArena } from "./rooms/game-arena";
 
-import { createNewUser, isUserExist, updateUserSession, readUserInfoBySession } from "./src/helper";
+import {
+	createNewUser,
+	isUserExist,
+	updateUserSession,
+	readUserInfoBySession
+} from "./src/helper";
 
 const port = Number(process.env.PORT || 2657);
 const app = express();
 
-app.use( bodyParser.json() );       // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
-})); 
+app.use(bodyParser.json()); // to support JSON-encoded bodies
+app.use(
+	bodyParser.urlencoded({
+		// to support URL-encoded bodies
+		extended: true
+	})
+);
 
 /**
  * Connect to MongoDB.
@@ -54,11 +62,19 @@ app.post("/api/register", (req, res) => {
 			message: "Password and Confirmed password are not matched"
 		});
 	else
-		createNewUser({ username, password, email, achievements: [{
-			logoUrl: "smile-o",
-			name: "You made an account!",
-			description: "We have given you an account, but we do not grant you the rank of master"
-		}] })
+		createNewUser({
+			username,
+			password,
+			email,
+			achievements: [
+				{
+					logoUrl: "smile-o",
+					name: "You made an account!",
+					description:
+						"We have given you an account, but we do not grant you the rank of master"
+				}
+			]
+		})
 			.then(_ =>
 				res.status(200).json({ status: "success", message: "Success" })
 			)
@@ -69,60 +85,54 @@ app.post("/api/register", (req, res) => {
 
 app.post("/api/login", (req, res) => {
 	let { username, password, sessionId } = req.body;
-	isUserExist(username, password).then(
-		user => {
-			if (user) {
-				updateUserSession(user._id, sessionId);
-				res.status(200).json({
-					status: "success", 
-					message: {
-						username: user.username,
-						email: user.email,
-						stats: user.stats,
-						achievements: user.achievements
-					},
-					redirect: `/profile.html`
-			 	});
-			} else {
-				res.status(400).json({
-						status: "error",
-						message:
-							"Username is not found or password is not matched"
-					})
-			}
+	isUserExist(username, password).then(user => {
+		if (user) {
+			updateUserSession(user._id, sessionId);
+			res.status(200).json({
+				status: "success",
+				message: {
+					username: user.username,
+					email: user.email,
+					stats: user.stats,
+					achievements: user.achievements
+				},
+				redirect: `/profile.html`
+			});
+		} else {
+			res.status(400).json({
+				status: "error",
+				message: "Username is not found or password is not matched"
+			});
 		}
-	);
+	});
 });
 
 app.get("/api/logout", (req, res) => {
 	delete req.sessionID;
-	res.redirect('/index.html');
-})
+	res.redirect("/index.html");
+});
 
 app.get("/api/getuser/:session", (req, res) => {
 	let sessionId = req.params.session;
-	readUserInfoBySession(sessionId).then(
-		user => {
-			if (user) {
-				res.status(200).json({
-					status: "success", 
-					message: {
-						username: user.username,
-						email: user.email,
-						stats: user.stats,
-						achievements: user.achievements
-					}
-			 	});
-			} else {
-				res.status(400).json({
-						status: "error",
-						message:
-							"Username is not found or password is not matched"
-					})
-			}
+	readUserInfoBySession(sessionId).then(user => {
+		if (user) {
+			res.status(200).json({
+				status: "success",
+				message: {
+					username: user.username,
+					email: user.email,
+					stats: user.stats,
+					achievements: user.achievements
+				}
+			});
+		} else {
+			res.status(400).json({
+				status: "error",
+				message: "Username is not found or password is not matched"
+			});
 		}
-	);
-})
+	});
+});
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/", serveIndex(path.join(__dirname, "static"), { icons: true }));
