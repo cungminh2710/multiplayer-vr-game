@@ -1,6 +1,6 @@
 class DetectHeight {
     static isAvaiable(oldY,newX,newZ){
-   
+        if(newX<0 || newX>120 || newZ>0 || newZ<-240) return -1;
         var ceilZ = Math.ceil(-newZ);
         var ceilX = Math.ceil(newX);
         var ceilY = matrix[ceilZ][ceilX];
@@ -9,18 +9,19 @@ class DetectHeight {
         var floorX = Math.floor(newX);
         // console.log("come herererere");
         var nearestY = matrix[Math.round(-newZ)][Math.round(newX)]
-       // console.log("Z",-newZ)
-       // console.log("X",newX)
+        console.log("fuckiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",nearestY,Math.round(-newZ),Math.round(newX));
+    //    console.log("Z",-newZ)
+    //    console.log("X",newX)
        // console.log("roundZ",Math.round(-newZ))
        // console.log("roundX",Math.round(newX))
         var floorY = matrix[floorZ][floorX];
         // console.log("oldY ", oldY);
-        // console.log("*******************");
+         console.log(nearestY-oldY);
         if(Math.abs(nearestY-oldY)>=1){
             //console.log("collide")
             return -1;
         }
-        if(ceilY!=oldY && Math.abs(ceilY-oldY)<0.5){
+        if(ceilY!=oldY && Math.abs(ceilY-oldY)<0.8){
             var altitude = 0;
 
             var x1 = Math.floor(newX);

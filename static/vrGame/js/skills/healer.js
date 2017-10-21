@@ -5,10 +5,12 @@ class Healer{
         //description: heal an ally, need to target an ally, 100% success
         //animation: a "+" symbol will be on the top of the target's 
         //must need an ally target
-        
+        var attack = panel.querySelector("#attack");
+        if(attack.getAttribute("color") == "#ff0000") return;
         var target = raycasterEl.components.raycaster.intersectedEls[0];
         if(!target) return;
         if(target.getAttribute("team") != "ally") return;
+        attack.emit("start");
         var id = target.getAttribute("id");
         // realease skill and update cd
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack");

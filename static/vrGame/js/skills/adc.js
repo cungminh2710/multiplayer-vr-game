@@ -4,6 +4,9 @@ class Adc{
         // description: do not need target, shoot a bullet along the gaze(lookAt) direction, not 100% success,
         // animation: a bullet will be fly from the adc's position to gaze direction with specific distance
         // do not need a target, release attack directly
+        var attack = panel.querySelector("#attack");
+        if(attack.getAttribute("color") == "#ff0000") return;
+        attack.emit("start");
         var pos = playerWrapperEl.getAttribute("position");
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack");
         var target = raycasterEl.components.raycaster.intersectedEls[0];

@@ -8,7 +8,7 @@ export let skills = {
     duration: 5000
   },
   Rocket: {
-    damage: 0,
+    damage: 10,
     duration: 1000
   },
   Bullet: {

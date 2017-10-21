@@ -12,6 +12,7 @@
       <script type="text/javascript" src="js/custom/characterConfig.js"></script>
       <script type="text/javascript" src="js/matrix.js"></script>
       <script type="text/javascript" src="js/skills/bullet.js"></script>
+      <script type="text/javascript" src="js/skills/rocket.js"></script>
     
       <script type="text/javascript" src="js/custom/intersection.js"></script>
       <script type="text/javascript" src="js/custom/detectHeight.js"></script>
@@ -31,42 +32,85 @@
       <a-scene>
       <a-assets>
         <img id="container" src="textures/map/container2.png">
-        <img id="box" src="textures/map/box.png">
         <img id="stair" src="textures/map/stair.png">
         <img id="platform" src="textures/map/platform.png">
         <img id="ground" src="textures/map/ground.png">
         <img id="wall" src="textures/map/wall.png">
         <img id="lazer" src="js/skills/lazer.jpg">
+        <img id="box" src="textures/map/box.jpeg">
+        <img id="box2" src="textures/map/box2.jpeg">
+        <img id="border" src="textures/map/border.jpg">
+        <img id="pt" src="textures/map/pt.jpeg">
+        <img id="slope" src="textures/map/slope.jpeg">
+        <img id="lamppost" src="textures/map/lamppost.jpeg">
       </a-assets>
         
     
-          <a-plane class = "coll" id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
-          <a-entity id="mainterrace" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -15"></a-entity>
-          <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -35"></a-plane>
-        
-          <a-entity id="tower" tower position="60 3 -3"></a-entity>
-          <a-entity id="bluewall1"  physics-body="boundingBox: 1 1 1; mass: 5; velocity: 0.2 0 0"  geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -78"></a-entity>
-          <a-entity id="bluewallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="20 0.5 -75.5"></a-entity>
-          <a-entity id="bluewall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -78"></a-entity>
-          <a-entity id="frontwall1" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="44 3 -105.25"></a-entity>
-          <a-entity id="frontwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -105.25"></a-entity>
-          <a-entity id="frontdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -105.25"></a-entity>
-          <a-entity id="backwall1" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="44 3 -134.75"></a-entity>
-          <a-entity id="backwall2" geometry="primitive:box;depth:0.5;height:6;width:28" material="src:#wall"position="76 3 -134.75"></a-entity>
-          <a-entity id="backdoor" geometry="primative:box;depth:0.5;height:1;width:4" material="src:#wall"position="60 5.5 -134.75"></a-entity>
-          <a-entity id="rightwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="30.25 3 -111.5"></a-entity>
-          <a-entity id="rightwall2" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="30.25 3 -128.5"></a-entity>
-          <a-entity id="rightdoor" geometry="primative:box;depth:4;height:1;width:0.5" material="src:#wall" position="30.25 5.5 -120 -"></a-entity>
-          <a-entity id="leftwall1" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="89.75 3 -111.5"></a-entity>
-          <a-entity id="leftwall2" geometry="primitive:box;depth:13;height:6;width:0.5" material="src:#wall"position="89.75 3 -128.5"></a-entity>
-          <a-entity id="leftdoor" geometry="primative:box;depth:4;height:1;width:0.5" material="src:#wall" position="89.75 5.5 -120 -"></a-entity>
-          <a-entity id="redwall1" geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -162"></a-entity>
-          <a-entity id="redwallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="100 0.5 -164.5"></a-entity>
-          <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -162"></a-entity>
-          <a-entity  id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
-          <a-plane  id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
-  
-          <a-entity  id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
+      <a-entity position="0 0 0">
+        <!--ground-->
+      <a-plane id="ground" src="#ground" rotation="-90 0 0" width="120" height="240"repeat="30 30"position="60 0 -120"></a-plane>
+      <a-entity id="mainterrace" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -15"></a-entity>
+       <a-plane id="slope" src="#ground" rotation="-106.7 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -35"></a-plane>
+       <!--tower-->
+       <a-entity id="tower" tower position="60 3 -3"></a-entity>
+        <a-entity id="bluewall1"  physics-body="boundingBox: 1 1 1; mass: 5; velocity: 0.2 0 0"  geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -78"></a-entity>
+        <a-entity id="bluewallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="20 0.5 -75.5"></a-entity>
+       <a-entity id="bluewall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -78"></a-entity>
+        <a-entity id="frontwall1" geometry="primitive:box;depth:1;height:6;width:28" material="src:#wall"position="44 3 -105.5"></a-entity>
+         <a-entity id="frontwall2" geometry="primitive:box;depth:1;height:6;width:28" material="src:#wall"position="76 3 -105.5"></a-entity>
+       <a-entity id="frontdoor" geometry="primative:box;depth:1;height:1;width:4" material="src:#wall"position="60 5.5 -105.5"></a-entity>
+       <a-entity id="backwall1" geometry="primitive:box;depth:1;height:6;width:28" material="src:#wall"position="44 3 -134.5"></a-entity>
+         <a-entity id="backwall2" geometry="primitive:box;depth:1;height:6;width:28" material="src:#wall"position="76 3 -134.5"></a-entity>
+       <a-entity id="backdoor" geometry="primative:box;depth:1;height:1;width:4" material="src:#wall"position="60 5.5 -134.5"></a-entity>
+      <a-entity id="rightwall1" geometry="primitive:box;depth:13;height:6;width:1" material="src:#wall"position="30.5 3 -111.5"></a-entity>
+        <a-entity id="rightwall2" geometry="primitive:box;depth:13;height:6;width:1" material="src:#wall"position="30.5 3 -128.5"></a-entity>
+        <a-entity id="rightdoor" geometry="primative:box;depth:4;height:1;width:1" material="src:#wall" position="30.5 5.5 -120 -"></a-entity>
+         <a-entity id="leftwall1" geometry="primitive:box;depth:13;height:6;width:1" material="src:#wall"position="89.5 3 -111.5"></a-entity>
+        <a-entity id="leftwall2" geometry="primitive:box;depth:13;height:6;width:1" material="src:#wall"position="89.5 3 -128.5"></a-entity>
+        <a-entity id="leftdoor" geometry="primative:box;depth:4;height:1;width:1" material="src:#wall" position="89.5 5.5 -120 -"></a-entity>
+        <a-entity id="redwall1" geometry="primitive: box; depth:4; height:2 ;width:20" material="src: #container" position="20 1 -162"></a-entity>
+        <a-entity id="redwallbox1" geometry="primitive: box; depth:1; height:1 ;width:1" material="src:#box"position="100 0.5 -164.5"></a-entity>
+       <a-entity id="redwall2" geometry="primitive: box; depth:4; height:2 ;width:20"  material="src: #container" position="100 1 -162"></a-entity>    
+       <a-entity id="mainterrace2" geometry="primitive: box; depth:30; height:3 ;width:120"material="src:#platform" position="60 1.5 -225"></a-entity>
+       <a-plane id="slope" src="#ground" rotation="-73.3 0 0" width="120" height="10.5" repeat="30 30"position="60 1.5 -205"></a-plane>
+       <!--tower-->
+       <a-entity id="tower2" tower position="60 3 -237" rotation="0 180 0"></a-entity>
+       <!--border-->
+       <a-entity id="border1" geometry="primative:box;depth:240;height:10;width:1"material="src:#border;repeat:20 1"position="-0.5 5 -120;"></a-entity>
+       <a-entity id="border2" geometry="primative:box;depth:240;height:10;width:1"material="src:#border;repeat:20 1"position="120.5 5 -120"></a-entity>
+       <a-entity id="border3" geometry="primative:box;depth:1;height:10;width:120"material="src:#border;repeat:20 1"position="60 5 0.5"></a-entity>
+       <a-entity id="border4" geometry="primative:box;depth:1;height:10;width:120"material="src:#border;repeat:20 1"position="60 5 -240.5"></a-entity>
+       <!--stair and pt-->
+       <a-entity id="stair1" material="src:#slope" rotation="0 0 53.14"geometry="primitive: box; depth:10; height:10 ;width:0.1"repeat="1 1"position="45 3 -129"></a-entity>
+       <a-entity id="pt1" material="src:#pt" rotation="0 0 0"geometry="primitive: box; depth:10; height:0.1 ;width:10"repeat="1 1"position="36 6 -129"></a-entity>
+       <a-entity id="stair2" material="src:#slope" rotation="0 0 -53.14"geometry="primitive: box; depth:10; height:10 ;width:0.1"repeat="1 1"position="75 3 -111"></a-entity>
+       <a-entity id="pt2" material="src:#pt"rotation="0 0 0"geometry="primitive: box; depth:10; height:0.1 ;width:10"repeat="1 1"position="84 6 -111"></a-entity>
+       <!--zheyanwu-->
+       <a-entity id="pt1zheyanwu1" geometry="primitive:box;depth:1;height:0.8;width:11" material="src:#wall"position="35.5 6.4 -134.5"></a-entity>
+       <a-entity id="pt2zheyanwu1" geometry="primitive:box;depth:1;height:0.8;width:11" material="src:#wall"position="84.5 6.4 -105.5"></a-entity>
+       <a-entity id="pt1zheyanwu2"geometry="primitive:box;depth:10;height:0.8;width:1" material="src:#wall"position="30.5 6.4 -129"></a-entity>
+       <a-entity id="pt2zheyanwu2"geometry="primitive:box;depth:10;height:0.8;width:1" material="src:#wall"position="89.5 6.4 -111"></a-entity>
+       <a-entity id="pt1zheyanwu3"geometry="primitive:box;depth:1;height:0.8;width:11" material="src:#wall"position="35.5 6.4 -124.5"></a-entity>    
+       <a-entity id="pt2zheyanwu3" geometry="primitive:box;depth:1;height:0.8;width:11" material="src:#wall"position="84.5 6.4 -115.5"></a-entity>
+      <!--pingfeng-->
+      <a-plane id="pt1pingfeng1" src="#wall" rotation="0 0 0" width="10" height="6" repeat="1 1"position="36 3 -124"></a-plane>
+      <a-plane id="pt2pingfeng1" src="#wall" rotation="0 180 0" width="10" height="6" repeat="1 1"position="84 3 -116"></a-plane>
+       <a-entity geometry="primitive: triangle;vertexA:0 6 0;vertexB:0 0 0;vertexC:8 0 0" material="src:#wall"position="41 0 -124"></a-entity>
+       <a-entity rotation="0 180 0" geometry="primitive: triangle;vertexA:0 0 0;vertexB:8 0 0;vertexC:0 6 0" material="src:#wall"position="79 0 -116"></a-entity>
+       <!--box on blueterrace-->
+       <a-entity geometry="primitive:box;depth:2;height:2;width:2"material="src:#box2" position="21 4 -15"></a-entity>
+       <a-entity geometry="primitive:box;depth:2;height:2;width:2"material="src:#box2" position="99 4 -15"></a-entity>
+       <!--box on redterrace-->
+        <a-entity geometry="primitive:box;depth:2;height:2;width:2"material="src:#box2" position="21 4 -225"></a-entity>
+       <a-entity geometry="primitive:box;depth:2;height:2;width:2"material="src:#box2" position="99 4 -225"></a-entity>
+       <!--lamp post on blue-->
+       <a-entity geometry="primitive:cylinder;height:4;radius:1"material="src:#lamppost"position="50 2 -57"></a-entity>
+       <a-entity geometry="primitive:cylinder;height:4;radius:1"material="src:#lamppost"position="70 2 -57"></a-entity>
+       <!--lamp post on red-->
+       <a-entity geometry="primitive:cylinder;height:4;radius:1"material="src:#lamppost"position="50 2 -183"></a-entity>
+       <a-entity geometry="primitive:cylinder;height:4;radius:1"material="src:#lamppost"position="70 2 -183"></a-entity>
+       </a-entity>   
+       
 
      
   

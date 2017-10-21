@@ -4,6 +4,13 @@ class Tank{
         //description: do not need a target, punch an enemy if there has an enemy target in a small distance 
         // animation: no extra animation required
         // do not need a target, release attack directly
+        var attack = panel.querySelector("#attack");
+        if(attack.getAttribute("color") == "#ff0000") return;
+        attack.emit("start");
+        var target = raycasterEl.components.raycaster.intersectedEls[0];
+        if(!target) return;
+        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2");
+    
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack")
         var dataAni = JSON.stringify({
             name:"attack",
@@ -39,7 +46,6 @@ class Tank{
         var skill1 = panel.querySelector("#skill1");
         if(skill1.getAttribute("color") == "#ff0000") return;
         var target = raycasterEl.components.raycaster.intersectedEls[0];
-        console.log(target);
         if(!target) return;
        
         if(target.getAttribute("team") == "ally") return;
@@ -58,10 +64,42 @@ class Tank{
     //rocket, AOE skill, do it later
     static skill2(){
 
-        var skill1 = panel.querySelector("#skill1");
-        if(skill1.getAttribute("color") == "#ff0000") return;
-        skill1.emit("start");
-        gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
+        var skill2 = panel.querySelector("#skill2");
+        if(skill2.getAttribute("color") == "#ff0000") return;
+        var target = raycasterEl.components.raycaster.intersectedEls[0];
+        if(!target) return;
+        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2");
+        skill2.emit("start");
+
+        var pos = target.getAttribute("position");
+        SkillEffect.rocket(pos);
+
+     
+      
+        // skill1.emit("start");
+        // var from = {
+        //     x: pos.x - direction.x*0.5,
+        //     y: pos.y + characterConfig[character].cameraHeight,
+        //     z:pos.z - direction.z*0.5
+
+        // };
+        // var to = {
+        //     x: pos.x - direction.x*20,
+        //     y: from.y -direction.y*20,
+        //     z:pos.z - direction.z*20
+
+        // };
+        // var data = JSON.stringify({
+        //     name:"skill1",
+        //     skillName:"FireBall",
+        //     from: from,
+        //     to: to
+        // });
+        // gameRoom.send({action: "SKILLANIMATION", data:data});
+        // console.log(direction);
+        // SkillEffect.fireBall(from,to);
     }
+
+    
 
 }

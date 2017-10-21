@@ -13,6 +13,7 @@ class SkillEffectAni{
         else if(ani.skillName =="Flash") SkillEffectAni.flash(ani.pos);
         else if(ani.skillName =="Lazer") SkillEffectAni.lazer(ani.direction,ani.from);
         else if(ani.skillName =="Cage") SkillEffectAni.cage(ani.targetId);
+        else if(ani.skillName =="Rocket") SkillEffectAni.rocket(ani.pos);
 
     }
     static cage(id){
@@ -38,7 +39,7 @@ class SkillEffectAni{
         
             animation.setAttribute("to","0 180 0");
     
-            animation.setAttribute("dur",5000);
+            animation.setAttribute("dur",3000);
             cage.appendChild(animation);
             scene.appendChild(cage);
     
@@ -50,7 +51,29 @@ class SkillEffectAni{
             })
     
         }
-
+        static rocket(pos){
+            
+            var top = pos.y+10;
+            var from = pos.x+" "+top+" "+pos.z;
+            var rocket = document.createElement("a-entity");
+            rocket.setAttribute("position",from);
+            rocket.setAttribute("rotation","180 0 0");
+            rocket.setAttribute("rocket","");
+            rocket.setAttribute("scale","5 5 5");
+            var animation = document.createElement('a-animation');
+            animation.setAttribute("attribute","position");
+            animation.setAttribute("to",pos.x+" "+pos.y+" "+pos.z);
+            animation.setAttribute("dur","700");
+            rocket.appendChild(animation);
+            scene.appendChild(rocket);
+    
+            animation.addEventListener("animationend",function(){
+                panel.querySelector("#attack").emit("start");
+                panel.querySelector("#skill1").emit("start");
+                panel.querySelector("#skill2").emit("start");
+                scene.removeChild(rocket);  
+            });
+        }
 
     static shootBullet(from, to){
         // var d =cameraEl.getAttribute("rotation");
