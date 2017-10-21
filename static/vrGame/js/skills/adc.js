@@ -32,25 +32,23 @@ class Adc{
                 x: pos.x - direction.x*20,
                 y: from.y - direction.y*20,
                 z:pos.z - direction.z*20
-    
             };
-
         }
-
-        var data = JSON.stringify({
+        var dataAni = JSON.stringify({
             name:"attack",
             skillName:"Bullet",
             from: from,
             to: to
         });
-        gameRoom.send({action: "SKILLANIMATION", data:data});
+        gameRoom.send({action: "SKILLANIMATION", data:dataAni});
         SkillEffect.shootBullet(from,to);
     }
     //description: transport adc itself 5 meters along gaze position
     //animation: N/A
     //flash
     static skill1(preMovement){
-
+        var skill1 = panel.querySelector("#skill1");
+        if(skill1.getAttribute("color") == "#ff0000") return;
         var pos = playerWrapperEl.getAttribute("position");
         var direction = cameraEl.object3D.getWorldDirection();
         var oldY = pos.y;
@@ -78,6 +76,13 @@ class Adc{
 
         playerWrapperEl.setAttribute('position', newPos);
         gameRoom.send({action: "MOVE", data:{position: newPos, moveAnimation:"flash"}}); 
+
+        var dataAni = JSON.stringify({
+            name:"skill1",
+            skillName:"Flash",
+            pos: pos,
+        });
+        gameRoom.send({action: "SKILLANIMATION", data:dataAni});
         // if(preMovement == 87){ //w
 
 
@@ -97,8 +102,29 @@ class Adc{
     //animation:  draw a lazer animated from adc's eyes to along the gaze direction
     //lazer
     static skill2(){
+       // var skill1 = panel.querySelector("#skill2");
+      //  if(skill1.getAttribute("color") == "#ff0000") return;
         Animation.setAnimation(el.children[0].querySelector("#"+client.id),"skill2")
-        gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
+        var pos = playerWrapperEl.getAttribute("position");
+        var direction = cameraEl.object3D.getWorldDirection();
+
+        var from = {
+            x: pos.x - direction.x*0.5,
+            y: pos.y + characterConfig[character].cameraHeight,
+            z:pos.z - direction.z*0.5
+
+        };
+
+        var to = {
+            x: pos.x - direction.x*7,
+            y: from.y -direction.y*7,
+            z:pos.z - direction.z*7
+
+        };
+        var direction = cameraEl.object3D.getWorldDirection();
+        SkillEffect.lazer(direction,pos,from,to);
+
+        //gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
 
     }
     

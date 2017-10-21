@@ -8,7 +8,7 @@ class Healer{
         
         var target = raycasterEl.components.raycaster.intersectedEls[0];
         if(!target) return;
-        //if(target.getAttribute("team") != "ally") return;
+        if(target.getAttribute("team") != "ally") return;
         var id = target.getAttribute("id");
         // realease skill and update cd
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack");
@@ -31,7 +31,7 @@ class Healer{
 
        
     }
-    //magicBall
+    //fireBall
     //done
     static skill1(){
         //description: do not need target, shoot a light or a magic ball along the gaze(lookAt) direction, not 100% success,
@@ -81,8 +81,8 @@ class Healer{
         for (var id in playersDict) {
             // check if the property/key is defined in the object itself, not in parent
             if (playersDict.hasOwnProperty(id)) {           
-               // if(playersDict[id].getAttribute("team")=="ally")
-                 ally.push(id)
+                if(playersDict[id].getAttribute("team")=="ally") 
+                    ally.push(id)
             }
         }
         SkillEffect.wish(ally);
