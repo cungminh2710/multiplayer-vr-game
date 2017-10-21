@@ -8,7 +8,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 1;
+      //character = 1;
       var config = characterConfig[character];
       
       //skill init
@@ -44,11 +44,25 @@ class Players {
     return player;
   }
   
+  static createHealthBar(y){
 
+    var radius = 0.2;
+    var outsphere = document.createElement("a-sphere");
+    outsphere.setAttribute("radius",radius);
+    outsphere.setAttribute("position",0+" "+y+" "+0.1);
+    outsphere.setAttribute("material","color:#00FA9A;transparent:true;opacity:0.3");
+    var innersphere = document.createElement('a-sphere');
+    innersphere.setAttribute('radius',radius-0.02);
+    innersphere.setAttribute('id',"healthBar");
+    innersphere.setAttribute("material","color:#DC143C");
+    outsphere.appendChild(innersphere);
+    return outsphere;
+
+  }
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 1;
+      //playerInfo.character = 1;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -67,6 +81,7 @@ class Players {
       player.setAttribute("id",playerInfo.id);
       console.log(playerInfo);
       player.setAttribute("team",playerInfo.team);
+      player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
       //player.setAttribute("position",playerInfo.data.position);
       //for debug
       player.setAttribute("position","10 0 -100");
@@ -76,7 +91,8 @@ class Players {
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
        
       document.querySelector("a-scene").appendChild(player);
-  
+      var healthBar = Players.createHealthBar(characterConfig[playerInfo.character].healthBarPos);
+      player.appendChild(healthBar);
       return player;
 
   }
@@ -176,6 +192,15 @@ class Players {
     panel.setAttribute("position","0 0.05 -0.1");
     panel.setAttribute("id","panel");
     
+    var damageanimation = document.createElement("a-animation");
+    damageanimation.setAttribute("attribute","material.color");
+    damageanimation.setAttribute("begin","damage");
+    damageanimation.setAttribute("from","red");
+    damageanimation.setAttribute("to","gray");
+    damageanimation.setAttribute("dur","1000");
+    damageanimation.setAttribute("repeat","0");
+    panel.appendChild(damageanimation);
+
     var healthtext = document.createElement("a-text");
     healthtext.setAttribute("id","health");
     healthtext.setAttribute("position","-0.02 0.011 0");
