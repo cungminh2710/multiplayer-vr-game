@@ -81,6 +81,71 @@ export let updateUserAchievements: {
 } = (_id, newAchievement) =>
 	User.update({ _id }, { $push: { achievements: newAchievement } }).exec();
 
+export let updateUserAchievementsFromStats: {
+	(username: string, kills: number, death: number, won: boolean): Promise<
+		IUserModel
+	>;
+} = (username, kills, death, won) =>
+	User.find({ username }).then(async user => {
+		let {
+			_id,
+			stats: { numGamesPlayed, numWon, numDrew, numKills, numDeath }
+		} = user;
+
+		// Calculate new Stats
+		let newStats = {
+			numGamesPlayed: numGamesPlayed + 1,
+			numWon: won ? numWon + 1 : numWon,
+			numDrew: won ? numDrew : numDrew + 1,
+			numKills: numKills + kills,
+			numDeath: numDeath + death
+		};
+		// Amazing Achievements
+		let achievement;
+		if (kills > death + 20 && death < 10)
+			achievement = {
+				logoUrl: won ? "smile-o" : "frown-o",
+				name: won ? "FPS Artist" : "Bad luck Brian",
+				description: "You are amazing player. GG WP !"
+			};
+		else if (kills > death + 10 && death < 10)
+			achievement = {
+				logoUrl: won ? "smile-o" : "frown-o",
+				name: won
+					? "You completely smashed the opponent(s)"
+					: "You are great ... but not enough",
+				description: "You have amazing skills !"
+			};
+		else if (kills < death + 10 && won)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "You got carried by your team",
+				description: "Your team is better than you ... Poor them"
+			};
+		else if (kills < 1 && death > 15)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "Born to die",
+				description: "You can't help your teammates"
+			};
+		else if (kills < 1 && death > 10)
+			achievement = {
+				logoUrl: "meh-o",
+				name: "Party crasher",
+				description: "You can't help your teammates"
+			};
+
+		if (achievement)
+			await Promise.all([
+				updateUserStats(_id, newStats),
+				updateUserAchievements(_id, achievement)
+			]);
+		else await updateUserStats(_id, newStats);
+
+		return User.findOne({ username })
+			.select("stats achievements email username")
+			.exec();
+	});
 /**
  * Update User Stats
  * @param id User ID 
@@ -101,15 +166,9 @@ export let readUserInfoBySession: {
 	(sessionID: string): Promise<string>;
 } = sessionID =>
 	User.findOne({ sessionID })
-		.exec()
-		.then(user => {
-			let retObj = {
-				stats: user.stats,
-				achievements: user.achievements,
-				email: user.email,
-				username: user.username
-			}
-			return Promise.resolve(retObj)});
+		.select("stats achievements email username")
+		.exec();
+// .then(user =>Promise.resolve(user));
 
 /**
  * Read User obj stuff from sessionID
