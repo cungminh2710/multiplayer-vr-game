@@ -102,8 +102,8 @@ class Adc{
     //animation:  draw a lazer animated from adc's eyes to along the gaze direction
     //lazer
     static skill2(){
-       // var skill1 = panel.querySelector("#skill2");
-      //  if(skill1.getAttribute("color") == "#ff0000") return;
+       var skill2 = panel.querySelector("#skill2");
+       if(skill2.getAttribute("color") == "#ff0000") return;
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2")
         var pos = playerWrapperEl.getAttribute("position");
         var direction = cameraEl.object3D.getWorldDirection();
@@ -122,7 +122,7 @@ class Adc{
 
         };
         console.log(to);
-        SkillEffect.lazer(pos,from,to);
+        SkillEffect.lazer(from,to);
 
         //gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
 

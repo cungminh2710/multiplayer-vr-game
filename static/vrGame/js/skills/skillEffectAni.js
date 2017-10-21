@@ -11,6 +11,7 @@ class SkillEffectAni{
         else if(ani.skillName =="Wish") SkillEffectAni.wish(ani.targetId);
         else if(ani.skillName =="Bullet") SkillEffectAni.shootBullet(ani.from,ani.to);
         else if(ani.skillName =="Flash") SkillEffectAni.flash(ani.pos);
+        else if(ani.skillName =="Lazer") SkillEffectAni.lazer(ani.direction,ani.from);
 
     }
 
@@ -27,7 +28,6 @@ class SkillEffectAni{
           animation.setAttribute("attribute","position");  
           animation.setAttribute("from",from.x+" "+from.y+" "+from.z);    
           animation.setAttribute("to",to.x+" "+to.y+" "+to.z);
-          animation.setAttribute("begin","bulletStart");
           animation.setAttribute("id","bulletShoot");
           animation.setAttribute("dur",300);
           bullet.appendChild(animation);
@@ -38,7 +38,6 @@ class SkillEffectAni{
               scene.removeChild(bullet);
               
           })
-          bullet.emit("bulletStart");    
     }
 
     static flash(pos){
@@ -53,6 +52,39 @@ class SkillEffectAni{
         })
     }
 
+    static lazer(d,from){
+
+        var entity = document.createElement("a-entity");
+        entity.setAttribute("position",from);
+        entity.setAttribute("rotation",d.x+" "+d.y+" "+d.z);
+        var lazer = document.createElement('a-cylinder');
+        lazer.setAttribute("position","0 0 -5");
+        lazer.setAttribute("rotation",'90 0 0');
+        lazer.setAttribute("radius","0.05");
+        lazer.setAttribute("height","10");
+
+        lazer.setAttribute("material","src:js/skills/lazer.jpg;transparent:true;opacity:0;repeat:2 1");
+        var animation = document.createElement('a-animation');
+        animation.setAttribute("attribute","radius");
+        animation.setAttribute("to","0.5");
+        animation.setAttribute("dur","500");
+       // animation.setAttribute( "repeat","indefinite");
+        lazer.appendChild(animation);
+
+        var tran = document.createElement('a-animation');
+        tran.setAttribute("attribute","material.opacity");
+        tran.setAttribute("to","1")
+        tran.setAttribute("dur","500");
+       // tran.setAttribute( "repeat","indefinite");
+  
+        lazer.appendChild(tran);
+        entity.appendChild(lazer);
+        scene.appendChild(entity);
+
+        animation.addEventListener("animationend",function(){
+            scene.removeChild(entity);
+        });
+    }
     static fireBallAni(from, to){
        console.log(from, to);
         var fireBall = document.createElement('a-entity');

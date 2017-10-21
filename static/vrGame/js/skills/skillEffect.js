@@ -9,13 +9,12 @@ class SkillEffect{
           bullet.setAttribute("id","bullet")
           bullet.setAttribute("bullet","")
           bullet.setAttribute("position",from.x+" "+from.y+" "+from.z);
-      
           
           var animation = document.createElement('a-animation');
           animation.setAttribute("attribute","position");  
           animation.setAttribute("from",from.x+" "+from.y+" "+from.z);    
           animation.setAttribute("to",to.x+" "+to.y+" "+to.z);
-          animation.setAttribute("begin","bulletStart");
+          //animation.setAttribute("begin","bulletStart");
           animation.setAttribute("id","bulletShoot");
           animation.setAttribute("dur",300);
           bullet.appendChild(animation);
@@ -26,11 +25,10 @@ class SkillEffect{
               scene.removeChild(bullet);
               
           })
-          bullet.emit("bulletStart");    
+         // bullet.emit("bulletStart");    
       }
 
     static flash(pos){
-
         var flashEl = document.createElement('a-entity');
         flashEl.setAttribute('position',pos.x/2+" "+"0"+" "+pos.z/2);
         console.log(pos);
@@ -42,14 +40,20 @@ class SkillEffect{
         })
     }
 
-    static lazer(pos,from,to){
-
+    static lazer(from,to){
         var maxX = Math.max(from.x,to.x);
         var minX = Math.min(from.x,to.x);
         var maxZ = Math.max(from.z,to.z);
         var minZ = Math.min(from.z,to.z);
         var d = cameraEl.components.rotation.data;
 
+        var dataAni = JSON.stringify({
+            name:"skill2",
+            skillName:"Lazer",
+            direction: d,
+            from:from
+        });
+        gameRoom.send({action: "SKILLANIMATION", data:dataAni});
 
         var entity = document.createElement("a-entity");
         entity.setAttribute("position",from);
@@ -64,14 +68,14 @@ class SkillEffect{
         var animation = document.createElement('a-animation');
         animation.setAttribute("attribute","radius");
         animation.setAttribute("to","0.5");
-        animation.setAttribute("dur","700");
+        animation.setAttribute("dur","500");
        // animation.setAttribute( "repeat","indefinite");
         lazer.appendChild(animation);
 
         var tran = document.createElement('a-animation');
         tran.setAttribute("attribute","material.opacity");
         tran.setAttribute("to","1")
-        tran.setAttribute("dur","700");
+        tran.setAttribute("dur","500");
        // tran.setAttribute( "repeat","indefinite");
   
         lazer.appendChild(tran);
@@ -95,22 +99,18 @@ class SkillEffect{
                         if(d<0.55){
                             enemy.push(id)
                         }
-                    
                 }
             }
-            console.log(enemy)
+            console.log(enemy);
+            scene.removeChild(entity);
             var data = {
                 target:enemy,
                 name:"Lazer",
             }
             //console.log("SEND FireBall: ",data)
             gameRoom.send({action: "DAMAGE", data}); 
-        scene.removeChild(entity);
-
-
+            
         });
-
-
     }
 
     static distanceVector( v1, v2 )
