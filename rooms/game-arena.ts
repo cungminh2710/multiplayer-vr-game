@@ -222,11 +222,9 @@ export class GameArena extends Room {
 		}
 
 		if (data.action == "MOVE") {
-			console.log(data);
 			this.state.players[client.id].data = data.data;
 		} else if (data.action == "ROTATION") {
 			this.state.players[client.id].rotation = data.data;
-			console.log(data);
 		} else if (data.action == "SKILLANIMATION") {
 			console.log("SKILLANIMATION: ", data);
 			this.state.players[client.id].skillAnimation = data.data;
@@ -256,9 +254,12 @@ export class GameArena extends Room {
 				} else {
 					let targetPlayer = this.state.players[targetId];
 					console.log("TARGETPLAYER: ", targetPlayer);
+					console.log("DATA PACKET: ", data.data);
 					// if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
 
 					//TODO no damage in package now
+					console.log("THIS IS DA SKILL", data.data.name);
+					console.log("THIS IS HOW MUCH DMG", skills[data.data.name].damage);
 					targetPlayer.health -= skills[data.data.name].damage;
 					if (targetPlayer.health <= 0) {
 						// Add one kill to client's stats
@@ -267,11 +268,22 @@ export class GameArena extends Room {
 						this.state.stats[targetId].deaths += 1;
 						setTimeout(function() {
 							console.log("bring back to life", targetId);
-							this.revivePlayer(targetId);
+							let playerId = targetId;
+							let pCharacter = this.state.players[playerId].character;
+							let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
+							this.state.players[playerId].health = pHealth;
+							if(this.state.players[playerId].team == "red"){
+								this.state.players[playerId].data.position = "5 3 -235";
+							}else{
+								this.state.players[playerId].data.position = "5 3 0";
+							}
 						}, 5000);
 
-						this.state.players[client.id].skillAnimation =
-							data.data.skillEffect;
+						targetPlayer.skill = JSON.stringify({
+								name:"idle",
+								skillName:"Dealth",
+								position: targetPlayer.team == "red" ? "0 3 -235" : "0 3 -5",
+						});
 						// setTimeout(function(){
 						//   console.log('turning off animation');
 						//   this.resetweapon(client.id);
