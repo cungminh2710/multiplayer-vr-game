@@ -36,11 +36,6 @@ export class GameRoom extends Room {
 		}
 
 		// check if all players are ready
-		console.log(
-			"CHECK IF ALL PLAYERS ARE READY +++++",
-			this.state.rooms[roomIndex].players.length ==
-				this.state.rooms[roomIndex].readyPlayers.length
-		);
 		if (
 			this.state.rooms[roomIndex].players.length ==
 				this.state.rooms[roomIndex].readyPlayers.length &&
@@ -98,19 +93,9 @@ export class GameRoom extends Room {
 			rooms: [],
 			players: []
 		});
-		console.log("GameRoom created!", options);
 	}
 
-	// Returns true/false based on if the clientId is associated with a user's
-	// requestJoin (options: any) {
-	//   let username: string|undefined = this.getUsername(options.client);
-	//   console.log("REQUESTING JOIN");
-	//   console.log(typeof username);
-	//   return (typeof username === "string");
-	// }
-
 	onJoin(client: Client) {
-		console.log("NEW CLIENT!", client);
 
 		//get username from db
 		// let username: string = this.getUsername(client.id);
@@ -144,7 +129,6 @@ export class GameRoom extends Room {
 			const username = value;
 			switch (action) {
 				case "CREATE":
-					console.log("make new room");
 					let newRoom: RoomData = {
 						name: data.payload.roomName,
 						maxPlayers: data.payload.maxPlayers,
@@ -158,7 +142,6 @@ export class GameRoom extends Room {
 					}
 					break;
 				case "JOIN":
-					console.log("Join existing room");
 					const roomName: string = data.payload.roomName;
 					this.joinRoom(roomName, username);
 					break;
@@ -166,7 +149,6 @@ export class GameRoom extends Room {
 					this.markPlayerReady(username);
 					break;
 				default:
-					console.log("Leaving current room");
 					this.leaveRoom(username);
 					break;
 			}

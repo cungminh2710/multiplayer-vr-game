@@ -44,7 +44,6 @@
         var myPlayerName = client.id;
         var globalState = {}
         gameRoom.onJoin.add(function (state) {
-            console.log("initial room data:", state);
             globalState = state
             for (var i = 0; i < state.players.length; i++) {
                 if (myPlayerName == state.players[i].id) {
@@ -56,8 +55,6 @@
         // new room state
         gameRoom.onUpdate.add(function (state) {
             // this signal is triggered on each patch
-            console.log("NEW STATE");
-            console.log(state);
             globalState = state;
             var p = document.createElement("p");
             p.innerHTML = JSON.stringify(state);
@@ -65,7 +62,6 @@
         });
         // send data to room on submit
         $('body').bind('keyup', function (e) {
-            console.log("new move");
             if (e.keyCode == 38) {
                 // send data to room
                 gameRoom.send({

@@ -135,9 +135,6 @@
         });
 
         var globalState = {};
-        gameRoom.onJoin.add(function () {
-            console.log("joined-room");
-        });
         // new room state
         gameRoom.onUpdate.add(function (state) {
             // this signal is triggered on each patch
@@ -154,7 +151,6 @@
         });
 
         function updateDOM() {
-            console.log(globalState);
             var joinedRoom = -1;
             //clear old data
             var gameRoomList = document.getElementById("current-rooms-tbody");

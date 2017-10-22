@@ -3,7 +3,6 @@ import { Room } from "colyseus";
 export class ChatRoom extends Room {
 	onInit(options) {
 		this.setState({ messages: [] });
-		console.log("ChatRoom created!", options);
 	}
 
 	onJoin(client) {
@@ -16,10 +15,8 @@ export class ChatRoom extends Room {
 
 	onMessage(client, data) {
 		this.state.messages.push(data.message);
-		console.log("ChatRoom:", client.id, data);
 	}
 
 	onDispose() {
-		console.log("Dispose ChatRoom");
 	}
 }

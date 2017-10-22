@@ -43,9 +43,7 @@
         var url = !isProduction ? 'ws://' + host + (location.port ? ':' + location.port : '') : 'wss://minhcung.me/lovr';
         var client = new Colyseus.Client(url);
         var chatRoom = client.join("chat");
-        chatRoom.onUpdate.addOnce(function (state) {
-            console.log("initial room data:", state);
-        });
+
         // new room state
         chatRoom.onUpdate.add(function (state) {
             // this signal is triggered on each patch
@@ -55,9 +53,6 @@
             var p = document.createElement("p");
             p.innerHTML = change.value;
             document.querySelector("#messages").appendChild(p);
-        });
-        chatRoom.listen(function (change) {
-            console.log("patch:", change.path, change.operation, change.value)
         });
         // send data to room on submit
         document.querySelector("#form").onsubmit = function (e) {

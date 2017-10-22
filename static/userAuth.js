@@ -13,7 +13,6 @@ $(document).ready(function() {
 	$("#login-form").submit(function() {
 		var loginData = $("#login").serialize();
 		loginData += "&sessionId=" + client.id;
-		console.log(loginData);
 
 		$.ajax({
 			method: "post",
@@ -21,11 +20,9 @@ $(document).ready(function() {
 			data: loginData,
 			dataType: "json",
 			success: function(response) {
-				console.log(response);
 				window.location = response.redirect;
 			},
 			error: function(response) {
-				console.log(response);
 				$("#msgHeader").html(response.responseJSON.message);
 				$("#msgPrompt").html(
 					'<button type="button" class="btn btn-danger" data-dismiss="modal">Try Again</button>'
@@ -89,7 +86,6 @@ $(document).ready(function() {
 				data: regisData,
 				dataType: "json",
 				success: function(response) {
-					console.log(response);
 					$("#msgHeader").html(response.message);
 					$("#msgPrompt").html(success);
 					$("#msgModal").modal("toggle");
@@ -98,7 +94,6 @@ $(document).ready(function() {
 					$("#msgHeader").html(response.responseJSON.message);
 					$("#msgPrompt").html(fail);
 					$("#msgModal").modal("toggle");
-					console.log(response);
 				}
 			});
 

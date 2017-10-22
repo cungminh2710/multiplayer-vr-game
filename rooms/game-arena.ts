@@ -50,7 +50,6 @@ export class GameArena extends Room {
 	}
 
 	onInit(options) {
-		console.log("Arena created!", options);
 		this.allowedPlayers = options.players;
 		this.maxPlayers = this.allowedPlayers.length;
 
@@ -133,7 +132,6 @@ export class GameArena extends Room {
 			skillAnimation: "none"
 		};
 
-		console.log(newPlayer);
 		return newPlayer;
 	}
 
@@ -179,7 +177,6 @@ export class GameArena extends Room {
 			this.state.playersReady = true;
 			var self = this;
 			setTimeout(function() {
-				console.log("ENDING GAME");
 				self.endGame("draw");
 			}, EIGHT_MINUTES);
 		}
@@ -188,8 +185,6 @@ export class GameArena extends Room {
 	onLeave(client: Client) {
 		//let index: number = this.state.messages.indexOf(client.id);
 		//this.state.players.splice(index, 1);
-		console.log("CLIENT GONE");
-		console.log(client.id);
 		delete this.state.players[client.id];
 		this.numJoined -= 1;
 	}
@@ -229,13 +224,11 @@ export class GameArena extends Room {
 
 		let self2 = this;
 		Promise.all(loadAchievements).then(function() {
-			console.log("ALL ACHIEVEMENTS ADDED, SAFE TO DESTROY ARENA");
 			self2.autoDispose = true;
 		});
 	}
 
 	onMessage(client: Client, data) {
-		// console.log("Game Arena:", client.id, data);
 		if (
 			data.action == "idle" ||
 			this.state.gameOver != "" ||
@@ -249,19 +242,14 @@ export class GameArena extends Room {
 		} else if (data.action == "ROTATION") {
 			this.state.players[client.id].rotation = data.data;
 		} else if (data.action == "SKILLANIMATION") {
-			console.log("SKILLANIMATION: ", data);
 			this.state.players[client.id].skillAnimation = data.data;
 		} else if (data.action == "DAMAGE") {
-			console.log(data.data);
 
 			//let clientCoords = target.position;
 			for (var i = 0; i < data.data.target.length; i++) {
 				let targetId = data.data.target[i];
-				console.log("TARGET: ", targetId);
 				if (targetId == "TURRET_RED" || targetId == "TURRET_BLUE") {
-					console.log("TURRET THINGGYY", this.state.players[targetId]);
 					let newTurretHealth = this.state.players[targetId].health - skills[data.data.name].damage;
-					console.log("TURRET HEALTHHHH", newTurretHealth);
 					this.state.players[targetId].health = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
@@ -269,18 +257,11 @@ export class GameArena extends Room {
 						this.state.stats[client.id].kills += 1;
 
 						//GAME OVER
-						console.log("END GAME>>>>>");
 						this.endGame(targetId == "TURRET_RED" ? "blue" : "red");
 					}
 				} else {
 					let targetPlayer = this.state.players[targetId];
-					console.log("TARGETPLAYER: ", targetPlayer);
-					console.log("DATA PACKET: ", data.data);
-					// if(this.euclideanDistance(clientCoords, targetPlayer.data.position)){
-
 					//TODO no damage in package now
-					console.log("THIS IS DA SKILL", data.data.name);
-					console.log("THIS IS HOW MUCH DMG", skills[data.data.name].damage);
 					targetPlayer.health -= skills[data.data.name].damage;
 					if (targetPlayer.health <= 0) {
 						// Add one kill to client's stats
@@ -303,11 +284,7 @@ export class GameArena extends Room {
 						}else{
 							this.state.players[targetId].data.position = "5 3 0";
 						}
-					} 
-					// else {
-					// 	console.log("SENDBACK: ");
-					// 	targetPlayer.skill = data.data.name;
-					// }
+					}
 				}
 			}
 		}

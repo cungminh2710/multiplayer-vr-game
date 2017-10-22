@@ -45,12 +45,10 @@ $( document ).ready( function () {
               data: formData,
               dataType: "json",
               success: function(response) {
-                console.log(response);
                 $("#messages").html(response.message);
               },
               error: function(response) {
                 $("#messages").html(response.responseJSON.message);
-                console.log(response);
               }
             });
 
