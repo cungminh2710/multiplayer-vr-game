@@ -7,18 +7,13 @@ class DetectHeight {
         var newY = ceilY;
         var floorZ = Math.floor(-newZ);
         var floorX = Math.floor(newX);
-        // console.log("come herererere");
+      
         var nearestY = matrix[Math.round(-newZ)][Math.round(newX)]
-        console.log("fuckiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",nearestY,Math.round(-newZ),Math.round(newX));
-    //    console.log("Z",-newZ)
-    //    console.log("X",newX)
-       // console.log("roundZ",Math.round(-newZ))
-       // console.log("roundX",Math.round(newX))
+
         var floorY = matrix[floorZ][floorX];
-        // console.log("oldY ", oldY);
-         console.log(nearestY-oldY);
+
         if(Math.abs(nearestY-oldY)>=1){
-            //console.log("collide")
+          
             return -1;
         }
         if(ceilY!=oldY && Math.abs(ceilY-oldY)<0.8){

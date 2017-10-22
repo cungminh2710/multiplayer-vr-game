@@ -96,7 +96,7 @@ export class GameArena extends Room {
 			pCoords = `${this.numJoined * 5} 3 -235`;
 		} else {
 			pTeam = "blue";
-			pCoords = `${this.numJoined * 5} 3 0`;
+			pCoords = `${this.numJoined * 5} 3 -5`;
 		}
 
 		while (

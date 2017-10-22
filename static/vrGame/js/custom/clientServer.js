@@ -1,7 +1,7 @@
 var count = 0;
 
 var host = window.document.location.host.replace(/:.*/, '');
-var client = new Colyseus.Client('wss://' + host + (location.port ? ':' + location.port : ''));
+var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
 var roomName = findGetParameter("roomName");
 var user = findGetParameter("user");
 var gameRoom = client.join(roomName != null ? roomName : "test-arena", { clientId: client.id, username: user, test: roomName == null });
@@ -13,11 +13,11 @@ var panel;
 var disableMove = false;
 var team = "";
 var character = Infinity;
-
 // PLAYER AND GAME INFO
 var myPlayerName = client.id; // player id is currently same as their browser's id
 var globalState = [] // it is a good idea to store state changes from server on client
 var skillInfo = {}
+var tempBuffer = {}
 
 // THIS IS THE FIRST STAETE THIS CLIENT WILL SEE WHEN THEY JOIN THE GAME
 gameRoom.onData.add(function(data) {
@@ -26,27 +26,33 @@ gameRoom.onData.add(function(data) {
         // STORE STATE
         // THIS WILL UPDATE playerNumber 
         // TO UPDATE YOUR POSITION LATER
-        for (var p in data.state) {
-            console.log("````````````````````````````````````");
-            // check if the property/key is defined in the object itself, not in parent
-            if (data.state.hasOwnProperty(p)) {
-                if (data.state[p].team == team) data.state[p].team = "ally";
-                else data.state[p].team = "enemy";
-                if (data.state[p].character == "turret") {
-                    console.log("THIS IS A TURRET");
-                    // player = MAKE TURRET HERE
-                } else {
-                    //MAKE NORMAL PLAYER HERE
-                    player = Players.createOtherPlayer(data.state[p]);
-                    playersDict[data.state[p].id] = player
-                    console.log("ondata: ", player);
-                }
-            }
-        }
+        // for (var p in data.state) {
+        //     console.log("````````````````````````````````````");
+        //     // check if the property/key is defined in the object itself, not in parent
+        //     if (data.state.hasOwnProperty(p)) {
+        //        // console.log(data.state[p]);
+        //        // console.log(team)
+        //        // if (data.state[p].team == team) data.state[p].team = "ally";
+        //         //else data.state[p].team = "enemy";
 
-    } else if (data.type === "damage") {
-        console.log("YOU GOT HIT");
+        //         if (data.state[p].character == "turret") {
+        //             //console.log(data.state[p]);
+        //             console.log("THIS IS A TURRET");
+        //             // player = MAKE TURRET HERE
+        //         } else {
+        //             //MAKE NORMAL PLAYER HERE
+        //            // player = Players.createOtherPlayer(data.state[p]);
+        //            // playersDict[data.state[p].id] = player
+        //             ///console.log("ondata: ", player);
+        //         }
+        //         //tempBuffer[data.state[p].id] = data.state[p];
+        //     }
+        // }
+        tempBuffer = data.state;
     }
+    // } else if (data.type === "damage") {
+    //     console.log("YOU GOT HIT");
+    // }
 
 });
 //create players
@@ -55,6 +61,27 @@ gameRoom.listen("players/:id", function(change) {
     if (change.path.id == client.id) {
         team = change.value.team;
         console.log("MESELF", team);
+        for (var p in tempBuffer) {
+            if (tempBuffer.hasOwnProperty(p)) {
+                if (tempBuffer[p].team == team) tempBuffer[p].team = "ally";
+                else tempBuffer[p].team = "enemy";
+                console.log(team)
+                if (tempBuffer[p].character == "turret") {
+                    console.log("THIS IS A TURRET");
+                    // player = MAKE TURRET HERE
+                    player = Players.createTurret(tempBuffer[p],change.value.data.position);
+                } else {
+                    //MAKE NORMAL PLAYER HERE
+                    player = Players.createOtherPlayer(tempBuffer[p]);
+                   // playersDict[data.state[p].id] = player
+                    console.log("ondata: ", player);
+                }
+                playersDict[tempBuffer[p].id] = player;
+            }
+           
+            
+        }
+        tempBuffer = {};
         player = Players.createMyself(change.value);
         console.log("MYSELF CREATED");
     } else {
@@ -125,8 +152,10 @@ gameRoom.listen("players/:id/:attribute", function(change) {
         }
         var totalHealth = playersDict[id].getAttribute("initalHealth");
 
-        var r = 0.18 * newValue / totalHealth;
-        playersDict[id].querySelector("#healthBar").setAttribute("radius", r);
+        var healthBar = playersDict[id].querySelector("#healthBar");
+        var initRadius = healthBar.getAttribute("initRadius");
+        var r = initRadius * newValue / totalHealth;
+        healthBar.setAttribute("radius", r);
         console.log(playersDict[id]);
     }
 });

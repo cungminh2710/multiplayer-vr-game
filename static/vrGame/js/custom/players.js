@@ -5,10 +5,104 @@ class Players {
 
   }
 
+  static createTurret(turretInfo,myPos){
+    console.log(myPos);
+    var tower = document.createElement("a-box");
+    
+    
+        tower.setAttribute("depth",12);
+        tower.setAttribute("height",12);
+        tower.setAttribute("width",12);
+    tower.setAttribute("position",pos);
+    tower.setAttribute("material","transparent:true;opacity:0");
+    var z = myPos.split(" ")[2];
+    tower.setAttribute("initalHealth",turretInfo.health);
+    var pos = "";
+    if (turretInfo.team == 'ally'){  
+      if(z == "-5"){
+        pos = "60 9 -15";
+        tower.setAttribute("position",pos)
+      }
+      else{
+        pos = "60 9 -225";
+        tower.setAttribute("position",pos)
+      } 
+    }else{
+      if(z == "-5"){
+        pos = "60 9 -225";
+        tower.setAttribute("position",pos)
+      }
+      else{
+        pos = "60 9 -15";
+        tower.setAttribute("position",pos)
+
+      } 
+      tower.setAttribute("class","collidable" );
+      console.log(turretInfo.team);
+     
+    }
+    tower.setAttribute("team",turretInfo.team);
+
+    tower.setAttribute("id",turretInfo.id);
+
+    var towerpan = document.createElement("a-entity");
+    towerpan.setAttribute("geometry","primitive:cone; radiusBottom: 2; radiusTop: 3;height:1");
+    towerpan.setAttribute("material","src:#towerbase");
+    towerpan.setAttribute("scale","2.5 2.5 2.5");
+    towerpan.setAttribute("position","0 -6 0");
+    var magicBall = document.createElement('a-entity');
+    magicBall.setAttribute("id","towerBall");
+    magicBall.setAttribute("geometry","primitive:sphere;radius:1.25;")
+    magicBall.setAttribute("position","0 2.5 0");
+    magicBall.setAttribute("material","src:#magicball")
+    var ballAni = document.createElement('a-animation');
+    ballAni.setAttribute("attribute","position");
+    ballAni.setAttribute("to","0 3.0 0");
+    ballAni.setAttribute("dur","2000");
+    ballAni.setAttribute("direction","alternate");
+    ballAni.setAttribute("repeat","indefinite");
+    magicBall.appendChild(ballAni);
+    towerpan.appendChild(magicBall);
+    var zhuzi1 = document.createElement("a-entity");
+    zhuzi1.setAttribute("geometry","primitive:cylinder;radius:0.2;height:2");
+    zhuzi1.setAttribute("rotation","0 0 -30")
+    zhuzi1.setAttribute("material","src:#zhuzi");
+    zhuzi1.setAttribute("position","-2 1.5 0");
+    towerpan.appendChild(zhuzi1);
+     var zhuzi2 = document.createElement("a-entity");
+    zhuzi2.setAttribute("geometry","primitive:cylinder;radius:0.2;height:2");
+    zhuzi2.setAttribute("rotation","0 0 30")
+    zhuzi2.setAttribute("material","src:#zhuzi");
+    zhuzi2.setAttribute("position","2 1.5 0");
+    towerpan.appendChild(zhuzi2);
+    var zhuzi3 = document.createElement("a-entity");
+    zhuzi3.setAttribute("geometry","primitive:cylinder;radius:0.2;height:2");
+    zhuzi3.setAttribute("rotation","-30 0 0")
+    zhuzi3.setAttribute("material","src:#zhuzi");
+    zhuzi3.setAttribute("position","0 1.5 2");
+    towerpan.appendChild(zhuzi3);
+    var zhuzi4 = document.createElement("a-entity");
+    zhuzi4.setAttribute("geometry","primitive:cylinder;radius:0.2;height:2");
+    zhuzi4.setAttribute("rotation","30 0 0")
+    zhuzi4.setAttribute("material","src:#zhuzi");
+    zhuzi4.setAttribute("position","0 1.5 -2");
+    towerpan.appendChild(zhuzi4);
+
+
+    var healthBar = Players.createHealthBar(9,2);
+
+    tower.appendChild(towerpan);
+    tower.appendChild(healthBar);
+    console.log(tower.object3D)
+    if(raycasterEl) raycasterEl.components.raycaster.refreshObjects();
+    document.querySelector("a-scene").appendChild(tower);
+    return tower;
+  }
+
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      //character = 1;
+      character = 1;
       var config = characterConfig[character];
       
       //skill init
@@ -18,9 +112,9 @@ class Players {
       playerWrapperEl = document.createElement("a-entity");
       playerWrapperEl.setAttribute("id","playerWrapper");
       playerWrapperEl.setAttribute("class","collidable");
-      //playerWrapperEl.setAttribute("position",playerInfo.data.position );
+      playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
-      playerWrapperEl.setAttribute("position","5 0 -100");
+      //playerWrapperEl.setAttribute("position","5 0 -100");
       playerWrapperEl.setAttribute("control","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
       player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
@@ -44,15 +138,16 @@ class Players {
     return player;
   }
   
-  static createHealthBar(y){
+  static createHealthBar(y,radius){
 
-    var radius = 0.2;
+
     var outsphere = document.createElement("a-sphere");
     outsphere.setAttribute("radius",radius);
     outsphere.setAttribute("position",0+" "+y+" "+0.1);
     outsphere.setAttribute("material","color:#00FA9A;transparent:true;opacity:0.3");
     var innersphere = document.createElement('a-sphere');
     innersphere.setAttribute('radius',radius-0.02);
+    innersphere.setAttribute('initRadius',radius-0.02);
     innersphere.setAttribute('id',"healthBar");
     innersphere.setAttribute("material","color:#DC143C");
     outsphere.appendChild(innersphere);
@@ -62,7 +157,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      //playerInfo.character = 1;
+      playerInfo.character = 1;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -82,16 +177,16 @@ class Players {
       console.log(playerInfo);
       player.setAttribute("team",playerInfo.team);
       player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
-      //player.setAttribute("position",playerInfo.data.position);
+      player.setAttribute("position",playerInfo.data.position);
       //for debug
-      player.setAttribute("position","10 0 -100");
+     // player.setAttribute("position","10 0 -100");
       player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
     
       player.setAttribute("animation-mixer",playerInfo.data.moveAnimation);
        
       document.querySelector("a-scene").appendChild(player);
-      var healthBar = Players.createHealthBar(characterConfig[playerInfo.character].healthBarPos);
+      var healthBar = Players.createHealthBar(characterConfig[playerInfo.character].healthBarPos,0.2);
       player.appendChild(healthBar);
       return player;
 
@@ -151,8 +246,11 @@ class Players {
 
     raycasterEl.addEventListener("mouseenter",function(evt){
       console.log(evt)
-      if(evt.detail.intersectedEl.getAttribute("team")=="enemy")raycasterEl.emit('targetEnemy');
-      else raycasterEl.emit('targetAlly');
+      if(evt.detail.intersectedEl.getAttribute("team")=="enemy"){
+        raycasterEl.emit('targetEnemy');
+      }
+      else{ raycasterEl.emit('targetAlly');
+    }
 
     });
     // cursor animation
