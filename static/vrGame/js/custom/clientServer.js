@@ -1,7 +1,9 @@
 var count = 0;
 
 var host = window.document.location.host.replace(/:.*/, '');
-var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
+var isProduction = host.indexOf('minhcung') !== -1;
+var url = !isProduction ? 'ws://' + host + (location.port ? ':' + location.port : '') : 'wss://minhcung.me/lovr';
+var client = new Colyseus.Client(url);
 var roomName = findGetParameter("roomName");
 var user = findGetParameter("user");
 var gameRoom = client.join(roomName != null ? roomName : "test-arena", { clientId: client.id, username: user, test: roomName == null });
