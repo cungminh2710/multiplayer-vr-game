@@ -259,7 +259,9 @@ export class GameArena extends Room {
 				let targetId = data.data.target[i];
 				console.log("TARGET: ", targetId);
 				if (targetId == "TURRET_RED" || targetId == "TURRET_BLUE") {
-					let newTurretHealth = this.state.players[targetId] - skills[data.data.name].damage;
+					console.log("TURRET THINGGYY", this.state.players[targetId]);
+					let newTurretHealth = this.state.players[targetId].health - skills[data.data.name].damage;
+					console.log("TURRET HEALTHHHH", newTurretHealth);
 					this.state.players[targetId] = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
@@ -267,6 +269,7 @@ export class GameArena extends Room {
 						this.state.stats[client.id].kills += 1;
 
 						//GAME OVER
+						console.log("END GAME>>>>>");
 						this.endGame(targetId == "TURRET_RED" ? "blue" : "red");
 					}
 				} else {
