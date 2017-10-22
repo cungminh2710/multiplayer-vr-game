@@ -126,7 +126,9 @@ export class GameArena extends Room {
 	}
 
 	revivePlayer(playerId: string) {
-		this.state.players[playerId].health = 100;
+		let pCharacter = this.state.players[playerId].character;
+		let pHealth = pCharacter == 1 ? 500 : pCharacter == 2 ? 200 : 300;
+		this.state.players[playerId].health = pHealth;
 		if(this.state.players[playerId].team == "red"){
 			this.state.players[playerId].data.position = "5 3 -235";
 		}else{
