@@ -4,20 +4,22 @@
 <head>
     <!-- dummy Symbol polyfill -->
     <script>
-        if (typeof(Symbol) === "undefined") {
-            window.Symbol = function(arg) {
+        if (typeof (Symbol) === "undefined") {
+            window.Symbol = function (arg) {
                 return arg;
             }
         }
     </script>
-
+    <!-- <base href="https://minhcung.me/lovr/"> -->
     <!-- colyseus.js 0.7.0 client -->
     <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
     <script src="content-loader.js"></script>
     <link rel="stylesheet" type="text/css" href="webtheme.css">
 </head>
@@ -25,18 +27,24 @@
 <body>
     <ul class="navlist">
         <div class="pull-left">
-            <li class="navLogo"><a href="#" class="logo-brand">LoVR</a></li>
-            <li class="navitem">
-                <a href="/profile.html"><i class="fa fa-lg fa-user-circle-o fa-fw" aria-hidden="true"></i>   Profile</a>
+            <li class="navLogo">
+                <a href="#" class="logo-brand">LoVR</a>
             </li>
             <li class="navitem">
-                <a href="/game-rooms.html" class="active"><i class="fa fa-lg fa-gamepad fa-fw" aria-hidden="true"></i>   Game Room</a>
+                <a href="/profile.html">
+                    <i class="fa fa-lg fa-user-circle-o fa-fw" aria-hidden="true"></i> Profile</a>
+            </li>
+            <li class="navitem">
+                <a href="/game-rooms.html" class="active">
+                    <i class="fa fa-lg fa-gamepad fa-fw" aria-hidden="true"></i> Game Room</a>
             </li>
         </div>
 
         <div class="pull-right">
             <li class="navitem">
-                <a href="/api/logout">Logout   <i class="fa fa-lg fa-sign-out fa-fw" aria-hidden="true"></i></a>
+                <a href="/api/logout">Logout
+                    <i class="fa fa-lg fa-sign-out fa-fw" aria-hidden="true"></i>
+                </a>
             </li>
         </div>
     </ul>
@@ -46,7 +54,8 @@
             <div class="panel-body center-text game-table">
                 <h1>LoVR Game Rooms</h1>
                 <div id="game-room-form">
-                    <strong>Game Room</strong><br>
+                    <strong>Game Room</strong>
+                    <br>
 
                     <form id="form">
                         <input type="text" id="game-name" value="" placeholder="Game Room Name" />
@@ -124,17 +133,17 @@
         });
 
         var globalState = {};
-        gameRoom.onJoin.add(function() {
+        gameRoom.onJoin.add(function () {
             console.log("joined-room");
         });
         // new room state
-        gameRoom.onUpdate.add(function(state) {
+        gameRoom.onUpdate.add(function (state) {
             // this signal is triggered on each patch
             globalState = state;
             updateDOM();
         });
 
-        gameRoom.onData.add(function(data) {
+        gameRoom.onData.add(function (data) {
             if (data.hasOwnProperty("error")) {
                 console.log("ERROR: " + data.error);
             } else if (data.hasOwnProperty("success")) {
@@ -234,7 +243,7 @@
         }
 
         // send data to room on submit
-        document.querySelector("#form").onsubmit = function(e) {
+        document.querySelector("#form").onsubmit = function (e) {
             e.preventDefault();
             var roomName = document.querySelector("#game-name");
             var maxPlayers = document.querySelector("#game-max-players");
@@ -253,7 +262,7 @@
         }
 
         // join room
-        $(document).on('click', '.join-room', function(e) {
+        $(document).on('click', '.join-room', function (e) {
             var roomName = $(this).siblings('.room-name').innerHTML;
             gameRoom.send({
                 action: "JOIN",
@@ -265,13 +274,13 @@
         });
 
         // mark ready
-        $(document).on('click', '#player-ready', function() {
+        $(document).on('click', '#player-ready', function () {
             gameRoom.send({
                 action: "READY"
             });
         });
 
-        $(document).on('click', '#leave-room', function() {
+        $(document).on('click', '#leave-room', function () {
             gameRoom.send({
                 action: "LEAVE"
             });

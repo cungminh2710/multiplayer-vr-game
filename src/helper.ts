@@ -51,7 +51,11 @@ export let isUserExist: {
 
 export let updateUserSession: {
 	(username: string, sessionID: string): Promise<void>;
-} = (username, sessionID) => User.update({ username }, { sessionID }).exec();
+} = async (username, sessionID) => {
+	await User.update({ sessionID }, { $unset: { sessionID: 1 } }).exec();
+	await User.update({ username }, { sessionID }).exec();
+	return;
+};
 
 /**
  * Read user data based on User ID
