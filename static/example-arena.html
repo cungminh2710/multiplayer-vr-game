@@ -8,11 +8,11 @@
             text-align: center;
         }
     </style>
-
+    <!-- <base href="https://minhcung.me/lovr/"> -->
     <!-- dummy Symbol polyfill -->
     <script>
-        if (typeof(Symbol) === "undefined") {
-            window.Symbol = function(arg) {
+        if (typeof (Symbol) === "undefined") {
+            window.Symbol = function (arg) {
                 return arg;
             }
         }
@@ -20,13 +20,17 @@
 
     <!-- colyseus.js 0.7.0 client -->
     <script type="text/javascript" src="https://rawgit.com/gamestdio/colyseus.js/0.7.0/dist/colyseus.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+        crossorigin="anonymous"></script>
 
 </head>
 
 <body>
-    <h1><img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus"></h1>
-    <strong>States</strong><br>
+    <h1>
+        <img src="https://rawgit.com/gamestdio/colyseus/master/media/header.png" height="100" alt="colyseus">
+    </h1>
+    <strong>States</strong>
+    <br>
 
     <div id="states"></div>
 
@@ -37,7 +41,7 @@
         var playerNumber = 0;
         var myPlayerName = client.id;
         var globalState = {}
-        gameRoom.onJoin.add(function(state) {
+        gameRoom.onJoin.add(function (state) {
             console.log("initial room data:", state);
             globalState = state
             for (var i = 0; i < state.players.length; i++) {
@@ -48,7 +52,7 @@
             }
         });
         // new room state
-        gameRoom.onUpdate.add(function(state) {
+        gameRoom.onUpdate.add(function (state) {
             // this signal is triggered on each patch
             console.log("NEW STATE");
             console.log(state);
@@ -58,7 +62,7 @@
             document.querySelector("#states").appendChild(p);
         });
         // send data to room on submit
-        $('body').bind('keyup', function(e) {
+        $('body').bind('keyup', function (e) {
             console.log("new move");
             if (e.keyCode == 38) {
                 // send data to room
