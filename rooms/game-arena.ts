@@ -89,7 +89,11 @@ export class GameArena extends Room {
 		let pTeam: string;
 		let pCoords: string;
 		let pCharacter = Math.floor(Math.random() * 3) + 1;
+<<<<<<< HEAD
 		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ?1500 : 1700;
+=======
+		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
+>>>>>>> master
 
 		if (this.numJoined % 2 == 0) {
 			pTeam = "red";
@@ -127,7 +131,11 @@ export class GameArena extends Room {
 
 	revivePlayer(playerId: string) {
 		let pCharacter = this.state.players[playerId].character;
+<<<<<<< HEAD
 		let pHealth = pCharacter ==  1 ? 2500 : pCharacter == 2 ?1500 : 1700;
+=======
+		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
+>>>>>>> master
 		this.state.players[playerId].health = pHealth;
 		if(this.state.players[playerId].team == "red"){
 			this.state.players[playerId].data.position = "5 3 -235";
