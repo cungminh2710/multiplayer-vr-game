@@ -44,11 +44,34 @@ export class GameArena extends Room {
 		this.maxPlayers = this.allowedPlayers.length;
 
 		this.setState({
-			turrets: {
-				blue: 100000,
-				red: 100000
+			players: {
+				"TURRET_RED": {
+					id: "TURRET_RED",
+					character: "turret",
+					team: "red",
+					health: 100000,
+					data: {
+						position: "",
+						moveAnimation: "",
+					},
+					rotation: "",
+					skill: "",
+					skillAnimation: "",
+				},
+				"TURRET_BLUE": {
+					id: "TURRET_BLUE",
+					character: "turret",
+					team: "blue",
+					health: 100000,
+					data: {
+						position: "",
+						moveAnimation: "",
+					},
+					rotation: "",
+					skill: "",
+					skillAnimation: "",
+				},
 			},
-			players: {},
 			stats: {},
 			gameOver: false,
 			playersReady: false
@@ -62,38 +85,35 @@ export class GameArena extends Room {
 	//   this.state.players[playerId].weapon = "none";
 	// }
 
-	revivePlayer(playerId: string) {
-		this.state.players[playerId].health = 100;
-	}
-
 	newPlayerInfo(playerId: string): PlayerInfo {
-		let playerTeam: string;
-		let playerCoords: string;
-		let playerCharacter = Math.floor(Math.random() * 3) + 1;
+		let pTeam: string;
+		let pCoords: string;
+		let pCharacter = Math.floor(Math.random() * 3) + 1;
+		let pHealth = pCharacter == 1 ? 500 : pCharacter == 2 ? 200 : 300;
 
 		if (this.numJoined % 2 == 0) {
-			playerTeam = "red";
-			playerCoords = `${this.numJoined * 5} 3 -235`;
+			pTeam = "red";
+			pCoords = `${this.numJoined * 5} 3 -235`;
 		} else {
-			playerTeam = "blue";
-			playerCoords = `${this.numJoined * 5} 3 0`;
+			pTeam = "blue";
+			pCoords = `${this.numJoined * 5} 3 0`;
 		}
 
 		while (
-			this.takenCharacters[playerTeam].indexOf(playerCharacter) != -1
+			this.takenCharacters[pTeam].indexOf(pCharacter) != -1
 		) {
-			playerCharacter = Math.floor(Math.random() * 3) + 1;
+			pCharacter = Math.floor(Math.random() * 3) + 1;
 		}
 
-		this.takenCharacters[playerTeam].push(playerCharacter);
+		this.takenCharacters[pTeam].push(pCharacter);
 
 		let newPlayer: PlayerInfo = {
 			id: playerId,
-			team: playerTeam,
-			character: playerCharacter,
-			health: 100,
+			team: pTeam,
+			character: pCharacter,
+			health: pHealth,
 			data: {
-				position: playerCoords,
+				position: pCoords,
 				moveAnimation: "idle"
 			},
 			rotation: "0 0 0",
@@ -103,6 +123,15 @@ export class GameArena extends Room {
 
 		console.log(newPlayer);
 		return newPlayer;
+	}
+
+	revivePlayer(playerId: string) {
+		this.state.players[playerId].health = 100;
+		if(this.state.players[playerId].team == "red"){
+			this.state.players[playerId].data.position = "5 3 -235";
+		}else{
+			this.state.players[playerId].data.position = "5 3 0";
+		}
 	}
 
 	requestJoin(options: any) {
@@ -236,7 +265,7 @@ export class GameArena extends Room {
 						setTimeout(function() {
 							console.log("bring back to life", targetId);
 							this.revivePlayer(targetId);
-						}, 1500);
+						}, 5000);
 
 						this.state.players[client.id].skillAnimation =
 							data.data.skillEffect;

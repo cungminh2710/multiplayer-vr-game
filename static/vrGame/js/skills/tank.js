@@ -6,12 +6,11 @@ class Tank{
         // do not need a target, release attack directly
         var attack = panel.querySelector("#attack");
         if(attack.getAttribute("color") == "#ff0000") return;
+        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack")
         attack.emit("start");
         var target = raycasterEl.components.raycaster.intersectedEls[0];
         if(!target) return;
-        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2");
     
-        Animation.setAnimation(cameraEl.querySelector("#"+client.id),"attack")
         var dataAni = JSON.stringify({
             name:"attack",
             skillName:"Punch"
@@ -51,11 +50,11 @@ class Tank{
         if(target.getAttribute("team") == "ally") return;
         // realease skill and update cd
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill1")
-        
+        skill1.emit("start");
         //no damage for it 
         var skill1 = panel.querySelector("#skill1");
         SkillEffect.cage(target);
-        skill1.emit("start");
+     
 
     
 
@@ -73,31 +72,6 @@ class Tank{
 
         var pos = target.getAttribute("position");
         SkillEffect.rocket(pos);
-
-     
-      
-        // skill1.emit("start");
-        // var from = {
-        //     x: pos.x - direction.x*0.5,
-        //     y: pos.y + characterConfig[character].cameraHeight,
-        //     z:pos.z - direction.z*0.5
-
-        // };
-        // var to = {
-        //     x: pos.x - direction.x*20,
-        //     y: from.y -direction.y*20,
-        //     z:pos.z - direction.z*20
-
-        // };
-        // var data = JSON.stringify({
-        //     name:"skill1",
-        //     skillName:"FireBall",
-        //     from: from,
-        //     to: to
-        // });
-        // gameRoom.send({action: "SKILLANIMATION", data:data});
-        // console.log(direction);
-        // SkillEffect.fireBall(from,to);
     }
 
     
