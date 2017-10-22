@@ -1,9 +1,8 @@
-
-$( document ).ready( function () {
+$(document).ready(function() {
     var host = window.document.location.host.replace(/:.*/, '');
-    var client = new Colyseus.Client('ws://' + host + (location.port ? ':' + location.port : ''));
-    
-    $(document).on("click", "#trigger", function(){
+    var client = new Colyseus.Client('wss://' + host + (location.port ? ':' + location.port : ''));
+
+    $(document).on("click", "#trigger", function() {
         $("#msgModal").modal('hide');
         $('.nav-tabs a[href="#login-form"]').tab('show');
     });
@@ -34,7 +33,7 @@ $( document ).ready( function () {
     });
 
 
-    $( "#register" ).validate( {
+    $("#register").validate({
         rules: {
             username: {
                 required: true,
@@ -70,7 +69,7 @@ $( document ).ready( function () {
             },
             email: "Please enter a valid email address",
         },
-        submitHandler: function (form) {
+        submitHandler: function(form) {
             var regisData = $(form).serialize();
             var success = '<p>Your registration has been completed. Click the button below to login.</p>';
             success += '<button type="button" class="btn btn-success" id="trigger">To Login</button>';
@@ -78,43 +77,43 @@ $( document ).ready( function () {
             fail += '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>';
 
             $.ajax({
-              method: "post",
-              url: "/api/register",
-              data: regisData,
-              dataType: "json",
-              success: function(response) {
-                console.log(response);
-                $("#msgHeader").html(response.message);
-                $("#msgPrompt").html(success);
-                $("#msgModal").modal('toggle');
-              },
-              error: function(response) {
-                $("#msgHeader").html(response.responseJSON.message);
-                $("#msgPrompt").html(fail);
-                $("#msgModal").modal('toggle');
-                console.log(response);
-              }
+                method: "post",
+                url: "/api/register",
+                data: regisData,
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
+                    $("#msgHeader").html(response.message);
+                    $("#msgPrompt").html(success);
+                    $("#msgModal").modal('toggle');
+                },
+                error: function(response) {
+                    $("#msgHeader").html(response.responseJSON.message);
+                    $("#msgPrompt").html(fail);
+                    $("#msgModal").modal('toggle');
+                    console.log(response);
+                }
             });
 
             return false;
         },
         errorElement: "em",
-        errorPlacement: function ( error, element ) {
+        errorPlacement: function(error, element) {
             // Add the `help-block` class to the error element
-            error.addClass( "help-block" );
+            error.addClass("help-block");
 
-            if ( element.prop( "type" ) === "checkbox" ) {
-                error.insertAfter( element.parent( "label" ) );
+            if (element.prop("type") === "checkbox") {
+                error.insertAfter(element.parent("label"));
             } else {
-                error.insertAfter( element );
+                error.insertAfter(element);
             }
         },
-        highlight: function ( element, errorClass, validClass ) {
-            $( element ).parents( ".col-sm-5" ).addClass( "has-error" ).removeClass( "has-success" );
+        highlight: function(element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-error").removeClass("has-success");
         },
-        unhighlight: function (element, errorClass, validClass) {
-            $( element ).parents( ".col-sm-5" ).addClass( "has-success" ).removeClass( "has-error" );
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
         }
-    } );
+    });
 
-} );
+});

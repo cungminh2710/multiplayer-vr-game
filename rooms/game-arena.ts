@@ -196,7 +196,7 @@ export class GameArena extends Room {
 						this.state.stats[clientId].deaths,
 						winner == "draw"
 							? "draw"
-							: this.state[clientId].team == winner
+							: this.state.players[clientId].team == winner
 					)
 				);
 			}
