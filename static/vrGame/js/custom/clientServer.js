@@ -59,6 +59,9 @@ gameRoom.onData.add(function(data) {
 });
 //create players
 gameRoom.listen("players/:id", function(change) {
+    if(change.path.id == "TURRET_RED" || change.path.id == "TURRET_BLUE"){
+        return;
+    }
     console.log("CHANGE OF PLAYER NUMBERS");
     if (change.path.id == client.id) {
         team = change.value.team;
