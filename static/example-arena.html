@@ -36,7 +36,9 @@
 
     <script>
         var host = window.document.location.host.replace(/:.*/, '');
-        var client = new Colyseus.Client('wss://' + host + (location.port ? ':' + location.port : ''));
+        var isProduction = host.indexOf('minhcung') !== -1;
+        var url = !isProduction ? 'ws://' + host + (location.port ? ':' + location.port : '') : 'wss://minhcung.me/lovr';
+        var client = new Colyseus.Client(url);
         var gameRoom = client.join("test-arena");
         var playerNumber = 0;
         var myPlayerName = client.id;

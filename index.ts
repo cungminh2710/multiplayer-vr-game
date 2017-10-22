@@ -6,6 +6,7 @@ import * as bodyParser from "body-parser";
 import { Promise } from "bluebird";
 
 import { createServer } from "http";
+import { createServer as createServerSecure } from "https";
 import { Server } from "colyseus";
 
 // Require ChatRoom handler
@@ -45,7 +46,10 @@ mongoose.connection.on("error", () => {
 });
 
 // Create HTTP Server
-const httpServer = createServer(app);
+const httpServer =
+	process.env.NODE_ENV === "production"
+		? createServerSecure(app)
+		: createServer(app);
 
 // Attach WebSocket Server on HTTP Server.
 const gameServer = new Server({ server: httpServer });
