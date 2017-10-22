@@ -163,9 +163,10 @@ gameRoom.listen("players/:id/:attribute", function(change) {
 
         var healthBar = playersDict[id].querySelector("#healthBar");
         var initRadius = healthBar.getAttribute("initRadius");
+        if(newValue<totalHealth) {
         var r = initRadius * newValue / totalHealth;
         healthBar.setAttribute("radius", r);
-        console.log(playersDict[id]);
+        }
     }
 });
 gameRoom.onJoin.add(function() {
