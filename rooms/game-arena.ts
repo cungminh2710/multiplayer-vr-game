@@ -236,19 +236,13 @@ export class GameArena extends Room {
 			for (var i = 0; i < data.data.target.length; i++) {
 				let targetId = data.data.target[i];
 				console.log("TARGET: ", targetId);
-				if (targetId == "TURRET") {
-					let targetTurretId =
-						this.state.players[client.id].team == "red"
-							? "blue"
-							: "red";
-					let newTurretHealth =
-						this.state.turrets[targetTurretId] -
-						skills[data.data.name].damage;
-					this.state.turrets[targetTurretId] = newTurretHealth;
+				if (targetId == "TURRET_RED" || targetId == "TURRET_BLUE") {
+					let newTurretHealth = this.state.players[targetTurretId] - skills[data.data.name].damage;
+					this.state.players[targetTurretId] = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
 						//GAME OVER
-						this.endGame(targetTurretId == "red" ? "blue" : "red");
+						this.endGame(targetId == "TURRET_RED" ? "blue" : "red");
 					}
 
 					return;
