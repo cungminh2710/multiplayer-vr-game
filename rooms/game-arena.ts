@@ -262,7 +262,7 @@ export class GameArena extends Room {
 					console.log("TURRET THINGGYY", this.state.players[targetId]);
 					let newTurretHealth = this.state.players[targetId].health - skills[data.data.name].damage;
 					console.log("TURRET HEALTHHHH", newTurretHealth);
-					this.state.players[targetId] = newTurretHealth;
+					this.state.players[targetId].health = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
 						// Add one kill to client's stats
