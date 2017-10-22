@@ -38,6 +38,17 @@ export class GameArena extends Room {
 		blue: []
 	};
 
+	getFirstKey(val: string, obj: any): string{
+		let retVal = "";
+		Object.keys(obj).forEach(key => {
+			if (obj[key] === val) {
+					retVal = key;
+			}
+		});
+
+		return retVal;
+	}
+
 	onInit(options) {
 		console.log("Arena created!", options);
 		this.allowedPlayers = options.players;
@@ -73,7 +84,7 @@ export class GameArena extends Room {
 				},
 			},
 			stats: {},
-			gameOver: false,
+			gameOver: "",
 			playersReady: false
 		});
 		this.allowedPlayers.forEach(p => {
@@ -184,18 +195,21 @@ export class GameArena extends Room {
 	}
 
 	endGame(winner: string) {
-		this.state.gameOver = true;
-
+		//rearrange stat object
+		let newStats = {};
 		//update player stats in database
 		this.autoDispose = false;
-
+		
 		let loadAchievements = [];
-		for (var player in this.playerClientMap) {
-			if (this.playerClientMap.hasOwnProperty(player)) {
-				var clientId = this.playerClientMap[player];
+		for (var clientId in this.state.stats) {
+			if (this.state.stats.hasOwnProperty(clientId)) {
+				var element = this.state.stats[clientId];
+				var username = this.getFirstKey(clientId, this.playerClientMap);
+				newStats[username] = element;
+
 				loadAchievements.push(
 					updateUserAchievementsFromStats(
-						player,
+						username,
 						this.state.stats[clientId].kills,
 						this.state.stats[clientId].deaths,
 						winner == "draw"
@@ -206,9 +220,17 @@ export class GameArena extends Room {
 			}
 		}
 
+
+
+		this.state.gameOver = JSON.stringify({
+			winner: winner,
+			stats: newStats
+		});
+
+		let self2 = this;
 		Promise.all(loadAchievements).then(function() {
 			console.log("ALL ACHIEVEMENTS ADDED, SAFE TO DESTROY ARENA");
-			this.autoDispose = true;
+			self2.autoDispose = true;
 		});
 	}
 
@@ -216,7 +238,7 @@ export class GameArena extends Room {
 		// console.log("Game Arena:", client.id, data);
 		if (
 			data.action == "idle" ||
-			this.state.gameOver ||
+			this.state.gameOver != "" ||
 			!this.state.players.hasOwnProperty(client.id)
 		) {
 			return;
@@ -241,8 +263,13 @@ export class GameArena extends Room {
 					this.state.players[targetId] = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
+						// Add one kill to client's stats
+						this.state.stats[client.id].kills += 1;
+
 						//GAME OVER
 						this.endGame(targetId == "TURRET_RED" ? "blue" : "red");
+					}else{
+						this.state.players[targetId].skill = data.data.name;
 					}
 
 					return;

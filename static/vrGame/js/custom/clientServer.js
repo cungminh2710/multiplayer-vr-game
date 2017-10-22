@@ -95,8 +95,9 @@ gameRoom.listen("players/:id", function(change) {
 })
 
 gameRoom.listen("gameOver", function(change) {
-    if (change.value) {
-        console.log("GAME OVER?");
+    if (change.value != "") {
+        console.log("GAME OVER!!!");
+        console.log(value);
     }
 });
 
