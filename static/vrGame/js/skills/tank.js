@@ -27,7 +27,8 @@ class Tank{
         var dy = pos.y - targetPos.y;
         var dz = pos.z - targetPos.z;
         var distance = dx * dx + dy * dy + dz * dz;
-        if(distance > 3.5) return;
+        console.log(distance);
+        if(distance > 6) return;
         //send damage
         var data = {
             //not AOE

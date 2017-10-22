@@ -106,7 +106,7 @@ class Adc{
     //animation:  draw a lazer animated from adc's eyes to along the gaze direction
     //lazer
     static skill2(){
-        var skill2 = panel.querySelector("#skill1");
+        var skill2 = panel.querySelector("#skill2");
         if(skill2.getAttribute("color") == "#ff0000") return;
         skill2.emit("start");
         Animation.setAnimation(cameraEl.querySelector("#"+client.id),"skill2")

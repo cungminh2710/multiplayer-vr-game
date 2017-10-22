@@ -102,7 +102,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 1;
+      character = 2;
       var config = characterConfig[character];
       
       //skill init
@@ -114,7 +114,8 @@ class Players {
       playerWrapperEl.setAttribute("class","collidable");
       playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
-      //playerWrapperEl.setAttribute("position","5 0 -100");
+      playerWrapperEl.setAttribute("position","5 0 -100");
+      playerWrapperEl.setAttribute("visible",true);
       playerWrapperEl.setAttribute("control","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
       player.setAttribute("json_model","src: url("+config.model+"-yellow.json);");
@@ -157,7 +158,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 1;
+      playerInfo.character = 2;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -172,14 +173,14 @@ class Players {
         player.setAttribute("class","collidable" );
         if(raycasterEl) raycasterEl.components.raycaster.refreshObjects();
       })
-
+      player.setAttribute("visible",true);
       player.setAttribute("id",playerInfo.id);
       console.log(playerInfo);
       player.setAttribute("team",playerInfo.team);
       player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
       player.setAttribute("position",playerInfo.data.position);
       //for debug
-     // player.setAttribute("position","10 0 -100");
+      player.setAttribute("position","10 0 -100");
       player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
     

@@ -237,8 +237,8 @@ export class GameArena extends Room {
 				let targetId = data.data.target[i];
 				console.log("TARGET: ", targetId);
 				if (targetId == "TURRET_RED" || targetId == "TURRET_BLUE") {
-					let newTurretHealth = this.state.players[targetTurretId] - skills[data.data.name].damage;
-					this.state.players[targetTurretId] = newTurretHealth;
+					let newTurretHealth = this.state.players[targetId] - skills[data.data.name].damage;
+					this.state.players[targetId] = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
 						//GAME OVER
@@ -262,10 +262,10 @@ export class GameArena extends Room {
 						// Add one death to target's stats
 						this.state.stats[targetId].deaths += 1;
 
-						targetPlayer.skill = JSON.stringify({
+						targetPlayer.skillAnimation = JSON.stringify({
 							name:"idle",
 							skillName:"Dealth",
-							position: targetPlayer.team == "red" ? "0 3 -235" : "0 3 -5",
+							position: targetPlayer.team == "red" ? "3 3 -235" : "3 3 -5",
 						});
 
 						//Bring back to life
@@ -277,10 +277,11 @@ export class GameArena extends Room {
 						}else{
 							this.state.players[targetId].data.position = "5 3 0";
 						}
-					} else {
-						console.log("SENDBACK: ");
-						targetPlayer.skill = data.data.name;
-					}
+					} 
+					// else {
+					// 	console.log("SENDBACK: ");
+					// 	targetPlayer.skill = data.data.name;
+					// }
 				}
 			}
 		}

@@ -3,16 +3,24 @@ class SkillEffectAni{
     static handleEffects(id,newValue){
         console.log("SKILLANIMATION: ",newValue);
         var ani  = JSON.parse(newValue);
+        if(id == client.id){
+            
+            if(ani.skillName =="Dealth") {
+                Animation.setAnimation(playersDict[id], ani.name);
+                SkillEffectAni.dealth(id,ani.position);
+            }
+            return;
+        }
         Animation.setAnimation(playersDict[id], ani.name);
         console.log("++++++++++++++++++++++++++++++++++++++++",ani);
         if (ani.name=="none") return;
         else if(ani.skillName == "FireBall") SkillEffectAni.fireBallAni(ani.from,ani.to);
         else if(ani.skillName =="Cure") SkillEffectAni.cure(ani.targetId);
-        else if(ani.skillName =="Wish") SkillEffectAni.wish(ani.targetId);
+        else if(ani.skillName =="Wish" ) SkillEffectAni.wish(ani.targetId);
         else if(ani.skillName =="Bullet") SkillEffectAni.shootBullet(ani.from,ani.to);
         else if(ani.skillName =="Flash") SkillEffectAni.flash(ani.pos);
-        else if(ani.skillName =="Lazer") SkillEffectAni.lazer(ani.direction,ani.from);
-        else if(ani.skillName =="Cage") SkillEffectAni.cage(ani.targetId);
+        else if(ani.skillName =="Lazer" ) SkillEffectAni.lazer(ani.direction,ani.from);
+        else if(ani.skillName =="Cage" ) SkillEffectAni.cage(ani.targetId);
         else if(ani.skillName =="Rocket") SkillEffectAni.rocket(id,ani.pos);
 
     }
@@ -68,11 +76,20 @@ class SkillEffectAni{
         scene.appendChild(rocket);
 
         animation.addEventListener("animationend",function(){
-            // if(id == client.id){
-            //     panel.querySelector("#attack").emit("start");
-            //     panel.querySelector("#skill1").emit("start");
+            if(playersDict[id].getAttribute("team") == "ally") return;
+            var currPos = playerWrapperEl.getAttribute("position");
+            var dx = pos.x - currPos.x;
+            var dy = pos.y - currPos.y;
+            var dz = pos.z - currPos.z;
+            var distance = dx * dx + dy * dy + dz * dz;
+            console.log(distance)
+            console.log(pos)
+            console.log(currPos)
+             if(distance < 36){
+                panel.querySelector("#attack").emit("start");
+                panel.querySelector("#skill1").emit("start");
             //     panel.querySelector("#skill2").emit("start");
-            // }
+            }
             scene.removeChild(rocket);  
         });
     }
@@ -194,7 +211,35 @@ class SkillEffectAni{
         }
          
     }
+    static dealth(id, position){
+        var animation = document.createElement('a-animation');
+        animation.setAttribute("attribute","visible");  
+        animation.setAttribute("from",false);
+        animation.setAttribute("to",true);
+        animation.setAttribute("dur",10000);
+        console.log("getHereANIMATED");
+        if( id == client.id){
+            disableMove = true;
+            playerWrapperEl.appendChild(animation);
+            playerWrapperEl.setAttribute("position",position);
+            animation.addEventListener("animationend",function(e){
+                console.log("getHereANIMATED");
+                playerWrapperEl.removeChild(animation);
+                disableMove = false;
+                
+            })
+          
+        }else{
+            playersDict[id].appendChild(animation);
+            playersDict[id].setAttribute("position",position);
+            animation.addEventListener("animationend",function(e){
+                playersDict[id].removeChild(animation);    
+            })
 
+        }
+
+
+    }
 
     
 

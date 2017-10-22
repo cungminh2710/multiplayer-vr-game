@@ -136,7 +136,7 @@ gameRoom.listen("players/:id/:attribute", function(change) {
         console.log("CHANGE ROTATION");
         playersDict[id].setAttribute("rotation", newValue)
     } else if (change.path.attribute == "skillAnimation") {
-        if (id == client.id) return;
+        
         SkillEffectAni.handleEffects(id, newValue);
 
     } else if (change.path.attribute == "skill") {
