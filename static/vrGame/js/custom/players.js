@@ -114,7 +114,7 @@ class Players {
       playerWrapperEl.setAttribute("class","collidable");
       playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
-      playerWrapperEl.setAttribute("position","5 0 -100");
+      playerWrapperEl.setAttribute("position","5 3 -3");
       playerWrapperEl.setAttribute("visible",true);
       playerWrapperEl.setAttribute("control","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
@@ -180,7 +180,7 @@ class Players {
       player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
       player.setAttribute("position",playerInfo.data.position);
       //for debug
-      player.setAttribute("position","10 0 -100");
+      player.setAttribute("position","10 3 -3");
       player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
     

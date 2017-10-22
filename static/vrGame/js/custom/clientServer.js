@@ -102,8 +102,11 @@ gameRoom.listen("players/:id", function(change) {
 gameRoom.listen("gameOver", function(change) {
     if (change.value != "") {
         console.log("GAME OVER!!!");
-        console.log(value);
+        console.log(change.value);
+        SkillEffectAni.gameOver(change.value);
     }
+    
+
 });
 
 gameRoom.listen("turrets/:attribute", function(change) {

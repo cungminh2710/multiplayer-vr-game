@@ -241,6 +241,62 @@ class SkillEffectAni{
 
     }
 
-    
+    static gameOver( value ){
+        var data = JSON.parse(value);
+        disableMove = true;
+        Animation.setAnimation(playersDict[client.id], "idle");
+        var resultText = "DEFEAT";
+        if (team == data.winner){
+            resultText = "VICTORY"
+
+        } 
+
+        var user = findGetParameter("user");
+        var stats = data.stats[user];
+        console.log(data);
+        var panel = document.createElement("a-entity");
+            panel.setAttribute("geometry","primitive:plane;height: 0.14; width: 0.2");
+            panel.setAttribute("material","color:#66FF66;transparent:true;opacity:0.5");
+            panel.setAttribute("position","0 0.0 -0.1");
+            panel.setAttribute("id","panel");
+            panel.setAttribute("scale","1 1 1");
+            
+            var animation = document.createElement("a-animation");
+            animation.setAttribute("attribute","scale");
+            animation.setAttribute("from","0 0 0");
+            animation.setAttribute("to","1 1 1");;
+            animation.setAttribute("repeat","0");
+            animation.setAttribute("during","3000");
+            panel.appendChild(animation)
+            
+            
+            var result = document.createElement("a-text");
+            result.setAttribute("position","-0.04 0.03 0");
+            // console.log(config)
+            result.setAttribute("value",resultText);//config.health
+            
+            result.setAttribute("width","0.5");
+            result.setAttribute("color","white");
+            panel.appendChild(result);
+            
+            var kill = document.createElement("a-text");
+            kill.setAttribute("position","-0.03 -0.003 0");
+            kill.setAttribute("value","Kills: "+stats.kills);//skill1.setAttribute("value",config.skill.skill1.name+": Ready");
+            kill.setAttribute("width","0.3");
+            kill.setAttribute("color","green");
+            panel.appendChild(kill);
+            
+            var dealth = document.createElement("a-text");
+            dealth.setAttribute("id","skill2");
+            dealth.setAttribute("position","-0.03 -0.02 0");
+            dealth.setAttribute("value","dealth: "+stats.deaths);//skill1.setAttribute("value",config.skill.skill1.name+": Ready");
+            dealth.setAttribute("width","0.3");
+            dealth.setAttribute("color","red");
+            panel.appendChild(dealth);
+            cameraEl.appendChild(panel);
+            console.log("have created panel");
+         
+        
+            }
 
 }
