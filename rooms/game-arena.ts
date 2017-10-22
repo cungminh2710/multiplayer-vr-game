@@ -59,7 +59,7 @@ export class GameArena extends Room {
 					id: "TURRET_RED",
 					character: "turret",
 					team: "red",
-					health: 100,
+					health: 10000,
 					data: {
 						position: "",
 						moveAnimation: "",
@@ -72,7 +72,7 @@ export class GameArena extends Room {
 					id: "TURRET_BLUE",
 					character: "turret",
 					team: "blue",
-					health: 100,
+					health: 10000,
 					data: {
 						position: "",
 						moveAnimation: "",
