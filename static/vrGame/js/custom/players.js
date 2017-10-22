@@ -6,13 +6,12 @@ class Players {
   }
 
   static createTurret(turretInfo,myPos){
-    console.log(myPos);
     var tower = document.createElement("a-box");
     
     
-        tower.setAttribute("depth",12);
-        tower.setAttribute("height",12);
-        tower.setAttribute("width",12);
+    tower.setAttribute("depth",12);
+    tower.setAttribute("height",12);
+    tower.setAttribute("width",12);
     tower.setAttribute("position",pos);
     tower.setAttribute("material","transparent:true;opacity:0");
     var z = myPos.split(" ")[2];
@@ -38,7 +37,6 @@ class Players {
 
       } 
       tower.setAttribute("class","collidable" );
-      console.log(turretInfo.team);
      
     }
     tower.setAttribute("team",turretInfo.team);
@@ -93,7 +91,6 @@ class Players {
 
     tower.appendChild(towerpan);
     tower.appendChild(healthBar);
-    console.log(tower.object3D)
     if(raycasterEl) raycasterEl.components.raycaster.refreshObjects();
     document.querySelector("a-scene").appendChild(tower);
     return tower;
@@ -102,7 +99,6 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
-      character = 2;
       var config = characterConfig[character];
       
       //skill init
@@ -114,7 +110,7 @@ class Players {
       playerWrapperEl.setAttribute("class","collidable");
       playerWrapperEl.setAttribute("position",playerInfo.data.position );
       //for debug
-      playerWrapperEl.setAttribute("position","5 3 -3");
+      //playerWrapperEl.setAttribute("position","5 3 -3");
       playerWrapperEl.setAttribute("visible",true);
       playerWrapperEl.setAttribute("control","moveSpeed: "+config.moveSpeed+";runSpeed: "+config.runSpeed);
       var player = document.createElement("a-entity");
@@ -158,7 +154,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-      playerInfo.character = 2;
+
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -180,7 +176,7 @@ class Players {
       player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
       player.setAttribute("position",playerInfo.data.position);
       //for debug
-      player.setAttribute("position","10 3 -3");
+      //player.setAttribute("position","10 3 -3");
       player.setAttribute("health",characterConfig[playerInfo.character].health);
       player.setAttribute("rotation",playerInfo.rotation);
     
@@ -388,7 +384,6 @@ class Players {
 
     panel.appendChild(skill2);
     cameraEl.appendChild(panel);
-    console.log("have created panel");
 
 
   }
