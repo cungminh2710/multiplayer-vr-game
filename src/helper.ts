@@ -98,32 +98,33 @@ export let updateUserAchievementsFromStats: {
 		won: boolean | string
 	): Promise<IUserModel>;
 } = (username, kills, death, won) =>
-	User.find({ username }).then(async user => {
+	User.findOne({ username }).then(async user => {
 		let {
 			_id,
-			stats: { numGamesPlayed, numWon, numDrew, numKills, numDeath }
+			stats,
 		} = user;
 
 		// Calculate new Stats
 		let newStats = {
-			numGamesPlayed: numGamesPlayed + 1,
-			numWon: typeof won === "boolean" ? numWon + 1 : numWon,
-			numDrew: typeof won !== "boolean" ? numDrew : numDrew + 1,
-			numKills: numKills + kills,
-			numDeath: numDeath + death
+			numGamesPlayed: stats.numGamesPlayed + 1,
+			numWon: typeof won === "boolean" ? stats.numWon + 1 : stats.numWon,
+			numDrew: typeof won !== "boolean" ? stats.numDrew : stats.numDrew + 1,
+			numKills: stats.numKills + kills,
+			numDeath: stats.numDeath + death
 		};
+
 		// Amazing Achievements
 		let achievement;
 		let youWon = typeof won === "boolean";
 		if (kills > death + 20 && death < 10)
 			achievement = {
-				logoUrl: youWon ? "smile-o" : "frown-o",
+				logoUrl: youWon ? "fa-smile-o" : "fa-frown-o",
 				name: youWon ? "FPS Artist" : "Bad luck Brian",
 				description: "You are amazing player. GG WP !"
 			};
 		else if (kills > death + 10 && death < 10)
 			achievement = {
-				logoUrl: youWon ? "smile-o" : "frown-o",
+				logoUrl: youWon ? "fa-smile-o" : "fa-frown-o",
 				name: youWon
 					? "You completely smashed the opponent(s)"
 					: "You are great ... but not enough",
@@ -131,19 +132,19 @@ export let updateUserAchievementsFromStats: {
 			};
 		else if (kills < death + 10 && won)
 			achievement = {
-				logoUrl: "meh-o",
+				logoUrl: "fa-meh-o",
 				name: "You got carried by your team",
 				description: "Your team is better than you ... Poor them"
 			};
 		else if (kills < 1 && death > 15)
 			achievement = {
-				logoUrl: "meh-o",
+				logoUrl: "fa-meh-o",
 				name: "Born to die",
 				description: "You can't help your teammates"
 			};
 		else if (kills < 1 && death > 10)
 			achievement = {
-				logoUrl: "meh-o",
+				logoUrl: "fa-meh-o",
 				name: "Party crasher",
 				description: "You can't help your teammates"
 			};
