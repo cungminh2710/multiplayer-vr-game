@@ -60,7 +60,7 @@ export class GameArena extends Room {
 					id: "TURRET_RED",
 					character: "turret",
 					team: "red",
-					health: 100000,
+					health: 100,
 					data: {
 						position: "",
 						moveAnimation: "",
@@ -73,7 +73,7 @@ export class GameArena extends Room {
 					id: "TURRET_BLUE",
 					character: "turret",
 					team: "blue",
-					health: 100000,
+					health: 100,
 					data: {
 						position: "",
 						moveAnimation: "",
@@ -268,11 +268,7 @@ export class GameArena extends Room {
 
 						//GAME OVER
 						this.endGame(targetId == "TURRET_RED" ? "blue" : "red");
-					}else{
-						this.state.players[targetId].skill = data.data.name;
 					}
-
-					return;
 				} else {
 					let targetPlayer = this.state.players[targetId];
 					console.log("TARGETPLAYER: ", targetPlayer);
