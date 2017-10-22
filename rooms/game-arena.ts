@@ -166,9 +166,10 @@ export class GameArena extends Room {
 		//Once all players have joined, set the game timer
 		if (this.numJoined == this.maxPlayers) {
 			this.state.playersReady = true;
+			var self = this;
 			setTimeout(function() {
 				console.log("ENDING GAME");
-				this.endGame("draw");
+				self.endGame("draw");
 			}, EIGHT_MINUTES);
 		}
 	}
@@ -266,28 +267,22 @@ export class GameArena extends Room {
 						this.state.stats[client.id].kills += 1;
 						// Add one death to target's stats
 						this.state.stats[targetId].deaths += 1;
-						setTimeout(function() {
-							console.log("bring back to life", targetId);
-							let playerId = targetId;
-							let pCharacter = this.state.players[playerId].character;
-							let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
-							this.state.players[playerId].health = pHealth;
-							if(this.state.players[playerId].team == "red"){
-								this.state.players[playerId].data.position = "5 3 -235";
-							}else{
-								this.state.players[playerId].data.position = "5 3 0";
-							}
-						}, 5000);
 
 						targetPlayer.skill = JSON.stringify({
-								name:"idle",
-								skillName:"Dealth",
-								position: targetPlayer.team == "red" ? "0 3 -235" : "0 3 -5",
+							name:"idle",
+							skillName:"Dealth",
+							position: targetPlayer.team == "red" ? "0 3 -235" : "0 3 -5",
 						});
-						// setTimeout(function(){
-						//   console.log('turning off animation');
-						//   this.resetweapon(client.id);
-						// }, skills[data.data.name].duration);
+
+						//Bring back to life
+						let pCharacter = this.state.players[targetId].character;
+						let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
+						this.state.players[targetId].health = pHealth;
+						if(this.state.players[targetId].team == "red"){
+							this.state.players[targetId].data.position = "5 3 -235";
+						}else{
+							this.state.players[targetId].data.position = "5 3 0";
+						}
 					} else {
 						console.log("SENDBACK: ");
 						targetPlayer.skill = data.data.name;
