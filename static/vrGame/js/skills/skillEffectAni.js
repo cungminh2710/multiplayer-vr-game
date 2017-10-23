@@ -1,18 +1,19 @@
 
 class SkillEffectAni{
     static handleEffects(id,newValue){
-        console.log("SKILLANIMATION: ",newValue);
+
         var ani  = JSON.parse(newValue);
         if(id == client.id){
-            
             if(ani.skillName =="Dealth") {
+               
                 Animation.setAnimation(playersDict[id], ani.name);
                 SkillEffectAni.dealth(id,ani.position);
             }
             return;
         }
         Animation.setAnimation(playersDict[id], ani.name);
-        console.log("++++++++++++++++++++++++++++++++++++++++",ani);
+
+        
         if (ani.name=="none") return;
         else if(ani.skillName == "FireBall") SkillEffectAni.fireBallAni(ani.from,ani.to);
         else if(ani.skillName =="Cure") SkillEffectAni.cure(ani.targetId);
@@ -28,7 +29,7 @@ class SkillEffectAni{
 
             var pos;
             if(id == client.id){
-                console.log("DISABLE",disableMove);
+            
                 pos = playerWrapperEl.getAttribute("position");
                 disableMove = true;
 
@@ -36,7 +37,7 @@ class SkillEffectAni{
             }else{
                 pos = playersDict[id].getAttribute("position");
             }
-            console.log(pos);
+     
 
             var cage = document.createElement('a-entity');
             cage.setAttribute("cage","");
@@ -52,7 +53,7 @@ class SkillEffectAni{
             scene.appendChild(cage);
     
             animation.addEventListener("animationend",function(e){
-                console.log("animationed",e);
+   
                 disableMove = false;
                 scene.removeChild(cage);
                 
@@ -82,9 +83,7 @@ class SkillEffectAni{
             var dy = pos.y - currPos.y;
             var dz = pos.z - currPos.z;
             var distance = dx * dx + dy * dy + dz * dz;
-            console.log(distance)
-            console.log(pos)
-            console.log(currPos)
+   
              if(distance < 36){
                 panel.querySelector("#attack").emit("start");
                 panel.querySelector("#skill1").emit("start");
@@ -97,7 +96,7 @@ class SkillEffectAni{
     static shootBullet(from, to){
         // var d =cameraEl.getAttribute("rotation");
           //var d = cameraEl.components.rotation.data;
-          console.log(from,to)
+
           var bullet = document.createElement('a-entity');
           bullet.setAttribute("id","bullet")
           bullet.setAttribute("bullet","")
@@ -113,7 +112,7 @@ class SkillEffectAni{
           scene.appendChild(bullet);
 
           animation.addEventListener("animationend",function(e){
-              console.log("animationed",e)
+    
               scene.removeChild(bullet);
               
           })
@@ -122,12 +121,12 @@ class SkillEffectAni{
     static flash(pos){
         var flashEl = document.createElement('a-entity');
         flashEl.setAttribute('position',pos.x/2+" "+"0"+" "+pos.z/2);
-        console.log(pos);
+
         scene.appendChild(flashEl);
         flashEl.setAttribute("particle-system","accelerationValue:0 -20 0;velocitySpread:1 1 1;accelerationSpread:2 0 2;velocityValue:0 7 0;color: #FFFF33,#FFFF00;duration:0.5;particleCount:10;size:0.5;texture:js/skills/star.png");
         flashEl.addEventListener("particleed",function(){  
             scene.removeChild(flashEl);
-            console.log("remove");
+
         })
     }
 
@@ -165,17 +164,15 @@ class SkillEffectAni{
         });
     }
     static fireBallAni(from, to){
-       console.log(from, to);
+  
         var fireBall = document.createElement('a-entity');
-        fireBall.setAttribute("id","fireBall")
-        fireBall.setAttribute("fireBall","")
+        fireBall.setAttribute("fireball","")
         fireBall.setAttribute("position",from.x+" "+from.y+" "+from.z);
 
         var animation = document.createElement('a-animation');
         animation.setAttribute("attribute","position");  
         animation.setAttribute("from",from.x+" "+from.y+" "+from.z);    
         animation.setAttribute("to",to.x+" "+to.y+" "+to.z);
-        animation.setAttribute("begin","fireBallStart");
         animation.setAttribute("id","fireBallShoot");
         animation.setAttribute("dur",2000);
 
@@ -186,17 +183,16 @@ class SkillEffectAni{
             
         })
       
-        fireBall.emit("fireBallStart");
         
     }
     static cure(id){
         var pos;
         if(id == client.id) pos = playerWrapperEl.getAttribute("position");
         else pos = playersDict[id].getAttribute("position");
-       // console.log("SYSTEM POS",pos);
+
         var cureEl = document.createElement('a-entity');
         cureEl.setAttribute('position',pos.x/2+" "+"0"+" "+pos.z/2);
-        //console.log(cureEl);
+
         scene.appendChild(cureEl);
         cureEl.setAttribute("particle-system","velocitySpread:1 1 1;accelerationSpread:2 0 2;velocityValue:0 10 0;color: #7FF000,#7FFF00;duration:3;particleCount:5;size:1;texture:js/skills/crosifixion.png");
         cureEl.addEventListener("particleed",function(){
@@ -206,7 +202,7 @@ class SkillEffectAni{
     }
     static wish(ids){
         for(var i = 0; i<ids.length;i++ ){
-            console.log(ids[i]);
+
             SkillEffectAni.cure(ids[i])
         }
          
@@ -217,13 +213,13 @@ class SkillEffectAni{
         animation.setAttribute("from",false);
         animation.setAttribute("to",true);
         animation.setAttribute("dur",10000);
-        console.log("getHereANIMATED");
+   
         if( id == client.id){
             disableMove = true;
             playerWrapperEl.appendChild(animation);
             playerWrapperEl.setAttribute("position",position);
             animation.addEventListener("animationend",function(e){
-                console.log("getHereANIMATED");
+         
                 playerWrapperEl.removeChild(animation);
                 disableMove = false;
                 
@@ -253,7 +249,7 @@ class SkillEffectAni{
 
         var user = findGetParameter("user");
         var stats = data.stats[user];
-        console.log(data);
+
         var panel = document.createElement("a-entity");
             panel.setAttribute("geometry","primitive:plane;height: 0.14; width: 0.2");
             panel.setAttribute("material","color:#66FF66;transparent:true;opacity:0.5");
@@ -272,7 +268,7 @@ class SkillEffectAni{
             
             var result = document.createElement("a-text");
             result.setAttribute("position","-0.04 0.03 0");
-            // console.log(config)
+        
             result.setAttribute("value",resultText);//config.health
             
             result.setAttribute("width","0.5");
@@ -294,7 +290,8 @@ class SkillEffectAni{
             dealth.setAttribute("color","red");
             panel.appendChild(dealth);
             cameraEl.appendChild(panel);
-            console.log("have created panel");
+
+            
          
         
             }

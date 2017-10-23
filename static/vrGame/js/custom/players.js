@@ -99,6 +99,7 @@ class Players {
 
   static createMyself(playerInfo){
       character = playerInfo.character;
+      //character = 3;
       var config = characterConfig[character];
       
       //skill init
@@ -154,7 +155,7 @@ class Players {
   static createOtherPlayer(playerInfo){
     //console.log(playerInfo);
     //console.log(playerInfo.character);  
-
+   // playerInfo.character = 3;
       var model = characterConfig[playerInfo.character].model;
   
       if(playerInfo.team == "ally") model += "-yellow.json";
@@ -171,7 +172,7 @@ class Players {
       })
       player.setAttribute("visible",true);
       player.setAttribute("id",playerInfo.id);
-      console.log(playerInfo);
+
       player.setAttribute("team",playerInfo.team);
       player.setAttribute("initalHealth",characterConfig[playerInfo.character].health);
       player.setAttribute("position",playerInfo.data.position);
@@ -190,10 +191,8 @@ class Players {
   }
 
   static getBoundingBox(player){
-    //console.log(player)
     player.geometry.computeBoundingBox();
     var boundingBox = player.geometry.boundingBox;
-    //console.log(boundingBox)
     return {x:boundingBox.max.x-boundingBox.min.x,
             y:boundingBox.max.y-boundingBox.min.y,
             z:boundingBox.max.z-boundingBox.min.z};
@@ -242,7 +241,6 @@ class Players {
     raycasterEl.setAttribute("material","color: black; shader: flat");
 
     raycasterEl.addEventListener("mouseenter",function(evt){
-      console.log(evt)
       if(evt.detail.intersectedEl.getAttribute("team")=="enemy"){
         raycasterEl.emit('targetEnemy');
       }
@@ -299,7 +297,6 @@ class Players {
     var healthtext = document.createElement("a-text");
     healthtext.setAttribute("id","health");
     healthtext.setAttribute("position","-0.02 0.011 0");
-    console.log(config)
     healthtext.setAttribute("value","Health: "+config.health);
     
     healthtext.setAttribute("width","0.1");

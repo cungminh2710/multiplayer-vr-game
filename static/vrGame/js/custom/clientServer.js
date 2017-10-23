@@ -24,37 +24,9 @@ var tempBuffer = {}
 // THIS IS THE FIRST STAETE THIS CLIENT WILL SEE WHEN THEY JOIN THE GAME
 gameRoom.onData.add(function(data) {
     if (data.type == "initial") {
-
-        // STORE STATE
-        // THIS WILL UPDATE playerNumber 
-        // TO UPDATE YOUR POSITION LATER
-        // for (var p in data.state) {
-        //     console.log("````````````````````````````````````");
-        //     // check if the property/key is defined in the object itself, not in parent
-        //     if (data.state.hasOwnProperty(p)) {
-        //        // console.log(data.state[p]);
-        //        // console.log(team)
-        //        // if (data.state[p].team == team) data.state[p].team = "ally";
-        //         //else data.state[p].team = "enemy";
-
-        //         if (data.state[p].character == "turret") {
-        //             //console.log(data.state[p]);
-        //             console.log("THIS IS A TURRET");
-        //             // player = MAKE TURRET HERE
-        //         } else {
-        //             //MAKE NORMAL PLAYER HERE
-        //            // player = Players.createOtherPlayer(data.state[p]);
-        //            // playersDict[data.state[p].id] = player
-        //             ///console.log("ondata: ", player);
-        //         }
-        //         //tempBuffer[data.state[p].id] = data.state[p];
-        //     }
-        // }
         tempBuffer = data.state;
     }
-    // } else if (data.type === "damage") {
-    //     console.log("YOU GOT HIT");
-    // }
+
 
 });
 //create players
@@ -62,24 +34,22 @@ gameRoom.listen("players/:id", function(change) {
     if(change.path.id == "TURRET_RED" || change.path.id == "TURRET_BLUE"){
         return;
     }
-    console.log("CHANGE OF PLAYER NUMBERS");
     if (change.path.id == client.id) {
         team = change.value.team;
-        console.log("MESELF", team);
         for (var p in tempBuffer) {
             if (tempBuffer.hasOwnProperty(p)) {
                 if (tempBuffer[p].team == team) tempBuffer[p].team = "ally";
                 else tempBuffer[p].team = "enemy";
-                console.log(team)
+    
                 if (tempBuffer[p].character == "turret") {
-                    console.log("THIS IS A TURRET");
+                
                     // player = MAKE TURRET HERE
                     player = Players.createTurret(tempBuffer[p],change.value.data.position);
                 } else {
                     //MAKE NORMAL PLAYER HERE
                     player = Players.createOtherPlayer(tempBuffer[p]);
                    // playersDict[data.state[p].id] = player
-                    console.log("ondata: ", player);
+        
                 }
                 playersDict[tempBuffer[p].id] = player;
             }
@@ -88,12 +58,12 @@ gameRoom.listen("players/:id", function(change) {
         }
         tempBuffer = {};
         player = Players.createMyself(change.value);
-        console.log("MYSELF CREATED");
+      
     } else {
         if (change.value.team == team) change.value.team = "ally";
         else change.value.team = "enemy";
         player = Players.createOtherPlayer(change.value);
-        console.log("listen: others ", player);
+
 
     }
     playersDict[change.path.id] = player
@@ -101,17 +71,13 @@ gameRoom.listen("players/:id", function(change) {
 
 gameRoom.listen("gameOver", function(change) {
     if (change.value != "") {
-        console.log("GAME OVER!!!");
-        console.log(change.value);
+
         SkillEffectAni.gameOver(change.value);
     }
     
 
 });
 
-gameRoom.listen("turrets/:attribute", function(change) {
-    console.log("DAMAGE TO TURRET");
-});
 
 //MOVEANIMATION AND POSITION UPDATE
 gameRoom.listen("players/:id/data/:attribute", function(change) {
@@ -142,7 +108,7 @@ gameRoom.listen("players/:id/:attribute", function(change) {
 
     if (change.path.attribute == "rotation") {
         if (id == client.id) return;
-        console.log("CHANGE ROTATION");
+    
         playersDict[id].setAttribute("rotation", newValue)
     } else if (change.path.attribute == "skillAnimation") {
         
@@ -150,7 +116,7 @@ gameRoom.listen("players/:id/:attribute", function(change) {
 
     } else if (change.path.attribute == "skill") {
         if (id == client.id) return;
-        console.log(newValue);
+
     } else if (change.path.attribute == "health") {
         playersDict[id].setAttribute("health", newValue);
 
@@ -169,9 +135,6 @@ gameRoom.listen("players/:id/:attribute", function(change) {
         }
     }
 });
-gameRoom.onJoin.add(function() {
-    console.log("JOIN_SUCCESSFUL");
-})
 
 function findGetParameter(parameterName) {
     var result = null,

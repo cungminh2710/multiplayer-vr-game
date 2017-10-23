@@ -64,19 +64,17 @@ AFRAME.registerComponent('control', {
                 var direction = camera.getWorldDirection();
                 preKey = 87;
                 el.setAttribute("position",pos);
-                console.log(el.object3D.position);
                 map = {};    
                 tween = new TWEEN.Tween()
                 .repeat(Infinity)
                 .onUpdate(function(){
                     var now = new Date().getTime();
-                    //console.log(preTime);
-                    
+           
                     if(now-preTime <10) return;
                     if(disableMove == true) return;
                     preTime = now;
                     pos = player.getAttribute("position");
-                    //console.log("pos ",pos);
+       
                     direction = camera.getWorldDirection();
                     newX = pos.x-direction.x*runSpeed;
                     newZ = pos.z-direction.z*runSpeed;
@@ -108,7 +106,7 @@ AFRAME.registerComponent('control', {
                     if(now-preTime <10) return;
                     if(disableMove == true) return;
                     preTime = now;
-                    console.log("send")
+                    //console.log("send")
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
@@ -141,7 +139,7 @@ AFRAME.registerComponent('control', {
                     if(now-preTime <10) return;
                     if(disableMove == true) return;
                     preTime = now;
-                    console.log("send")
+                    //console.log("send")
                     pos = player.getAttribute("position");
                     //console.log("pos ",pos);
                     direction = camera.getWorldDirection();
@@ -175,7 +173,6 @@ AFRAME.registerComponent('control', {
                     if(now-preTime <10) return;
                     if(disableMove == true) return;
                     preTime = now;
-                    console.log("send")
                     pos = player.getAttribute("position");
                     direction = camera.getWorldDirection();
                     var axis = new THREE.Vector3( 0, 1, 0 );

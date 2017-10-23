@@ -28,7 +28,6 @@ class Healer{
             target:[id],
             name:"Cure",
         }
-        console.log("SEND Cure: ",data)
         gameRoom.send({action: "DAMAGE", data}); 
 
        
@@ -66,7 +65,6 @@ class Healer{
             to: to
         });
         gameRoom.send({action: "SKILLANIMATION", data:data});
-        console.log(direction);
         SkillEffect.fireBall(from,to);
     }
     
@@ -88,7 +86,6 @@ class Healer{
             }
         }
         SkillEffect.wish(ally);
-        console.log("IDLISt",ally);
         //send animation
         var dataAni = JSON.stringify({
             name:"skill2",
@@ -104,7 +101,6 @@ class Healer{
         }
        
         gameRoom.send({action: "DAMAGE", data}); 
-        console.log("SEND Wish: ",data)
         }
 
 }

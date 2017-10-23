@@ -27,7 +27,6 @@ class Adc{
             }
             to = target.getAttribute("position");
             to.y = from.y;
-            console.log("SEND Bullet: ",data)
             gameRoom.send({action: "DAMAGE", data}); 
 
         }else{
@@ -126,7 +125,6 @@ class Adc{
             z:pos.z - direction.z*10
 
         };
-        console.log(to);
         SkillEffect.lazer(from,to);
 
         //gameRoom.send({action: "SKILLANIMATION", data:"skill2"});
