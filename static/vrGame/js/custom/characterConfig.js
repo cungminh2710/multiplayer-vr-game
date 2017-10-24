@@ -6,8 +6,8 @@ characterConfig[1] = {
     cameraHeight: 1.4,
     healthBarPos: 2,
     localPosition:"0 -1.4 0",
-    moveSpeed:0.05,
-    runSpeed: 0.07,
+    moveSpeed:0.075,
+    runSpeed: 0.08,
     gazeDistance:17,
     boundingBox:{
         width:1.4649,
@@ -49,8 +49,8 @@ characterConfig[2] = {
     cameraHeight: 0.85,
     healthBarPos: 1.6,
     localPosition:"0 -0.85 0.21",
-    moveSpeed: 0.035,
-    runSpeed: 0.05,
+    moveSpeed: 0.065,
+    runSpeed: 0.07,
     gazeDistance:20,
     boundingBox:{
         width:0.5660,
@@ -92,8 +92,8 @@ characterConfig[3] = {
     cameraHeight: 0.75,
     healthBarPos: 1.45,
     localPosition:"0 -0.75 0.17",
-    moveSpeed: 0.032,
-    runSpeed: 0.045,
+    moveSpeed: 0.06,
+    runSpeed: 0.065,
     gazeDistance:14,
     boundingBox:{
         width:0.5337,

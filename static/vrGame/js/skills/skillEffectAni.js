@@ -228,6 +228,10 @@ class SkillEffectAni{
         }else{
             playersDict[id].appendChild(animation);
             playersDict[id].setAttribute("position",position);
+
+            var healthBar = playersDict[id].querySelector("#healthBar");
+            healthBar.setAttribute("radius", healthBar.getAttribute("initRadius"));
+
             animation.addEventListener("animationend",function(e){
                 playersDict[id].removeChild(animation);    
             })

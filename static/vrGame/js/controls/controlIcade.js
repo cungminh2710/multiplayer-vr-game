@@ -22,6 +22,7 @@ AFRAME.registerComponent('control', {
 
         window.addEventListener( 'keydown', function( e ) {
             e.preventDefault( );
+         
             var player = playerWrapperEl;
             var pos = player.getAttribute("position");
             this.repeating = true;
@@ -30,6 +31,10 @@ AFRAME.registerComponent('control', {
             var map = {};
             map[e.keyCode] = e.type == 'keydown';
             if (map[67] || map[69]||map[81]||map[90]){
+                if((map[67]||map[81]||map[90])&& preKey ==87) return;
+                if((map[67]||map[69]||map[90])&& preKey ==65) return;
+                if((map[69]||map[81]||map[90])&& preKey ==68) return;
+                if((map[67]||map[69]||map[81])&& preKey ==88) return;
                 if(tween) tween.stop();
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
                 gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
@@ -56,10 +61,16 @@ AFRAME.registerComponent('control', {
              
 
             }else if(map[70] || map[78]||map[84]||map[82]){//reset skill animation n  t
+                //if(tween) tween.stop();
                 gameRoom.send({action: "SKILLANIMATION", data:JSON.stringify({name:"none"})})
                 Animation.setAnimation(el.children[0].querySelector("#"+client.id),"none");
             }
-            else if(map[87] && preKey != 87 ){// w front
+            else if(map[87] && preKey != 87){// w front
+                if(preKey == 88 || preKey == 65 || preKey == 68){
+                    if(tween) tween.stop();
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                    gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
+                }
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 87;
@@ -93,7 +104,12 @@ AFRAME.registerComponent('control', {
                 })
                 .start();   
             }
-            else if(map[88] && preKey != 88){//x back
+            else if(map[88] && preKey != 88 ){//x back
+                if(preKey == 87  || preKey == 65 || preKey == 68){
+                    if(tween) tween.stop();
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                    gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
+                }
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 88;
@@ -127,6 +143,11 @@ AFRAME.registerComponent('control', {
                 
             }
             else if(map[65] && preKey != 65){ //a left
+                if(preKey == 87 || preKey == 88  || preKey == 68){
+                    if(tween) tween.stop();
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                    gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
+                }
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 65;
@@ -161,7 +182,12 @@ AFRAME.registerComponent('control', {
                 })
                 .start();
             }
-            else if(map[68]&& preKey != 68){ //d right
+            else if(map[68] && preKey != 68 ){ //d right
+                if(preKey == 87 || preKey == 88 || preKey == 65){
+                    if(tween) tween.stop();
+                    Animation.setAnimation(el.children[0].querySelector("#"+client.id),"idle");
+                    gameRoom.send({action: "MOVE", data:{position: "", moveAnimation:"idle"}}); 
+                }
                 var camera = cameraEl.object3D;
                 var direction = camera.getWorldDirection();
                 preKey = 68;
