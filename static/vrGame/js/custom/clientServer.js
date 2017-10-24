@@ -1,10 +1,7 @@
 var count = 0;
 
 var host = window.document.location.host.replace(/:.*/, "");
-var isProduction = host.indexOf("minhcung") !== -1;
-var url = !isProduction
-	? "ws://" + host + (location.port ? ":" + location.port : "")
-	: "ws://minhcung.me/lovr";
+var url = "ws://" + host + (location.port ? ":" + location.port : "");
 var client = new Colyseus.Client(url);
 var roomName = findGetParameter("roomName");
 var user = findGetParameter("user");
