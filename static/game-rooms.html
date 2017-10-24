@@ -124,9 +124,8 @@
 
 
     <script>
-        //var host = window.document.location.host.replace(/:.*/, '');
-        var url = "ws://128.199.191.38:2657"
-        //var url = "ws://" + host + (location.port ? ":" + location.port : "");
+        var host = window.document.location.host.replace(/:.*/, '');
+        var url = "ws://" + host + (location.port ? ":" + location.port : "");
         var client = new Colyseus.Client(url);
         var myPlayerName = client.id;
         loadNav(myPlayerName);
@@ -228,9 +227,7 @@
                 }
 
                 if (globalState.rooms[joinedRoom].isReady) {
-                    //var gameUrl = host + (location.port ? ":" + location.port : "");
-                    var gameUrl = "128.199.191.38:2657"
-
+                    var gameUrl = "http://" + host + (location.port ? ":" + location.port : "");
                     $('#arena-url').attr('href', gameUrl + "/vrGame/map.html?roomName=" + globalState.rooms[joinedRoom].name + "&user=" + myPlayerName);
                     $('#ready-modal').modal('show');
                 }

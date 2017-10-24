@@ -1,10 +1,7 @@
 var count = 0;
 
 var host = window.document.location.host.replace(/:.*/, "");
-//var url = "ws://" + host + (location.port ? ":" + location.port : "");
-
-
-var url = "ws://128.199.191.38:2657";
+var url = "ws://" + host + (location.port ? ":" + location.port : "");
 var client = new Colyseus.Client(url);
 var roomName = findGetParameter("roomName");
 var user = findGetParameter("user");
