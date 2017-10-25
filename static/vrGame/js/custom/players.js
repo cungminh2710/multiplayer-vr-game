@@ -4,8 +4,8 @@ class Players {
   
   
     }
-  
-    static createTurret(turretInfo,myPos){
+
+    static createTurret(turretInfo,team){
       var tower = document.createElement("a-box");
       
       
@@ -14,35 +14,29 @@ class Players {
       tower.setAttribute("width",12);
       tower.setAttribute("position",pos);
       tower.setAttribute("material","transparent:true;opacity:0");
-      var z = myPos.split(" ")[2];
+  
       tower.setAttribute("initalHealth",turretInfo.health);
       var pos = "";
-      if (turretInfo.team == 'ally'){  
-        if(z == "-5"){
+      if (turretInfo.id=="TURRET_BLUE"){  
+        
           pos = "60 9 -15";
+          console.log("createTurr");
           tower.setAttribute("position",pos)
-        }
-        else{
-          pos = "60 9 -225";
-          tower.setAttribute("position",pos)
-        } 
+      
       }else{
-        if(z == "-5"){
+        
           pos = "60 9 -225";
+          console.log("createTurr231312");
           tower.setAttribute("position",pos)
-        }
-        else{
-          pos = "60 9 -15";
-          tower.setAttribute("position",pos)
-  
-        } 
-        tower.setAttribute("class","collidable" );
+          
        
       }
       tower.setAttribute("team",turretInfo.team);
-  
+      if(turretInfo.team=="enemy"){
+      tower.setAttribute("class","collidable" );
+    }
       tower.setAttribute("id",turretInfo.id);
-  
+      console.log(turretInfo.id);
       var towerpan = document.createElement("a-entity");
       towerpan.setAttribute("geometry","primitive:cone; radiusBottom: 2; radiusTop: 3;height:1");
       towerpan.setAttribute("material","src:#towerbase");

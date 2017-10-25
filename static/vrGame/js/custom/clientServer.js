@@ -32,6 +32,14 @@ gameRoom.onData.add(function(data) {
 });
 //create players
 gameRoom.listen("players/:id", function(change) {
+
+	console.log(change);
+	if(change.operation == "remove"){
+		console.log("remove",change);
+		console.log(playersDict[change.path.id])
+		playersDict[change.path.id].parentNode.removeChild(playersDict[change.path.id]);
+		return;
+	}
 	if (change.path.id == "TURRET_RED" || change.path.id == "TURRET_BLUE") {
 		return;
 	}
@@ -46,7 +54,7 @@ gameRoom.listen("players/:id", function(change) {
 					// player = MAKE TURRET HERE
 					player = Players.createTurret(
 						tempBuffer[p],
-						change.value.data.position
+						team
 					);
 				} else {
 					//MAKE NORMAL PLAYER HERE
@@ -59,9 +67,6 @@ gameRoom.listen("players/:id", function(change) {
 		tempBuffer = {};
 		player = Players.createMyself(change.value);
 	} else {
-		if(change.operation == "remove"){
-			return;
-		}
 		if (change.value.team == team) change.value.team = "ally";
 		else change.value.team = "enemy";
 		player = Players.createOtherPlayer(change.value);

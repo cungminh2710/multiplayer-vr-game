@@ -306,7 +306,7 @@ export class GameArena extends Room {
 								"5 3 -235";
 						} else {
 							this.state.players[targetId].data.position =
-								"5 3 0";
+								"5 3 -5";
 						}
 
 						this.playerCache[targetId] = this.state.players[targetId];
