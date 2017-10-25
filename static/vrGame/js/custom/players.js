@@ -110,6 +110,7 @@ class Players {
       playerWrapperEl.setAttribute("id","playerWrapper");
       playerWrapperEl.setAttribute("class","collidable");
       playerWrapperEl.setAttribute("position",playerInfo.data.position );
+      console.log(playerInfo.data.position );
       //for debug
       //playerWrapperEl.setAttribute("position","5 3 -3");
       playerWrapperEl.setAttribute("visible",true);
@@ -131,8 +132,8 @@ class Players {
 
       //set character fixed to camera
       Players.createCamera(player,config);
-      playerWrapperEl.appendChild(cameraEl);
-      document.querySelector("a-scene").appendChild(playerWrapperEl);
+    
+      
     return player;
   }
   
@@ -202,12 +203,12 @@ class Players {
   static createCamera(player,config){
       var userHeight = config.cameraHeight;
       cameraEl = document.createElement("a-camera");
+      cameraEl.setAttribute("position","0 0 0");
+      cameraEl.setAttribute("rotation","0 0 0");
       cameraEl.setAttribute("id","camera");
       cameraEl.setAttribute("user-height",userHeight);
       cameraEl.setAttribute("far","2000");
       cameraEl.setAttribute("wasd-controls","enabled:false");
-      cameraEl.setAttribute("position","0 0 0");
-      cameraEl.setAttribute("rotation","0 0 0");
       cameraEl.setAttribute("id","camera");
       //raycaster
       Players.createRayCaster(config); 
@@ -227,6 +228,8 @@ class Players {
         //head.rotation.x = -Math.PI*rotation.x/180;
 
        });
+       playerWrapperEl.appendChild(cameraEl);
+       document.querySelector("a-scene").appendChild(playerWrapperEl);
   }
 
   static createRayCaster(config){
