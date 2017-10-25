@@ -118,13 +118,13 @@ export let updateUserAchievementsFromStats: {
 		let youWon = typeof won === "boolean";
 		if (kills > death + 20 && death < 10)
 			achievement = {
-				logoUrl: youWon ? "fa-smile-o" : "fa-frown-o",
+				logoUrl: youWon ? "smile-o" : "frown-o",
 				name: youWon ? "FPS Artist" : "Bad luck Brian",
 				description: "You are amazing player. GG WP !"
 			};
 		else if (kills > death + 10 && death < 10)
 			achievement = {
-				logoUrl: youWon ? "fa-smile-o" : "fa-frown-o",
+				logoUrl: youWon ? "smile-o" : "frown-o",
 				name: youWon
 					? "You completely smashed the opponent(s)"
 					: "You are great ... but not enough",
@@ -132,19 +132,19 @@ export let updateUserAchievementsFromStats: {
 			};
 		else if (kills < death + 10 && won)
 			achievement = {
-				logoUrl: "fa-meh-o",
+				logoUrl: "meh-o",
 				name: "You got carried by your team",
 				description: "Your team is better than you ... Poor them"
 			};
 		else if (kills < 1 && death > 15)
 			achievement = {
-				logoUrl: "fa-meh-o",
+				logoUrl: "meh-o",
 				name: "Born to die",
 				description: "You can't help your teammates"
 			};
 		else if (kills < 1 && death > 10)
 			achievement = {
-				logoUrl: "fa-meh-o",
+				logoUrl: "meh-o",
 				name: "Party crasher",
 				description: "You can't help your teammates"
 			};
