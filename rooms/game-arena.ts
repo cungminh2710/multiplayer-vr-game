@@ -101,7 +101,7 @@ export class GameArena extends Room {
 		let pCharacter = Math.floor(Math.random() * 3) + 1;
 		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
 
-		if (this.numJoined % 2 == 0) {
+		if (this.takenCharacters.red.length < this.takenCharacters.blue.length) {
 			pTeam = "red";
 			pCoords = `${this.numJoined * 5} 3 -235`;
 		} else {
