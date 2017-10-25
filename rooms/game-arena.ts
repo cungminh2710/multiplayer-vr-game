@@ -185,6 +185,12 @@ export class GameArena extends Room {
 	onLeave(client: Client) {
 		//let index: number = this.state.messages.indexOf(client.id);
 		//this.state.players.splice(index, 1);
+		let playerName = this.getFirstKey(client.id, this.playerClientMap); //this.playerClientMap
+		this.playerClientMap[playerName] = "";
+		let thisCharacter = this.state.players[client.id].character;
+		let indexOfChar = this.takenCharacters[this.state.players[client.id].team].indexOf(thisCharacter);
+		this.takenCharacters[this.state.players[client.id].team].splice(indexOfChar, 1);
+
 		delete this.state.players[client.id];
 		this.numJoined -= 1;
 	}
