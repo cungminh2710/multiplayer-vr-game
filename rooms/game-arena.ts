@@ -142,7 +142,7 @@ export class GameArena extends Room {
 		if(this.state.players[playerId].team == "red"){
 			this.state.players[playerId].data.position = "5 3 -235";
 		}else{
-			this.state.players[playerId].data.position = "5 3 0";
+			this.state.players[playerId].data.position = "5 3 -5";
 		}
 	}
 

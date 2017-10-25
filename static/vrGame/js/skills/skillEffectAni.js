@@ -219,7 +219,7 @@ class SkillEffectAni{
             playerWrapperEl.appendChild(animation);
             playerWrapperEl.setAttribute("position",position);
             animation.addEventListener("animationend",function(e){
-         
+    
                 playerWrapperEl.removeChild(animation);
                 disableMove = false;
                 
