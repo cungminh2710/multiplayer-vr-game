@@ -206,6 +206,8 @@ class Players {
       cameraEl.setAttribute("position","0 0 0");
       cameraEl.setAttribute("rotation","0 0 0");
       cameraEl.setAttribute("id","camera");
+      cameraEl.setAttribute("active",true);
+      cameraEl.setAttribute("look-controls");
       cameraEl.setAttribute("user-height",userHeight);
       cameraEl.setAttribute("far","2000");
       cameraEl.setAttribute("wasd-controls","enabled:false");
