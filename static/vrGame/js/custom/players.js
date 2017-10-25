@@ -108,7 +108,7 @@ class Players {
   
         playerWrapperEl = document.createElement("a-entity");
         playerWrapperEl.setAttribute("id","playerWrapper");
-        playerWrapperEl.setAttribute("class","collidable");
+        //playerWrapperEl.setAttribute("class","collidable");
    
         console.log(playerInfo.data.position );
         //for debug
@@ -127,7 +127,7 @@ class Players {
         player.addEventListener('model-loaded', function (event) {
           //var boundingBox = Players.getBoundingBox(player.object3D.children[0]);
           //console.log(boundingBox)
-          player.setAttribute("position",config.localPosition);
+      
           playerWrapperEl.setAttribute("position",playerInfo.data.position );
         })
         
@@ -205,7 +205,6 @@ class Players {
     static createCamera(player,config){
         var userHeight = config.cameraHeight;
         cameraEl = document.createElement("a-camera");
-        cameraEl.setAttribute("position","0 0 0");
         cameraEl.setAttribute("rotation","0 0 0");
         cameraEl.setAttribute("id","camera");
         cameraEl.setAttribute("active",true);
@@ -218,6 +217,7 @@ class Players {
         Players.createRayCaster(config); 
         Players.createPanel(config);
         cameraEl.appendChild(player);
+        player.setAttribute("position",config.localPosition);
         // add head movement and body rotation           
         cameraEl.addEventListener('componentchanged', function (evt) {
           if (evt.detail.name !== 'rotation') return;
