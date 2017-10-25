@@ -59,6 +59,9 @@ gameRoom.listen("players/:id", function(change) {
 		tempBuffer = {};
 		player = Players.createMyself(change.value);
 	} else {
+		if(change.operation == "remove"){
+			return;
+		}
 		if (change.value.team == team) change.value.team = "ally";
 		else change.value.team = "enemy";
 		player = Players.createOtherPlayer(change.value);

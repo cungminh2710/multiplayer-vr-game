@@ -247,9 +247,10 @@ class SkillEffectAni{
         Animation.setAnimation(playersDict[client.id], "idle");
         var resultText = "DEFEAT";
         if (team == data.winner){
-            resultText = "VICTORY"
-
-        } 
+            resultText = "VICTORY";
+        }else if(data.winner == "draw"){
+            resultText = "DRAW";
+        }
 
         var user = findGetParameter("user");
         var stats = data.stats[user];
@@ -289,7 +290,7 @@ class SkillEffectAni{
             var dealth = document.createElement("a-text");
             dealth.setAttribute("id","skill2");
             dealth.setAttribute("position","-0.03 -0.02 0");
-            dealth.setAttribute("value","dealth: "+stats.deaths);//skill1.setAttribute("value",config.skill.skill1.name+": Ready");
+            dealth.setAttribute("value","Deaths: "+stats.deaths);//skill1.setAttribute("value",config.skill.skill1.name+": Ready");
             dealth.setAttribute("width","0.3");
             dealth.setAttribute("color","red");
             panel.appendChild(dealth);

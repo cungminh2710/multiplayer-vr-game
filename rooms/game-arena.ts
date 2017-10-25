@@ -38,6 +38,8 @@ export class GameArena extends Room {
 		blue: []
 	};
 
+	private playerCache: any = {};
+
 	getFirstKey(val: string, obj: any): string {
 		let retVal = "";
 		Object.keys(obj).forEach(key => {
@@ -162,34 +164,36 @@ export class GameArena extends Room {
 			});
 		}
 
-		this.numJoined += 1;
-		this.state.players[client.id] = this.newPlayerInfo(client.id);
-		this.state.stats[client.id] = {
-			kills: 0,
-			deaths: 0
-		};
+		if(!this.playerCache.hasOwnProperty(client.id)){
+			this.numJoined += 1;
+			this.state.players[client.id] = this.newPlayerInfo(client.id);
+			this.state.stats[client.id] = {
+				kills: 0,
+				deaths: 0
+			};
 
-		//Once all players have joined, set the game timer
-		if (this.numJoined == this.maxPlayers) {
-			this.state.playersReady = true;
-			var self = this;
-			setTimeout(function() {
-				self.endGame("draw");
-			}, EIGHT_MINUTES);
+			//Once all players have joined, set the game timer
+			if (this.numJoined == this.maxPlayers) {
+				this.state.playersReady = true;
+				var self = this;
+				setTimeout(function() {
+					self.endGame("draw");
+				}, EIGHT_MINUTES);
+			}
+		}else{
+			console.log("RECOVER THIS GUY>>>", this.playerCache[client.id]);
+			this.state.players[client.id] = this.playerCache[client.id];
 		}
 	}
 
 	onLeave(client: Client) {
 		//let index: number = this.state.messages.indexOf(client.id);
 		//this.state.players.splice(index, 1);
-		let playerName = this.getFirstKey(client.id, this.playerClientMap); //this.playerClientMap
-		this.playerClientMap[playerName] = "";
-		let thisCharacter = this.state.players[client.id].character;
-		let indexOfChar = this.takenCharacters[this.state.players[client.id].team].indexOf(thisCharacter);
-		this.takenCharacters[this.state.players[client.id].team].splice(indexOfChar, 1);
+		if(!this.state.gameOver){
+			this.playerCache[client.id] = this.state.players[client.id];
+		}
 
 		delete this.state.players[client.id];
-		this.numJoined -= 1;
 	}
 
 	endGame(winner: string) {
@@ -245,7 +249,11 @@ export class GameArena extends Room {
 		}
 
 		if (data.action == "MOVE") {
-			this.state.players[client.id].data = data.data;
+			if(data.data.moveAnimation == "idle"){
+				this.state.players[client.id].data.moveAnimation = "idle";
+			}else{
+				this.state.players[client.id].data = data.data;
+			}
 		} else if (data.action == "ROTATION") {
 			this.state.players[client.id].rotation = data.data;
 		} else if (data.action == "SKILLANIMATION") {
@@ -300,10 +308,16 @@ export class GameArena extends Room {
 							this.state.players[targetId].data.position =
 								"5 3 0";
 						}
+
+						this.playerCache[targetId] = this.state.players[targetId];
 					}
 				}
 			}
 		}
+
+		//update players cache
+		console.log("NEW OBJ", this.state.players[client.id])
+		this.playerCache[client.id] = this.state.players[client.id];
 
 		// this.messageClient(client);
 	}
