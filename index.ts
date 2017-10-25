@@ -59,6 +59,7 @@ gameServer.register("game-room", GameRoom);
 gameServer.register("test-arena", GameArena, { TEST: true });
 
 app.post("/api/register", (req, res) => {
+	console.log("/api/register");
 	let { username, password, confirm_password, email } = req.body;
 	if (password !== confirm_password)
 		return res.status(403).json({
@@ -88,6 +89,7 @@ app.post("/api/register", (req, res) => {
 });
 
 app.post("/api/login", (req, res) => {
+	console.log("/api/login");
 	let { username, password, sessionId } = req.body;
 	isUserExist(username, password).then(user => {
 		if (user) {
@@ -118,6 +120,7 @@ app.get("/api/logout", (req, res) => {
 
 app.get("/api/getuser/:session", (req, res) => {
 	let sessionId = req.params.session;
+	console.log(req.path);
 	readUserInfoBySession(sessionId).then(user => {
 		if (user) {
 			res.status(200).json({
@@ -137,7 +140,10 @@ app.get("/api/getuser/:session", (req, res) => {
 		}
 	});
 });
-
+app.use(function(req, res, next) {
+	console.log(req.path);
+	next();
+});
 app.use(express.static(path.join(__dirname, "static")));
 app.use("/", serveIndex(path.join(__dirname, "static"), { icons: true }));
 
