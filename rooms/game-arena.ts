@@ -38,11 +38,11 @@ export class GameArena extends Room {
 		blue: []
 	};
 
-	getFirstKey(val: string, obj: any): string{
+	getFirstKey(val: string, obj: any): string {
 		let retVal = "";
 		Object.keys(obj).forEach(key => {
 			if (obj[key] === val) {
-					retVal = key;
+				retVal = key;
 			}
 		});
 
@@ -55,32 +55,32 @@ export class GameArena extends Room {
 
 		this.setState({
 			players: {
-				"TURRET_RED": {
+				TURRET_RED: {
 					id: "TURRET_RED",
 					character: "turret",
 					team: "red",
 					health: 10000,
 					data: {
 						position: "",
-						moveAnimation: "",
+						moveAnimation: ""
 					},
 					rotation: "",
 					skill: "",
-					skillAnimation: "",
+					skillAnimation: ""
 				},
-				"TURRET_BLUE": {
+				TURRET_BLUE: {
 					id: "TURRET_BLUE",
 					character: "turret",
 					team: "blue",
 					health: 10000,
 					data: {
 						position: "",
-						moveAnimation: "",
+						moveAnimation: ""
 					},
 					rotation: "",
 					skill: "",
-					skillAnimation: "",
-				},
+					skillAnimation: ""
+				}
 			},
 			stats: {},
 			gameOver: "",
@@ -101,7 +101,6 @@ export class GameArena extends Room {
 		let pCharacter = Math.floor(Math.random() * 3) + 1;
 		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
 
-
 		if (this.numJoined % 2 == 0) {
 			pTeam = "red";
 			pCoords = `${this.numJoined * 5} 3 -235`;
@@ -110,9 +109,7 @@ export class GameArena extends Room {
 			pCoords = `${this.numJoined * 5} 3 -5`;
 		}
 
-		while (
-			this.takenCharacters[pTeam].indexOf(pCharacter) != -1
-		) {
+		while (this.takenCharacters[pTeam].indexOf(pCharacter) != -1) {
 			pCharacter = Math.floor(Math.random() * 3) + 1;
 		}
 
@@ -139,10 +136,10 @@ export class GameArena extends Room {
 		let pCharacter = this.state.players[playerId].character;
 		let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
 		this.state.players[playerId].health = pHealth;
-		if(this.state.players[playerId].team == "red"){
+		if (this.state.players[playerId].team == "red") {
 			this.state.players[playerId].data.position = "5 3 -235";
-		}else{
-			this.state.players[playerId].data.position = "5 3 0";
+		} else {
+			this.state.players[playerId].data.position = "5 3 -5";
 		}
 	}
 
@@ -200,7 +197,7 @@ export class GameArena extends Room {
 		let newStats = {};
 		//update player stats in database
 		this.autoDispose = false;
-		
+
 		let loadAchievements = [];
 		for (var clientId in this.state.stats) {
 			if (this.state.stats.hasOwnProperty(clientId)) {
@@ -220,8 +217,6 @@ export class GameArena extends Room {
 				);
 			}
 		}
-
-
 
 		this.state.gameOver = JSON.stringify({
 			winner: winner,
@@ -243,6 +238,12 @@ export class GameArena extends Room {
 			return;
 		}
 
+		try {
+			let testPlayer = this.state.players[client.id];
+		} catch (err) {
+			return;
+		}
+
 		if (data.action == "MOVE") {
 			this.state.players[client.id].data = data.data;
 		} else if (data.action == "ROTATION") {
@@ -250,12 +251,13 @@ export class GameArena extends Room {
 		} else if (data.action == "SKILLANIMATION") {
 			this.state.players[client.id].skillAnimation = data.data;
 		} else if (data.action == "DAMAGE") {
-
 			//let clientCoords = target.position;
 			for (var i = 0; i < data.data.target.length; i++) {
 				let targetId = data.data.target[i];
 				if (targetId == "TURRET_RED" || targetId == "TURRET_BLUE") {
-					let newTurretHealth = this.state.players[targetId].health - skills[data.data.name].damage;
+					let newTurretHealth =
+						this.state.players[targetId].health -
+						skills[data.data.name].damage;
 					this.state.players[targetId].health = newTurretHealth;
 					//check if game finished
 					if (newTurretHealth <= 0) {
@@ -276,19 +278,27 @@ export class GameArena extends Room {
 						this.state.stats[targetId].deaths += 1;
 
 						targetPlayer.skillAnimation = JSON.stringify({
-							name:"idle",
-							skillName:"Dealth",
-							position: targetPlayer.team == "red" ? "3 3 -235" : "3 3 -5",
+							name: "idle",
+							skillName: "Dealth",
+							position:
+								targetPlayer.team == "red"
+									? "3 3 -235"
+									: "3 3 -5"
 						});
 
 						//Bring back to life
 						let pCharacter = this.state.players[targetId].character;
-						let pHealth = pCharacter == 1 ? 2500 : pCharacter == 2 ? 1500 : 1700;
+						let pHealth =
+							pCharacter == 1
+								? 2500
+								: pCharacter == 2 ? 1500 : 1700;
 						this.state.players[targetId].health = pHealth;
-						if(this.state.players[targetId].team == "red"){
-							this.state.players[targetId].data.position = "5 3 -235";
-						}else{
-							this.state.players[targetId].data.position = "5 3 0";
+						if (this.state.players[targetId].team == "red") {
+							this.state.players[targetId].data.position =
+								"5 3 -235";
+						} else {
+							this.state.players[targetId].data.position =
+								"5 3 0";
 						}
 					}
 				}

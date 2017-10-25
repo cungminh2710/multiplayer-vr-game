@@ -27,7 +27,7 @@ class Tank{
         var dy = pos.y - targetPos.y;
         var dz = pos.z - targetPos.z;
         var distance = dx * dx + dy * dy + dz * dz;
-        console.log(distance);
+
         if(distance > 6) return;
         //send damage
         var data = {
@@ -35,7 +35,6 @@ class Tank{
             target:[target.getAttribute("id")],
             name:"Punch",
         }
-        console.log("SEND TankAttack: ",data)
         gameRoom.send({action: "DAMAGE", data}); 
     }
     //description: disable someone's movement, need to target an enemy target, no damage, 100% success
