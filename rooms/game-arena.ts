@@ -25,7 +25,7 @@ interface Coords {
 	z: number;
 }
 
-const EIGHT_MINUTES = 480000;
+const EIGHT_MINUTES = 1280000;
 
 export class GameArena extends Room {
 	private numJoined: number = 0;

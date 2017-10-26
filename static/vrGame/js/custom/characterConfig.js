@@ -48,7 +48,7 @@ characterConfig[2] = {
     health:1500,
     cameraHeight: 0.85,
     healthBarPos: 1.6,
-    localPosition:"0 -0.85 0.3",
+    localPosition:"0 -0.85 0.33",
     moveSpeed: 0.065,
     runSpeed: 0.07,
     gazeDistance:20,
